@@ -2,6 +2,7 @@
 Theory of programming end of year web application. A shop platform that allows people to buy and sell stuff..
 
 ## ideas:
+- Something between Steam and Aliexpress.
 - Have a web application with accounts with different permissions and rights(Admin, Buyer, Seller, Company buyer/seller, Premium buyer/seller)
 - Platform that focuses only on the items sold and the users. Make many features that describe the items and the users
 - Search system. Tags.
