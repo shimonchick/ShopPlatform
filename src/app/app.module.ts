@@ -9,15 +9,21 @@ import {HttpClientModule} from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
+import {NavComponent} from './nav/nav.component';
+import {MaterialModule} from './material.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
         AppComponent,
         ItemsComponent,
-        ItemDetailComponent
+        ItemDetailComponent,
+        NavComponent
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
+        MaterialModule,
         AppRoutingModule,
         HttpClientModule,
         // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
