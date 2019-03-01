@@ -1,0 +1,19 @@
+<div *ngIf="product">
+    <h3>Product details:</h3>
+    <div>Seller: {{product.seller}}</div>
+    <label>Name:
+        <input [(ngModel)]="product.name" placeholder="name">
+    </label>
+
+
+    <textarea [(ngModel)]="product.description" placeholder="Enter description here">
+
+  </textarea>
+
+    <label>Price
+        <input [(ngModel)]="product.price">
+    </label>
+</div>
+<button (click)="save()">save</button>
+<button (click)="delete(product)">Delete</button>
+<button (click)="goBack()">Go back</button>

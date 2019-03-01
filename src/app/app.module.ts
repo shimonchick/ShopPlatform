@@ -3,14 +3,17 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ItemsComponent} from './items/items.component';
-import {ItemDetailComponent} from './item-detail/item-detail.component';
+import {ProductsComponent} from './products/products.component';
+import {ProductDetailComponent} from './product-detail/product-detail.component';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {NavComponent} from './nav/nav.component';
+import {MaterialModule} from './material.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 const config = {
@@ -25,13 +28,16 @@ const config = {
 @NgModule({
     declarations: [
         AppComponent,
-        ItemsComponent,
-        ItemDetailComponent
+        ProductsComponent,
+        ProductDetailComponent,
+        NavComponent
     ],
     imports: [
         AngularFireModule.initializeApp(config),
         AngularFirestoreModule,
         BrowserModule,
+        BrowserAnimationsModule,
+        MaterialModule,
         AppRoutingModule,
         HttpClientModule,
         // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
