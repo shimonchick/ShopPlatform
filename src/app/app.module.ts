@@ -9,6 +9,18 @@ import {HttpClientModule} from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+
+
+const config = {
+    apiKey: 'AIzaSyBfeAdlwMo49LteklnZP5sugxTG_ybXJUs',
+    authDomain: 'shopplatform-3c1c4.firebaseapp.com',
+    databaseURL: 'https://shopplatform-3c1c4.firebaseio.com',
+    projectId: 'shopplatform-3c1c4',
+    storageBucket: 'shopplatform-3c1c4.appspot.com',
+    messagingSenderId: '878506105599'
+};
 
 @NgModule({
     declarations: [
@@ -17,6 +29,8 @@ import {FormsModule} from '@angular/forms';
         ItemDetailComponent
     ],
     imports: [
+        AngularFireModule.initializeApp(config),
+        AngularFirestoreModule,
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
