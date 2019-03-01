@@ -1,0 +1,31 @@
+.sidenav-container {
+    height: 100%;
+}
+
+.sidenav {
+    width: 200px;
+}
+
+.sidenav .mat-toolbar {
+    /*background: inherit;*/
+}
+
+.mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.spacer {
+    flex: auto;
+}
+
+.google-avatar {
+    height: 100%;
+}
+
+#auth-user-div {
+    height: 100%;
+}
+
+/*# sourceMappingURL=nav.component.css.map */
