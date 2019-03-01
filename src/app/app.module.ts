@@ -1,10 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ItemsComponent} from './items/items.component';
-import {ItemDetailComponent} from './item-detail/item-detail.component';
+import {ProductsComponent} from './products/products.component';
+import {ProductDetailComponent} from './product-detail/product-detail.component';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {InMemoryDataService} from './services/in-memory-data.service';
@@ -16,8 +15,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 @NgModule({
     declarations: [
         AppComponent,
-        ItemsComponent,
-        ItemDetailComponent,
+        ProductsComponent,
+        ProductDetailComponent,
         NavComponent
     ],
     imports: [
