@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {Location} from '@angular/common';
-import {Product} from '../Product';
+import {Product} from '../models/product';
+import {AuthService} from '../services/auth.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -10,12 +11,14 @@ import {Product} from '../Product';
     styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent implements OnInit {
+
     public product: Product;
 
     constructor(
         private route: ActivatedRoute,
         private productService: ProductService,
-        private location: Location) {
+        private location: Location,
+        private auth: AuthService) {
     }
 
     ngOnInit() {
@@ -28,7 +31,6 @@ export class ProductDetailComponent implements OnInit {
             .subscribe(product => {
                 this.product = product;
             });
-
     }
 
     goBack() {

@@ -1,28 +1,26 @@
-<div>
+<section>
     <table>
         <tr>
             <th>Name</th>
             <th>Price</th>
         </tr>
-        <tr *ngFor="let product of products">
+        <tr *ngFor="let product of products$ | async">
 
-            <td><a routerLink="/product/{{product.id}}">{{product.name}}</a></td>
+            <td><a routerLink="/products/{{product.id}}">{{product.name}}</a></td>
 
             <td>{{product.price}}</td>
             <td>id: {{product.id}}</td>
 
         </tr>
     </table>
-</div>
-<div>
+</section>
+<section *ngIf="auth.canCreateProducts()">
     <label>Product name:
         <input #productName/>
     </label>
     <br>
     <label>Description:
-        <textarea #productDescription placeholder="Enter product description here">
-
-    </textarea>
+        <textarea #productDescription placeholder="Enter product description here"></textarea>
 
     </label>
     <br>
@@ -36,4 +34,4 @@
    productName.value=''; productDescription.value='';productPrice.value=''; ">
         Add product
     </button>
-</div>
+</section>

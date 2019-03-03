@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Product} from '../Product';
+import {Product} from '../models/product';
 import {ProductService} from '../services/product.service';
+import {AuthService} from '../services/auth.service';
+import {Observable} from 'rxjs';
+import {User} from '../models/user';
 
 @Component({
     selector: 'app-products',
@@ -9,14 +12,18 @@ import {ProductService} from '../services/product.service';
 })
 export class ProductsComponent implements OnInit {
 
-    products: Product[];
+    products$: Observable<Product[]>;
+    user: User;
 
-    constructor(private productService: ProductService) {
-
+    constructor(private productService: ProductService,
+                public auth: AuthService) {
+        auth.user$.subscribe(user => {
+            this.user = user;
+        });
     }
 
     ngOnInit() {
-        this.getProducts();
+        this.products$ = this.productService.getProducts();
     }
 
     add(name: string, description: string, price: string) {
@@ -30,12 +37,7 @@ export class ProductsComponent implements OnInit {
         }
         // TODO: validate input
         // TODO: valid seller
-        this.productService.createProduct({name: name, description: description, price: price_number, seller: 'misho'} as Product);
+        this.productService.createProduct({name: name, description: description, price: price_number, seller: this.user.uid} as Product);
 
-    }
-
-    private getProducts() {
-        this.productService.getProducts()
-            .subscribe(products => this.products = products);
     }
 }
