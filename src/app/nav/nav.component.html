@@ -20,36 +20,30 @@
               *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>ng-rentauto</span>
+
+      <span>ShopPlatform</span>
+
       <span class="spacer"></span>
       <!--<button mat-button></button>-->
       <div class="providers-container">
-        <!--<ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"-->
-                                       <!--[theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>-->
-        <!--<button *ngIf="auth.user$ | async as user" mat-button routerLink="/account">Hello, {{user.displayName}}</button>-->
-        <!--<div *ngIf="auth.user$ | async; then authenticated else guest">-->
-        <!--&lt;!&ndash; template will replace this div &ndash;&gt;-->
-        <!--</div>-->
+        <div *ngIf="auth.user$ | async; then authenticated else guest">
+          <!-- template will replace this div -->
+        </div>
+
+        <!-- User NOT logged in -->
+        <ng-template #guest>
+          <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"
+                                         [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>
+        </ng-template>
 
 
-        <!--&lt;!&ndash; User NOT logged in &ndash;&gt;-->
-        <!--<ng-template #guest>-->
-        <!--<button mat-button (click)="auth.googleSignIn()">-->
-        <!--<mat-icon class="fa fa-google" aria-hidden="true"></mat-icon>-->
-        <!--Connect Google-->
-        <!--</button>-->
-        <!--</ng-template>-->
-
-        <!--&lt;!&ndash; User logged in &ndash;&gt;-->
-        <!--<ng-template #authenticated>-->
-        <!--<div *ngIf="auth.user$ | async as user" id="auth-user-div">-->
-        <!--<h3>Howdy, {{ user.displayName }}</h3>-->
-        <!--<img class="google-avatar" [src]="user.photoURL"/>-->
-        <!--&lt;!&ndash;<p>UID: {{ user.uid }}</p>&ndash;&gt;-->
-        <!--<button mat-button (click)="auth.signOut()">Logout</button>-->
-        <!--</div>-->
-        <!--</ng-template>-->
-          Hello!
+        <!-- User logged in -->
+        <ng-template #authenticated>
+          <div *ngIf="auth.user$ | async as user">
+            <!--<h3>Howdy, {{ user.displayName }}</h3>-->
+            <img [src]="user.photoUrl" alt="avatar" class="avatar"/>
+          </div>
+        </ng-template>
       </div>
     </mat-toolbar>
     <!-- Add Content Here -->

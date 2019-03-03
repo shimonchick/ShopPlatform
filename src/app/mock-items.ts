@@ -1,4 +1,4 @@
-import {Product} from './Product';
+import {Product} from './models/product';
 
 // @ts-ignore
 export const PRODUCTS: Product[] = [

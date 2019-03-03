@@ -2,8 +2,8 @@ import {Component} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-// import {AuthService} from '../auth/auth.service';
-// import {Theme} from 'ngx-auth-firebaseui';
+import {AuthService} from '../services/auth.service';
+import {Theme} from 'ngx-auth-firebaseui';
 
 @Component({
   selector: 'app-nav',
@@ -16,8 +16,9 @@ export class NavComponent {
       .pipe(
           map(result => result.matches)
       );
-  // theme = Theme;
+    theme = Theme;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+    constructor(private breakpointObserver: BreakpointObserver,
+                public auth: AuthService) {
   }
 }

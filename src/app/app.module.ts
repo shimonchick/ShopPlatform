@@ -9,11 +9,11 @@ import {HttpClientModule} from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
-import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {NavComponent} from './nav/nav.component';
 import {MaterialModule} from './material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxAuthFirebaseUIModule} from 'ngx-auth-firebaseui';
 
 
 const config = {
@@ -33,7 +33,7 @@ const config = {
         NavComponent
     ],
     imports: [
-        AngularFireModule.initializeApp(config),
+        // AngularFireModule.initializeApp(config),
         AngularFirestoreModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -44,9 +44,10 @@ const config = {
         // and returns simulated server responses.
         // Remove it when a real server is ready to receive requests.
         HttpClientInMemoryWebApiModule.forRoot(
-            InMemoryDataService, {dataEncapsulation: false}
+            InMemoryDataService, {dataEncapsulation: false, passThruUnknownUrl: true}
         ),
         FormsModule,
+        NgxAuthFirebaseUIModule.forRoot(config)
     ],
     providers: [],
     bootstrap: [AppComponent]

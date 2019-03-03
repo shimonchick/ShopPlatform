@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {Location} from '@angular/common';
-import {Product} from '../Product';
+import {Product} from '../models/product';
+import {AuthService} from '../services/auth.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -15,7 +16,8 @@ export class ProductDetailComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private productService: ProductService,
-        private location: Location) {
+        private location: Location,
+        private auth: AuthService) {
     }
 
     ngOnInit() {

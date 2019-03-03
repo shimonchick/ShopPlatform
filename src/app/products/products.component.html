@@ -13,15 +13,13 @@
         </tr>
     </table>
 </div>
-<div>
+<section *ngIf="auth.canCreateProducts()">
     <label>Product name:
         <input #productName/>
     </label>
     <br>
     <label>Description:
-        <textarea #productDescription placeholder="Enter product description here">
-
-    </textarea>
+        <textarea #productDescription placeholder="Enter product description here"></textarea>
 
     </label>
     <br>
@@ -35,4 +33,4 @@
    productName.value=''; productDescription.value='';productPrice.value=''; ">
         Add product
     </button>
-</div>
+</section>

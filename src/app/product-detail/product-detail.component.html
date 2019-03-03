@@ -1,4 +1,4 @@
-<div *ngIf="product">
+<div *ngIf="product && auth.canRead(product)">
     <h3>Product details:</h3>
     <div>Seller: {{product.seller}}</div>
     <label>Name:
@@ -6,14 +6,12 @@
     </label>
 
 
-    <textarea [(ngModel)]="product.description" placeholder="Enter description here">
-
-  </textarea>
+    <textarea [(ngModel)]="product.description" placeholder="Enter description here"></textarea>
 
     <label>Price
         <input [(ngModel)]="product.price">
     </label>
 </div>
-<button (click)="save()">save</button>
-<button (click)="delete(product)">Delete</button>
+<button *ngIf="auth.canEdit(product)" (click)="save()">save</button>
+<button *ngIf="auth.canDelete(product)" (click)="delete(product)">Delete</button>
 <button (click)="goBack()">Go back</button>
