@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Product} from '../Product';
-
-import {HttpClient} from '@angular/common/http';
 import {AngularFirestore} from '@angular/fire/firestore';
 
 @Injectable({
@@ -12,7 +10,6 @@ export class ProductService {
 
 
     constructor(
-        private http: HttpClient,
         private db: AngularFirestore) {
     }
 
@@ -35,7 +32,7 @@ export class ProductService {
         return this.db.doc<Product>(`products/${product.id}`).update(product);
     }
 
-    //parameter is object and not a product since we don't want the product id starting value(undefined)
+    // parameter is object and not a product since we don't want the product id starting value(undefined)
     createProduct(data: object): Promise<void> {
         const key: string = this.db.createId();
         // @ts-ignore
