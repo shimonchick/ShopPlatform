@@ -30,8 +30,7 @@ export class ProductsComponent implements OnInit {
         }
         // TODO: validate input
         // TODO: valid seller
-        this.productService.addProduct({name: name, description: description, price: price_number, seller: 'misho'} as Product)
-            .subscribe(product => this.products.push(product));
+        this.productService.createProduct({name: name, description: description, price: price_number, seller: 'misho'} as Product);
 
     }
 

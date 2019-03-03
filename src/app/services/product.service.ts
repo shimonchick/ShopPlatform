@@ -1,80 +1,66 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Product} from '../Product';
 
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProductService {
 
-    private productUrl = 'api/products';
 
     constructor(
         private http: HttpClient,
-    ) {
+        private db: AngularFirestore) {
     }
 
     getProducts(): Observable<Product[]> {
-        return this.http.get<Product[]>(this.productUrl)
-            .pipe(
-                catchError(this.handleError('getHeroes', []))
-            );
+
+        return this.db.collection<Product>('products').valueChanges();
+
     }
 
-    getProduct(id: number): Observable<Product> {
-        const url = `${this.productUrl}/${id}`;
-        return this.http.get<Product>(url)
-            .pipe(
-                catchError(this.handleError<Product>('getProduct', undefined))
-            );
+// TODO: store reference for the product in the service so you can manipulate it without making extra requests
+    getProduct(id: string): Observable<Product> {
+
+        return this.db.doc<Product>(`products/${id}`).valueChanges();
+
     }
 
-    updateProduct(product: Product) {
-        const httpOptions = {
-            headers: new HttpHeaders({'Content-type': 'application/json'})
+    updateProduct(product: Product): Promise<void> {
 
-        };
-        return this.http.put<Product>(this.productUrl, product, httpOptions)
-            .pipe(catchError(this.handleError('updateProduct')));
+
+        return this.db.doc<Product>(`products/${product.id}`).update(product);
     }
 
-    addProduct(product: Product) {
-        const httpOptions = {
-            headers: new HttpHeaders({'Content-type': 'application/json'})
+    //parameter is object and not a product since we don't want the product id starting value(undefined)
+    createProduct(data: object): Promise<void> {
+        const key: string = this.db.createId();
+        // @ts-ignore
+        const product: Product = {id: key, ...data};
+        const documentReference = this.db.doc<Product>(`/products/${key}`);
+        return documentReference.set(product);
 
-        };
-        return this.http.post<Product>(this.productUrl, product, httpOptions);
     }
 
-    deleteProduct(product: Product | number): Observable<Product> {
-        const id = typeof product === 'number' ? product : product.id;
-        const url = `${this.productUrl}/${id}`;
-        return this.http.delete<Product>(url)
-            .pipe(
-                catchError(this.handleError<Product>('deleteProduct'))
-            );
+
+    deleteProduct(product: Product): Promise<void> {
+
+        return this.db.doc<Product>(`/products/${product.id}`).delete();
     }
 
     /*
-        getProduct(id: number): Observable<Product> {
-            const productFound: Product = PRODUCTS.find(product => {
-                return product.id === id;
-            });
-            // TODO: check if productFound exists
-            return of(productFound);
+        private handleError<T>(operation = 'operation', result?: T) {
+            return (error: any): Observable<T> => {
+
+                // TODO: send the error to remote logging infrastructure
+                console.error(error); // log to console instead
+
+
+                // Let the app keep running by returning an empty result.
+                return of(result as T);
+            };
         }*/
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
-    }
 }

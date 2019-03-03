@@ -11,19 +11,13 @@ import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireStorageModule} from '@angular/fire/storage';
+import {AngularFireAuthModule} from '@angular/fire/auth';
 import {NavComponent} from './nav/nav.component';
 import {MaterialModule} from './material.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {environment} from '../environments/environment';
 
-
-const config = {
-    apiKey: 'AIzaSyBfeAdlwMo49LteklnZP5sugxTG_ybXJUs',
-    authDomain: 'shopplatform-3c1c4.firebaseapp.com',
-    databaseURL: 'https://shopplatform-3c1c4.firebaseio.com',
-    projectId: 'shopplatform-3c1c4',
-    storageBucket: 'shopplatform-3c1c4.appspot.com',
-    messagingSenderId: '878506105599'
-};
 
 @NgModule({
     declarations: [
@@ -33,8 +27,10 @@ const config = {
         NavComponent
     ],
     imports: [
-        AngularFireModule.initializeApp(config),
+        AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
         AngularFirestoreModule,
+        AngularFireStorageModule,
+        AngularFireAuthModule,
         BrowserModule,
         BrowserAnimationsModule,
         MaterialModule,

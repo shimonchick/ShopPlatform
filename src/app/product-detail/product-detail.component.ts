@@ -23,7 +23,7 @@ export class ProductDetailComponent implements OnInit {
     }
 
     getProduct() {
-        const id: number = Number(this.route.snapshot.paramMap.get('id')); // get id parameter from URL
+        const id: string = this.route.snapshot.paramMap.get('id'); // get id parameter from URL
         this.productService.getProduct(id)
             .subscribe(product => {
                 this.product = product;
@@ -35,13 +35,13 @@ export class ProductDetailComponent implements OnInit {
         this.location.back();
     }
 
-    save() {
-        this.productService.updateProduct(this.product)
-            .subscribe(() => this.goBack());
+    update() {
+        this.productService.updateProduct(this.product);
+        this.goBack();
     }
 
-    delete(product: Product) {
-        this.productService.deleteProduct(product)
-            .subscribe(() => this.goBack());
+    delete() {
+        this.productService.deleteProduct(this.product)
+            .then(() => this.goBack());
     }
 }
