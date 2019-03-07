@@ -14,24 +14,3 @@
         </tr>
     </table>
 </section>
-<section *ngIf="auth.canCreateProducts()">
-    <label>Product name:
-        <input #productName/>
-    </label>
-    <br>
-    <label>Description:
-        <textarea #productDescription placeholder="Enter product description here"></textarea>
-
-    </label>
-    <br>
-    <label>Product price:
-        <input #productPrice/>
-    </label>
-    <br>
-
-    <!-- (click) passes input value to add() and then clears the input -->
-    <button (click)="add(productName.value, productDescription.value, productPrice.value);
-   productName.value=''; productDescription.value='';productPrice.value=''; ">
-        Add product
-    </button>
-</section>

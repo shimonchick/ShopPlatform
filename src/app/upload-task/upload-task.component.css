@@ -1,0 +1,9 @@
+progress::-webkit-progress-value {
+  transition: width 0.1s ease; }
+
+img {
+  max-width: 100%;
+  width: auto;
+  height: auto; }
+
+/*# sourceMappingURL=upload-task.component.css.map */

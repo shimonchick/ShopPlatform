@@ -26,18 +26,4 @@ export class ProductsComponent implements OnInit {
         this.products$ = this.productService.getProducts();
     }
 
-    add(name: string, description: string, price: string) {
-        name = name.trim();
-        description = description.trim();
-        const price_number: number = Number(price.trim());
-
-        if (!name || !description || !price) {
-            // TODO: show a message to the user.
-            return;
-        }
-        // TODO: validate input
-        // TODO: valid seller
-        this.productService.createProduct({name: name, description: description, price: price_number, seller: this.user.uid} as Product);
-
-    }
 }

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gCAAiC;EAC/B,UAAU,EAAE,eAAe;;AAG7B,GAAI;EACF,SAAS,EAAE,IAAI;EACf,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI",
+"sources": ["upload-task.component.scss"],
+"names": [],
+"file": "upload-task.component.css"
+}

@@ -4,7 +4,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ProductsComponent} from './products/products.component';
 import {ProductDetailComponent} from './product-detail/product-detail.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFireAuthModule} from '@angular/fire/auth';
@@ -14,13 +14,22 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {environment} from '../environments/environment';
 import {NgxAuthFirebaseUIModule} from 'ngx-auth-firebaseui';
 import {AngularFireModule} from '@angular/fire';
+import {ProductCreateComponent} from './product-create/product-create.component';
+import {DropzoneDirective} from './dropzone.directive';
+import {UploaderComponent} from './uploader/uploader.component';
+import {UploadTaskComponent} from './upload-task/upload-task.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
     declarations: [
         AppComponent,
         ProductsComponent,
         ProductDetailComponent,
-        NavComponent
+        NavComponent,
+        ProductCreateComponent,
+        DropzoneDirective,
+        UploaderComponent,
+        UploadTaskComponent
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
@@ -32,7 +41,9 @@ import {AngularFireModule} from '@angular/fire';
         MaterialModule,
         AppRoutingModule,
         FormsModule,
-        NgxAuthFirebaseUIModule.forRoot(environment.firebase)
+        NgxAuthFirebaseUIModule.forRoot(environment.firebase),
+        ReactiveFormsModule,
+        FlexLayoutModule
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -1,0 +1,19 @@
+.form-container {
+  display: flex;
+  flex-direction: column; }
+
+.product-container {
+  width: 50%;
+  margin: 0 auto; }
+
+.container-full-width {
+  width: 100%; }
+
+/*
+.uploader-container{
+  width:50%;
+  height: auto;
+}
+*/
+
+/*# sourceMappingURL=product-create.component.css.map */
