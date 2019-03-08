@@ -1,43 +1,85 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
+import {CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
 import {Product} from '../models/product';
-import {ProductService} from '../services/product.service';
-import {AuthService} from '../services/auth.service';
-import {Observable} from 'rxjs';
-import {User} from '../models/user';
+import {MatBottomSheet} from '@angular/material';
+import {ProductBottomSheetComponent} from './product-bottom-sheet/product-bottom-sheet.component';
 
 @Component({
     selector: 'app-products',
     templateUrl: './products.component.html',
     styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent {
+    @ViewChild(CdkVirtualScrollViewport)
+    viewport: CdkVirtualScrollViewport;
 
-    products$: Observable<Product[]>;
-    user: User;
+    batch = 20;
+    theEnd = false;
 
-    constructor(private productService: ProductService,
-                public auth: AuthService) {
-        auth.user$.subscribe(user => {
-            this.user = user;
+    offset = new BehaviorSubject(null);
+    infinite: Observable<any[]>;
+
+    constructor(private db: AngularFirestore, private bottomSheet: MatBottomSheet) {
+        const batchMap = this.offset.pipe(
+            tap(() => console.log('Getting new batch of data')),
+            throttleTime(500),
+            mergeMap(n => this.getBatch(n)),
+            scan((acc, batch) => {
+                return {...acc, ...batch};
+            }, {})
+        );
+
+        this.infinite = batchMap.pipe(map(v => Object.values(v)));
+    }
+
+    getBatch(offset) {
+        return this.db
+            .collection('products', ref =>
+                ref
+                    .orderBy('name')
+                    .startAfter(offset)
+                    .limit(this.batch)
+            )
+            .snapshotChanges()
+            .pipe(
+                tap(arr => (arr.length ? null : (this.theEnd = true))),
+                map(arr => {
+                    return arr.reduce((acc, cur) => {
+                        const id = cur.payload.doc.id;
+                        const data = cur.payload.doc.data();
+                        return {...acc, [id]: data};
+                    }, {});
+                })
+            );
+    }
+
+    nextBatch(e, offset) {
+
+        if (this.theEnd) {
+            return;
+        }
+
+        const end = this.viewport.getRenderedRange().end;
+        const total = this.viewport.getDataLength();
+        const limit = total - 4; // If you are 4 elements before the end - fetch more
+
+        console.log(`${end}, '>=', ${total}`);
+        if (end >= limit) {
+            this.offset.next(offset);
+        }
+    }
+
+    trackByIdx(i) {
+        return i;
+    }
+
+    openProductDetailBottomSheet(product: Product) {
+        this.bottomSheet.open(ProductBottomSheetComponent, {
+            data: product
         });
     }
 
-    ngOnInit() {
-        this.products$ = this.productService.getProducts();
-    }
-
-    add(name: string, description: string, price: string) {
-        name = name.trim();
-        description = description.trim();
-        const price_number: number = Number(price.trim());
-
-        if (!name || !description || !price) {
-            // TODO: show a message to the user.
-            return;
-        }
-        // TODO: validate input
-        // TODO: valid seller
-        this.productService.createProduct({name: name, description: description, price: price_number, seller: this.user.uid} as Product);
-
-    }
 }

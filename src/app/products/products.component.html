@@ -1,37 +1,18 @@
-<section>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-        </tr>
-        <tr *ngFor="let product of products$ | async">
+<ng-container *ngIf="infinite | async as products">
 
-            <td><a routerLink="/products/{{product.id}}">{{product.name}}</a></td>
 
-            <td>{{product.price}}</td>
-            <td>id: {{product.id}}</td>
+    <cdk-virtual-scroll-viewport (scrolledIndexChange)="nextBatch($event, (products[products.length - 1].name))"
+                                 itemSize="100">
 
-        </tr>
-    </table>
-</section>
-<section *ngIf="auth.canCreateProducts()">
-    <label>Product name:
-        <input #productName/>
-    </label>
-    <br>
-    <label>Description:
-        <textarea #productDescription placeholder="Enter product description here"></textarea>
-
-    </label>
-    <br>
-    <label>Product price:
-        <input #productPrice/>
-    </label>
-    <br>
-
-    <!-- (click) passes input value to add() and then clears the input -->
-    <button (click)="add(productName.value, productDescription.value, productPrice.value);
-   productName.value=''; productDescription.value='';productPrice.value=''; ">
-        Add product
-    </button>
-</section>
+        <mat-list>
+            <mat-list-item *cdkVirtualFor="let product of products; let i = index; trackBy: trackByIdx"
+                           class="animated lightSpeedIn" fxLayout="row">
+                <h2>{{product.name}}</h2>
+                <p>{{product.description}}</p>
+                <p>{{product.price}}</p>
+                <span class="spacer"></span>
+                <button (click)="openProductDetailBottomSheet(product)" mat-button>View</button>
+            </mat-list-item>
+        </mat-list>
+    </cdk-virtual-scroll-viewport>
+</ng-container>

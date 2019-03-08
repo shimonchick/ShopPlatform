@@ -2,8 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ProductsComponent} from './products/products.component';
-import {ProductDetailComponent} from './product-detail/product-detail.component';
 import {FormsModule} from '@angular/forms';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
@@ -14,16 +12,17 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {environment} from '../environments/environment';
 import {NgxAuthFirebaseUIModule} from 'ngx-auth-firebaseui';
 import {AngularFireModule} from '@angular/fire';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {CoreModule} from './core.module';
 
 @NgModule({
     declarations: [
         AppComponent,
-        ProductsComponent,
-        ProductDetailComponent,
-        NavComponent
+        NavComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
+        NgxAuthFirebaseUIModule.forRoot(environment.firebase),
         AngularFirestoreModule,
         AngularFireStorageModule,
         AngularFireAuthModule,
@@ -32,10 +31,11 @@ import {AngularFireModule} from '@angular/fire';
         MaterialModule,
         AppRoutingModule,
         FormsModule,
-        NgxAuthFirebaseUIModule.forRoot(environment.firebase)
+        ScrollingModule,
+        CoreModule
     ],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {
 }

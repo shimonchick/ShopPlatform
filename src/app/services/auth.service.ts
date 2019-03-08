@@ -6,9 +6,10 @@ import {Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 import {AuthProcessService} from 'ngx-auth-firebaseui';
 import {Product} from '../models/product';
+import {CoreModule} from '../core.module';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: CoreModule
 })
 export class AuthService {
 
