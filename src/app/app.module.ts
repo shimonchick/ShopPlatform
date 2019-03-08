@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFireAuthModule} from '@angular/fire/auth';
@@ -12,6 +12,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {environment} from '../environments/environment';
 import {NgxAuthFirebaseUIModule} from 'ngx-auth-firebaseui';
 import {AngularFireModule} from '@angular/fire';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CoreModule} from './core.module';
 
@@ -26,13 +27,16 @@ import {CoreModule} from './core.module';
         AngularFirestoreModule,
         AngularFireStorageModule,
         AngularFireAuthModule,
+        NgxAuthFirebaseUIModule.forRoot(environment.firebase),
         BrowserModule,
         BrowserAnimationsModule,
         MaterialModule,
         AppRoutingModule,
         FormsModule,
         ScrollingModule,
-        CoreModule
+        CoreModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Product} from '../models/product';
 import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,9 @@ export class ProductService {
 
 
     constructor(
-        private db: AngularFirestore) {
+        private db: AngularFirestore,
+        private storage: AngularFireStorage,
+    ) {
     }
 
     getProducts(): Observable<Product[]> {
@@ -28,6 +31,7 @@ export class ProductService {
 
     // parameter is object and not a product since we don't want the product id starting value(undefined)
     createProduct(data: any): Promise<void> {
+        console.log('creating product');
         const key: string = this.db.createId();
         const product: Product = {id: key, ...data};
         const documentReference = this.db.doc<Product>(`/products/${key}`);
@@ -51,4 +55,14 @@ export class ProductService {
                 return of(result as T);
             };
         }*/
+
+
+    /*
+        uploadProductImage(path: string, file: File): AngularFireUploadTask{
+            const ref = this.storage.ref(path);
+            const task = this.storage.upload(path, file);
+            return task;
+        }
+    */
+
 }

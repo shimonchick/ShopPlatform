@@ -5,6 +5,7 @@ import {RouterModule} from '@angular/router';
 
 const routes = [
     {path: '', component: ProductsComponent},
+    {path: 'create', loadChildren: './product-create/product-create.module#ProductCreateModule'},
     {path: ':id', component: ProductDetailComponent},
 ];
 

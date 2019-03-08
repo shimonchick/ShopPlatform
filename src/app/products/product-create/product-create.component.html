@@ -1,0 +1,49 @@
+<mat-horizontal-stepper #stepper linear>
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Enter product pictures</ng-template>
+            <app-uploader (urls)="OnUploads($event)"></app-uploader>
+
+            <div>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Fill product details</ng-template>
+            <mat-form-field class="container-full-width">
+                <input #productName (change)="setProductName(productName.value)" matInput placeholder="Name">
+            </mat-form-field>
+
+            <mat-form-field class="container-full-width">
+                <textarea #productDescription (change)="setProductDescription(productDescription.value)" matInput
+                          placeholder="Description">
+
+                </textarea>
+            </mat-form-field>
+            <mat-form-field class="container-full-width">
+                <input #productPrice (change)="setProductPrice(productPrice.value)" matInput placeholder="price"
+                       type="number">
+            </mat-form-field>
+
+
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <h3>Create product listing:</h3>
+        <button (click)="createProduct();
+            productName.value=''; productDescription.value='';productPrice.value=''; ">
+            Create
+        </button>
+        <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button (click)="stepper.reset()" mat-button>Reset</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>

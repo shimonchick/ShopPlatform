@@ -4,6 +4,8 @@ import {ProductDetailComponent} from './product-detail/product-detail.component'
 import {ProductBottomSheetComponent} from './product-bottom-sheet/product-bottom-sheet.component';
 import {ProductsRoutingModule} from './products-routing.module';
 import {SharedModule} from '../shared.module';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireStorageModule} from '@angular/fire/storage';
 
 @NgModule({
     declarations: [
@@ -13,7 +15,9 @@ import {SharedModule} from '../shared.module';
     ],
     imports: [
         ProductsRoutingModule,
-        SharedModule
+        SharedModule,
+        AngularFirestoreModule,
+        AngularFireStorageModule
     ],
     entryComponents: [
         ProductBottomSheetComponent

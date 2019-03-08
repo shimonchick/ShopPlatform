@@ -1,0 +1,18 @@
+<div (dropped)="onDrop($event)"
+     (hovered)="toggleHover($event)"
+     [class.hovering]="isHovering"
+     appDropzone
+     class="dropzone">
+
+
+    <h3>Choose files to upload</h3>
+    <p>Drag and Drop Files or </p>
+    <input (change)="onDrop($event.target.files)" class="file-input" multiple type="file">
+</div>
+
+<h3>Uploads</h3>
+
+<div *ngFor="let file of files" class="upload-list">
+    <app-upload-task [file]="file" (delete)="onDelete($event)" (finished)="onFinished($event)"></app-upload-task>
+    <!--<button (click)="remove(file)">Remove</button>-->
+</div>
