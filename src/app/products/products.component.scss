@@ -2,7 +2,7 @@ cdk-virtual-scroll-viewport {
   height: calc(100% - 64px);
 
   mat-list-item {
-    height: 100px;
+    height: 200px;
   }
 }
 
@@ -10,3 +10,9 @@ cdk-virtual-scroll-viewport {
   flex: auto;
 }
 
+div.item-container {
+  width: 100%;
+  & > div {
+    text-align: center;
+  }
+}

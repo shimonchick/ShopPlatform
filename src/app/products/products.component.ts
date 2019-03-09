@@ -20,7 +20,9 @@ export class ProductsComponent {
     theEnd = false;
 
     offset = new BehaviorSubject(null);
-    infinite: Observable<any[]>;
+    infinite$: Observable<Product[]>;
+
+    displayedColumns = ['img', 'name', 'description', 'options'];
 
     constructor(private db: AngularFirestore, private bottomSheet: MatBottomSheet) {
         const batchMap = this.offset.pipe(
@@ -32,7 +34,7 @@ export class ProductsComponent {
             }, {})
         );
 
-        this.infinite = batchMap.pipe(map(v => Object.values(v)));
+        this.infinite$ = batchMap.pipe(map(v => Object.values(v)));
     }
 
     getBatch(offset) {

@@ -1,17 +1,34 @@
-<ng-container *ngIf="infinite | async as products">
+<ng-container *ngIf="infinite$ | async as products">
 
 
     <cdk-virtual-scroll-viewport (scrolledIndexChange)="nextBatch($event, (products[products.length - 1].name))"
-                                 itemSize="100">
+                                 itemSize="200">
 
         <mat-list>
             <mat-list-item *cdkVirtualFor="let product of products; let i = index; trackBy: trackByIdx"
-                           class="animated lightSpeedIn" fxLayout="row">
-                <h2>{{product.name}}</h2>
-                <p>{{product.description}}</p>
-                <p>{{product.price}}</p>
-                <span class="spacer"></span>
-                <button (click)="openProductDetailBottomSheet(product)" mat-button>View</button>
+                           class="animated lightSpeedIn">
+                <div fxLayout fxLayoutAlign="center center" class="item-container">
+                    <div fxFlex="20%">
+                        <img [src]="product.urls" alt="product image"/>
+                    </div>
+                    <div fxFlex="0">
+                        <div>
+                            <h2>{{product.name}}</h2>
+                        </div>
+                        <div style="text-align: left;">
+                            #product, #buyable
+                        </div>
+                    </div>
+                    <!--<div>-->
+                    <!--<p>{{product.description}}</p>-->
+                    <!--</div>-->
+                    <div fxFlex="20%">
+                        <p>{{product.price}}</p>
+                    </div>
+                    <div fxFlex="20%">
+                        <button mat-button (click)="openProductDetailBottomSheet(product)">View</button>
+                    </div>
+                </div>
             </mat-list-item>
         </mat-list>
     </cdk-virtual-scroll-viewport>

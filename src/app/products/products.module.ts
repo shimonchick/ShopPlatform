@@ -6,6 +6,7 @@ import {ProductsRoutingModule} from './products-routing.module';
 import {SharedModule} from '../shared.module';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
         ProductsRoutingModule,
         SharedModule,
         AngularFirestoreModule,
-        AngularFireStorageModule
+        AngularFireStorageModule,
+        FlexLayoutModule,
     ],
     entryComponents: [
         ProductBottomSheetComponent
