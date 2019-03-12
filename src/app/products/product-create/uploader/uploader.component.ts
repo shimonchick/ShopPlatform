@@ -20,12 +20,12 @@ export class UploaderComponent {
         console.log(this.isHovering);
     }
 
-    onDrop(files: FileList) {
+    onDrop(files: File[]) {
         if (!files) {
             return;
         }
         for (let i = 0; i < files.length; i++) {
-            this.files.push(files.item(i));
+            this.files.push(files[i]);
         }
 
         console.log(this.files);

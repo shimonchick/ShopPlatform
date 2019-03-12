@@ -5,19 +5,20 @@ import {UploadTaskComponent} from './upload-task/upload-task.component';
 import {SharedModule} from '../../shared.module';
 import {ProductCreateRoutingModule} from './product-create-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
-import {DropzoneDirective} from './directives/dropzone.directive';
+import {NgxDropzoneModule} from 'ngx-dropzone';
 
 @NgModule({
     declarations: [
         ProductCreateComponent,
         UploaderComponent,
         UploadTaskComponent,
-        DropzoneDirective,
     ],
     imports: [
         SharedModule,
         ProductCreateRoutingModule,
         ReactiveFormsModule,
+        NgxDropzoneModule,
+
     ]
 })
 export class ProductCreateModule {
