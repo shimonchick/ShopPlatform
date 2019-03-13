@@ -1,6 +1,6 @@
 <article *ngIf="product">
     <div><h3>Product details:</h3>
-        <div>Seller: {{product.seller}}</div>
+        <div>Seller: {{product.sellerUid}}</div>
         <label>Name:
             <input [(ngModel)]="product.name" placeholder="name">
         </label>
@@ -11,6 +11,11 @@
         <label>Price
             <input [(ngModel)]="product.price">
         </label>
+        <button (click)="chatService.create(product.sellerUid, product.id)"
+                *ngIf="auth.user$ | async"
+                mat-raised-button>
+            Chat with user
+        </button>
     </div>
     <button (click)="update()" *ngIf="auth.canEdit(product)">save</button>
     <button (click)="delete(product)" *ngIf="auth.canDelete(product)">Delete</button>

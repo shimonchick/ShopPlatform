@@ -34,3 +34,6 @@ testem.log
 /typings
 
 # e2e
+
+#custom
+*.css # scss only

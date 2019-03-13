@@ -3,7 +3,7 @@ import {Observable, of} from 'rxjs';
 import {User} from '../models/user';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {first, switchMap} from 'rxjs/operators';
 import {AuthProcessService} from 'ngx-auth-firebaseui';
 import {Product} from '../models/product';
 import {CoreModule} from '../core.module';
@@ -48,7 +48,7 @@ export class AuthService {
         if (!this.isLoggedIn()) { // unauthorised users cannot edit
             return false;
         }
-        return product.seller === this.snapshotUser.uid || this.snapshotUser.roles.admin;
+        return product.sellerUid === this.snapshotUser.uid || this.snapshotUser.roles.admin;
     }
 
     ///// Role-based Authorization //////
@@ -57,12 +57,20 @@ export class AuthService {
         if (!this.isLoggedIn()) { // unauthorised users cannot edit
             return false;
         }
-        return product.seller === this.snapshotUser.uid || this.snapshotUser.roles.admin;
+        return product.sellerUid === this.snapshotUser.uid || this.snapshotUser.roles.admin;
     }
 
     canCreateProducts() {
         const allowed = ['admin', 'seller'];
         return this.checkAuthorization(this.snapshotUser, allowed);
+    }
+
+    getUserAsPromise() {
+        return this.user$.pipe(first()).toPromise();
+    }
+
+    getSnapshotUser() {
+        return this.snapshotUser;
     }
 
     private updateUserData({uid, photoURL, displayName, email, phoneNumber}) {
@@ -98,5 +106,4 @@ export class AuthService {
         }
         return false;
     }
-
 }

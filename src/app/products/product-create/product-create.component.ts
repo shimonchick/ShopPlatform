@@ -3,7 +3,8 @@ import {Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import {User} from '../../models/user';
 import {AuthService} from '../../services/auth.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-product-create',
@@ -21,6 +22,7 @@ export class ProductCreateComponent implements OnInit {
     constructor(
         private productService: ProductService,
         public auth: AuthService,
+        private router: Router,
         private formBuilder: FormBuilder,
     ) {
 
@@ -32,7 +34,7 @@ export class ProductCreateComponent implements OnInit {
 
     ngOnInit() {
         this.firstFormGroup = this.formBuilder.group({
-            firstCtrl: ['', Validators.required]
+            firstCtrl: ['']
         });
         this.secondFormGroup = this.formBuilder.group({
             secondCtrl: ['']
@@ -46,9 +48,10 @@ export class ProductCreateComponent implements OnInit {
                 name: name,
                 description: description,
                 price: price,
-                seller: this.user.uid,
+                sellerUid: this.user.uid,
                 urls: this.urls,
             } as Product);
+        this.router.navigateByUrl('/products');
 
     }
 
