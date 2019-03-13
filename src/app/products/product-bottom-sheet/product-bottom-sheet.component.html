@@ -30,13 +30,12 @@
             <!--<mat-card-subtitle>#product #tags</mat-card-subtitle>-->
         </mat-card-header>
         <img class="preview-mat-card-image" mat-card-image
-             [src]="product.urls[0]" alt="Product image"
-             alt="Photo of a Shiba Inu"/>
+             [src]="product.urls[0]" alt="Product image" />
         <mat-card-content class="preview-description-wrapper" style="max-width: none;">
             {{product.description}}
         </mat-card-content>
         <mat-card-actions align="right">
-            <button mat-button>VIEW</button>
+            <button mat-raised-button>VIEW</button>
             <div fxFlex></div>
             <button mat-icon-button [color]="'accent'">
                 <!-- todo if liked -->
