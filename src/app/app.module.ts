@@ -37,6 +37,7 @@ import {CoreModule} from './core.module';
         CoreModule,
         FlexLayoutModule,
         ReactiveFormsModule,
+        FlexLayoutModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

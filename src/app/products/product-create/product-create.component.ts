@@ -3,7 +3,7 @@ import {Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import {User} from '../../models/user';
 import {AuthService} from '../../services/auth.service';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
     selector: 'app-product-create',
@@ -17,9 +17,6 @@ export class ProductCreateComponent implements OnInit {
     secondFormGroup: FormGroup;
 
     private urls: string[];
-    private name: string;
-    private description: string;
-    private price: number;
 
     constructor(
         private productService: ProductService,
@@ -35,20 +32,20 @@ export class ProductCreateComponent implements OnInit {
 
     ngOnInit() {
         this.firstFormGroup = this.formBuilder.group({
-            firstCtrl: ['']
+            firstCtrl: ['', Validators.required]
         });
         this.secondFormGroup = this.formBuilder.group({
             secondCtrl: ['']
         });
     }
 
-    createProduct() {
+    createProduct(name: string, description: string, price: number) {
 
         this.productService.createProduct(
             {
-                name: this.name,
-                description: this.description,
-                price: this.price,
+                name: name,
+                description: description,
+                price: price,
                 seller: this.user.uid,
                 urls: this.urls,
             } as Product);
@@ -59,30 +56,4 @@ export class ProductCreateComponent implements OnInit {
         this.urls = urls;
     }
 
-    setProductName(value: string) {
-        if (!value) {
-            return;
-        }
-        value = value.trim();
-        // TODO other validations
-        this.name = value;
-    }
-
-    setProductDescription(value: string) {
-        if (!value) {
-            return;
-        }
-        value = value.trim();
-        // TODO other validations
-        this.description = value;
-    }
-
-    setProductPrice(value: number) {
-        if (!value) {
-            return;
-        }
-
-        // TODO other validations
-        this.price = value;
-    }
 }

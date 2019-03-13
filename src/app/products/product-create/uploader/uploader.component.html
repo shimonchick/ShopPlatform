@@ -1,18 +1,32 @@
-<div (dropped)="onDrop($event)"
-     (hovered)="toggleHover($event)"
-     [class.hovering]="isHovering"
-     appDropzone
-     class="dropzone">
+<article class="container">
+    <section class="responsive-section">
+        <ngx-dropzone
+                (filesDropped)="onDrop($event)"
+                accept="image/png,image/jpeg,image/jpg,image/"
+                label="Click or drag images here to upload"
+                maxFileSize="10485760"
+                multiple="true">
+
+        </ngx-dropzone>
+
+    </section>
+    <section class="responsive-section">
+
+        <h3>Uploads</h3>
+
+        <div class="images-container">
+            <div *ngFor="let file of files">
+                <app-upload-task (delete)="onDelete($event)" (finished)="onFinished($event)"
+                                 [file]="file">
+
+                </app-upload-task>
+            </div>
+        </div>
 
 
-    <h3>Choose files to upload</h3>
-    <p>Drag and Drop Files or </p>
-    <input (change)="onDrop($event.target.files)" class="file-input" multiple type="file">
-</div>
+    </section>
 
-<h3>Uploads</h3>
 
-<div *ngFor="let file of files" class="upload-list">
-    <app-upload-task [file]="file" (delete)="onDelete($event)" (finished)="onFinished($event)"></app-upload-task>
-    <!--<button (click)="remove(file)">Remove</button>-->
-</div>
+</article>
+
+
