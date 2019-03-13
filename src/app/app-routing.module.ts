@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
     {path: 'products', loadChildren: './products/products.module#ProductsModule'},
+    {path: 'chats', loadChildren: './chat/chat.module#ChatModule'},
     {path: '', redirectTo: 'products', pathMatch: 'full'}
 ];
 

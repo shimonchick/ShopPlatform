@@ -1,57 +1,60 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
-               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-               [mode]="(isHandset$ | async) ? 'over' : 'side'"
-               [opened]="!(isHandset$ | async)">
-    <mat-toolbar color="primary">Menu</mat-toolbar>
-    <mat-nav-list>
-        <a mat-list-item routerLink="/products/create">Add product</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-              type="button"
-              aria-label="Toggle sidenav"
-              mat-icon-button
-              (click)="drawer.toggle()"
-              *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
+    <mat-sidenav #drawer [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+                 [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                 [opened]="!(isHandset$ | async)"
+                 class="sidenav"
+                 fixedInViewport="true">
+        <mat-toolbar color="primary">Menu</mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/products/create">Add product</a>
+            <a href="#" mat-list-item>Link 2</a>
+            <a href="#" mat-list-item>Link 3</a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button
+                    (click)="drawer.toggle()"
+                    *ngIf="isHandset$ | async"
+                    aria-label="Toggle sidenav"
+                    mat-icon-button
+                    type="button">
+                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
 
-      <span>ShopPlatform</span>
+            <span>ShopPlatform</span>
 
-      <span class="spacer"></span>
-        <button *ngIf="auth.user$ | async"
-                mat-raised-button
-                routerLink="/products/create">
-            Add item
-        </button>
-      <!--<button mat-button></button>-->
-      <div class="providers-container">
-        <div *ngIf="auth.user$ | async; then authenticated else guest">
-          <!-- template will replace this div -->
-        </div>
+            <span class="spacer"></span>
+            <button *ngIf="auth.user$ | async"
+                    mat-raised-button
+                    routerLink="/products/create">
+                Add item
+            </button>
+            <!--TODO: change chatService id-->
 
-        <!-- User NOT logged in -->
-        <ng-template #guest>
-          <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"
-                                         [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>
-        </ng-template>
+            <!--<button mat-button></button>-->
+            <div class="providers-container">
+                <div *ngIf="auth.user$ | async; then authenticated else guest">
+                    <!-- template will replace this div -->
+                </div>
+
+                <!-- User NOT logged in -->
+                <ng-template #guest>
+                    <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"
+                                                   [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>
+                </ng-template>
 
 
-        <!-- User logged in -->
-        <ng-template #authenticated>
-          <div *ngIf="auth.user$ | async as user">
-            <!--<h3>Howdy, {{ user.displayName }}</h3>-->
-            <img [src]="user.photoURL" alt="avatar" class="avatar"/>
-          </div>
-        </ng-template>
-      </div>
-    </mat-toolbar>
-    <!-- Add Content Here -->
-    <ng-content></ng-content>
-  </mat-sidenav-content>
+                <!-- User logged in -->
+                <ng-template #authenticated>
+                    <div *ngIf="auth.user$ | async as user">
+                        <!--<h3>Howdy, {{ user.displayName }}</h3>-->
+                        <img [src]="user.photoURL" alt="avatar" class="avatar"/>
+                    </div>
+                </ng-template>
+            </div>
+        </mat-toolbar>
+        <!-- Add Content Here -->
+        <ng-content></ng-content>
+    </mat-sidenav-content>
 </mat-sidenav-container>
