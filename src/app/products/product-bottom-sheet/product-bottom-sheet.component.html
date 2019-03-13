@@ -1,1 +1,50 @@
-<app-product-detail [product]="data"></app-product-detail>
+<article *ngIf="data as product">
+    <div class="my-grid" fxHide.lt-sm fxLayout>
+        <div class="preview-image-wrapper preview-mat-card-image" fxFlex="33" fxLayout fxLayoutAlign="center center">
+            <img [src]="product.urls[0]" alt="Product image"/>
+        </div>
+        <div class="preview-section" fxFlex="67" fxLayout="column">
+            <div class="preview-title-wrapper mat-card-header">
+                <span mat-card-title>{{product.name}}</span>
+            </div>
+            <div class="preview-description-wrapper mat-card-content">
+                <p>
+                    {{product.description}}
+                </p>
+            </div>
+            <div fxFlex></div>
+            <div fxLayout class="preview-options-wrapper">
+                <button mat-button>VIEW</button>
+                <div fxFlex></div>
+                <button mat-icon-button [color]="''">
+                    <!-- todo if liked -->
+                    <mat-icon>bookmark</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <mat-card class="example-card" fxHide.gt-xs>
+        <mat-card-header>
+            <!--<div mat-card-avatar class="example-header-image"></div>-->
+            <mat-card-title>{{product.name}}</mat-card-title>
+            <!--<mat-card-subtitle>#product #tags</mat-card-subtitle>-->
+        </mat-card-header>
+        <img class="preview-mat-card-image" mat-card-image
+             [src]="product.urls[0]" alt="Product image"
+             alt="Photo of a Shiba Inu"/>
+        <mat-card-content class="preview-description-wrapper" style="max-width: none;">
+            {{product.description}}
+        </mat-card-content>
+        <mat-card-actions align="right">
+            <button mat-button>VIEW</button>
+            <div fxFlex></div>
+            <button mat-icon-button [color]="'accent'">
+                <!-- todo if liked -->
+                <mat-icon>bookmark</mat-icon>
+            </button>
+            <button mat-icon-button (click)="dismiss()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</article>

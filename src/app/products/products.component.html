@@ -6,27 +6,22 @@
 
         <mat-list>
             <mat-list-item *cdkVirtualFor="let product of products; let i = index; trackBy: trackByIdx"
-                           class="animated lightSpeedIn">
+                           class="animated fadeIn"
+                           (click)="openProductDetailBottomSheet(product)">
                 <div fxLayout fxLayoutAlign="center center" class="item-container">
-                    <div fxFlex="20%">
-                        <img [src]="product.urls" alt="product image"/>
+                    <div fxFlex="30%">
+                        <img [src]="product.urls" alt="product image" class="product-image"/>
                     </div>
-                    <div fxFlex="0">
+                    <div fxFlex="15%">
+                        <p>{{product.price}}</p>
+                    </div>
+                    <div fxFlex="0" style="padding-left: 40px; text-align: left">
                         <div>
                             <h2>{{product.name}}</h2>
                         </div>
-                        <div style="text-align: left;">
+                        <div>
                             #product, #buyable
                         </div>
-                    </div>
-                    <!--<div>-->
-                    <!--<p>{{product.description}}</p>-->
-                    <!--</div>-->
-                    <div fxFlex="20%">
-                        <p>{{product.price}}</p>
-                    </div>
-                    <div fxFlex="20%">
-                        <button mat-button (click)="openProductDetailBottomSheet(product)">View</button>
                     </div>
                 </div>
             </mat-list-item>
