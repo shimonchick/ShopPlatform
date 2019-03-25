@@ -1,0 +1,13 @@
+<div class="auth-container">
+    <ngx-auth-firebaseui
+            (onError)="printError($event)"
+            (onSuccess)="printUser($event)"
+            [goBackURL]="'products'"
+            [guestEnabled]="false"
+            [providers]="[providers.Google, providers.Facebook, providers.Twitter, providers.Github]"
+            privacyPolicyUrl="/legal/privacy"
+            tosUrl="/legal/tos"
+    >
+    </ngx-auth-firebaseui>
+
+</div>
