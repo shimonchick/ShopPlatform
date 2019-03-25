@@ -1,0 +1,16 @@
+<div *ngIf=" auth.user$ | async as user">
+    <h1>Your chats</h1>
+
+    <ul>
+        <li *ngFor="let chat of userChats$ | async">
+
+        </li>
+    </ul>
+    <mat-card *ngFor="let chat of userChats$ | async">
+
+        <mat-card-actions>
+            <a [routerLink]="chat.id">{{ chat.id }} - {{ chat.messages.length }} Messages </a>
+        </mat-card-actions>
+
+    </mat-card>
+</div>
