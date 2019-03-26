@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {firestore} from 'firebase/app';
 import {map, switchMap} from 'rxjs/operators';
 import {combineLatest, Observable, of} from 'rxjs';
+import {UserService} from './user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,8 @@ export class ChatService {
     constructor(
         private afs: AngularFirestore,
         private auth: AuthService,
-        private router: Router
+        private router: Router,
+        private userService: UserService
     ) {
     }
 
@@ -29,21 +31,59 @@ export class ChatService {
             );
     }
 
+    getBuyerChats() {
+        return this.auth.user$.pipe(
+            switchMap(user => {
+                return this.afs
+                    .collection('chats', ref => ref.where('buyerId', '==', user.uid))
+                    .snapshotChanges()
+                    .pipe(
+                        map(actions => {
+                            return actions.map(a => {
+                                const data: Object = a.payload.doc.data();
+                                const id = a.payload.doc.id;
+                                return {id, ...data};
+                            });
+                        })
+                    );
+            })
+        );
+    }
+
+    getSellerChats() {
+        return this.auth.user$.pipe(
+            switchMap(user => {
+                return this.afs
+                    .collection('chats', ref => ref.where('sellerId', '==', user.uid))
+                    .snapshotChanges()
+                    .pipe(
+                        map(actions => {
+                            return actions.map(a => {
+                                const data: Object = a.payload.doc.data();
+                                const id = a.payload.doc.id;
+                                return {id, ...data};
+                            });
+                        })
+                    );
+            })
+        );
+    }
+
     async create(sellerId: string, productId: string) {
-        const user = await this.auth.getSnapshotUser();
-        const buyerId = user.uid;
+        const buyer = await this.auth.getUserAsPromise();
+        const buyerId = buyer.uid;
 
         const data = {
-            buyerId,
-            sellerId,
-            productId,
+            buyerId: buyerId,
+            sellerId: sellerId,
+            productId: productId,
             createdAt: Date.now(),
             count: 0,
             messages: []
         };
 
         const docRef = await this.afs.collection('chats').add(data);
-        console.log('navigating');
+
         return this.router.navigate(['chats', docRef.id]);
     }
 
@@ -64,6 +104,20 @@ export class ChatService {
         }
     }
 
+    async deleteMessage(chat, msg) {
+        const {uid} = await this.auth.getUserAsPromise();
+
+        const ref = this.afs.collection('chats').doc(chat.id);
+        console.log(msg);
+        if (chat.uid === uid || msg.uid === uid) {
+            // Allowed to delete
+            delete msg.user;
+            return ref.update({
+                messages: firestore.FieldValue.arrayRemove(msg)
+            });
+        }
+    }
+
     joinUsers(chat$: Observable<any>) {
         let chat;
         const joinKeys = {};
@@ -72,17 +126,19 @@ export class ChatService {
             switchMap(c => {
                 // Unique User IDs
                 chat = c;
+                console.log(c);
 
                 const uids = Array.from(new Set(c.messages.map(v => v.uid)));
-
-                // Firestore User Doc Reads
                 if (uids) {
+                    // Firestore User Doc Reads
                     const userDocs = uids.map(u =>
                         this.afs.doc(`users/${u}`).valueChanges()
                     );
                     return userDocs.length ? combineLatest(userDocs) : of([]);
-                }
 
+                } else {
+                    return of([]);
+                }
             }),
             map(arr => {
                 arr.forEach(v => (joinKeys[(<any>v).uid] = v));
@@ -94,5 +150,4 @@ export class ChatService {
             })
         );
     }
-
 }

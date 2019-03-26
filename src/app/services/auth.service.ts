@@ -106,4 +106,9 @@ export class AuthService {
         }
         return false;
     }
+
+    async signOut() {
+        await this.ngxAuth.afa.auth.signOut();
+        return this.router.navigate(['/']);
+    }
 }

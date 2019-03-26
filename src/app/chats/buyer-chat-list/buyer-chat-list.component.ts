@@ -11,9 +11,8 @@ import {User} from '../../models/user';
 })
 export class BuyerChatListComponent implements OnInit {
 
-    userChats$;
+    userChats: any[] = [];
     seller: User;
-
     constructor(
         private cs: ChatService,
         public auth: AuthService,
@@ -22,10 +21,12 @@ export class BuyerChatListComponent implements OnInit {
     }
 
     async ngOnInit() {
-
-        this.userChats$ = this.cs.getBuyerChats();
-        console.log(this.userChats$.sellerId);
-        this.seller = await this.userService.getUserById(this.userChats$.sellerId);
+        this.cs.getBuyerChats().subscribe(async chats => {
+            this.userChats = chats;
+            console.log(this.userChats[1]);
+            console.log(this.userChats[0].messages[this.userChats[0].messages.length - 1]);
+            this.seller = await this.userService.getUserById(this.userChats[0].sellerId);
+        });
     }
 
 }

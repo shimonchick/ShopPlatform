@@ -6,6 +6,8 @@ import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
 import {Product} from '../models/product';
 import {MatBottomSheet} from '@angular/material';
 import {ProductBottomSheetComponent} from './product-bottom-sheet/product-bottom-sheet.component';
+import {AuthService} from '../services/auth.service';
+import {ChatService} from '../services/chat.service';
 
 @Component({
     selector: 'app-products',
@@ -24,7 +26,10 @@ export class ProductsComponent {
 
     displayedColumns = ['img', 'name', 'description', 'options'];
 
-    constructor(private db: AngularFirestore, private bottomSheet: MatBottomSheet) {
+    constructor(private db: AngularFirestore,
+                private bottomSheet: MatBottomSheet,
+                private auth: AuthService,
+                private cs: ChatService) {
         const batchMap = this.offset.pipe(
             tap(() => console.log('Getting new batch of data')),
             throttleTime(500),

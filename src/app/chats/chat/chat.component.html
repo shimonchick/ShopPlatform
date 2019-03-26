@@ -1,9 +1,9 @@
 <ng-container *ngIf="chat$ | async as chat">
     <ng-container *ngIf=" auth.user$ | async as user">
-        <article style="width: 90%; margin: 0 auto; position: relative">
+        <article>
 
 
-            <section #chatBox class="chat" style="width: 90%; margin: 0 auto">
+            <section #chatBox class="chat">
 
 
                 <div *ngFor="let msg of chat.messages; trackBy: trackByCreated" class="msg animated zoomInUp"
@@ -27,10 +27,10 @@
 
             </section>
             <section style="position: fixed; bottom: 0; left:5%; right: 5%;">
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" class="textarea">
                 <textarea #productDescription (keydown.enter)="submit(chat.id)"
                           [(ngModel)]="newMsg"
-                          autosize class="textarea"
+                          autosize
                           matInput
                           maxlength="100" placeholder="Enter message here">
                 </textarea>

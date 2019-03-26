@@ -1,4 +1,6 @@
 .chat {
+  width: 90%;
+  margin: 0 auto
 }
 
 .msg {
@@ -39,10 +41,16 @@
   z-index: 99;
 }
 
+.content {
+  display: flex;
+  padding: 5vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 //
 .textarea {
-  //  min-width: 300px;
-  //  min-height: 100px;
-  //  width:100%;
-  //  border: 1px solid black;
+  min-width: 300px;
+  min-height: 100px;
+  width: 90%;
 }

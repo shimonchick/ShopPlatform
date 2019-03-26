@@ -14,7 +14,7 @@
         <button (click)="chatService.create(product.sellerUid, product.id)"
                 *ngIf="auth.user$ | async"
                 mat-raised-button>
-            Chat with user
+            Chat with seller
         </button>
     </div>
     <button (click)="update()" *ngIf="auth.canEdit(product)">save</button>

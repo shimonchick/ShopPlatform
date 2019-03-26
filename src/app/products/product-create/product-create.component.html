@@ -1,20 +1,36 @@
 <mat-vertical-stepper #stepper linear>
-    <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup">
+    <mat-step [stepControl]="firstFormGroup" label="Fill product details">
+        <form class="form-full-width">
             <ng-template matStepLabel>Fill product details</ng-template>
-            <mat-form-field appearance="standard" hintLabel="Product Name" style="width:70%">
-                <input #productName matInput placeholder="Name">
+            <mat-form-field appearance="standard" class="form-field">
+                <input #productName [errorStateMatcher]="matcher" [formControl]="nameFormControl"
+                       matInput maxlength="50"
+                       minlength="3" placeholder="Name">
+                <mat-hint>
+                    Product name
+                </mat-hint>
+                <mat-error *ngIf="nameFormControl.invalid">
+                    {{getErrorMessage()}}
+                </mat-error>
             </mat-form-field>
 
-            <mat-form-field hintLabel="Max 500 characters" style="width:70%">
-                <textarea #productDescription matInput
-                          maxlength="500"
-                          placeholder="Description"></textarea>
-                <mat-hint align="end">{{productDescription.value?.length || 0}}/500</mat-hint>
+            <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
+                <textarea #productDescription [errorStateMatcher]="matcher" [formControl]="descriptionFormControl"
+                          autosize
+                          matInput maxlength="10000" placeholder="Description"></textarea>
+                <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
+                <mat-error *ngIf="descriptionFormControl.hasError('required') ">
+                    Product description is <strong>required</strong>
+                </mat-error>
             </mat-form-field>
-            <mat-form-field hintLabel="Product Price" style="width:70%">
-                <input #productPrice matInput placeholder="price"
-                       type="number">
+
+            <mat-form-field class="form-field" hintLabel="Product Price">
+                <input #productPrice [errorStateMatcher]="matcher" [formControl]="priceFormControl" matInput
+                       placeholder="price" type="number">
+                <mat-error *ngIf="descriptionFormControl.hasError('required') ">
+                    Product description is <strong>required</strong>
+                </mat-error>
+
             </mat-form-field>
 
             <div>
@@ -23,9 +39,9 @@
 
         </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step [stepControl]="secondFormGroup" label="Upload product images">
         <div>
-            <form [formGroup]="secondFormGroup">
+            <form>
                 <ng-template matStepLabel>Enter product pictures</ng-template>
                 <app-uploader (urls)="OnUploads($event)"></app-uploader>
             </form>
@@ -35,7 +51,7 @@
             <button mat-button matStepperNext>Next</button>
         </div>
     </mat-step>
-    <mat-step>
+    <mat-step label="Create product">
         <ng-template matStepLabel>Done</ng-template>
         <h3>Create product listing:</h3>
         <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);

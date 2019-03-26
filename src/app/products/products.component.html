@@ -24,6 +24,13 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                    <button (click)="cs.create(product.sellerUid, product.id)"
+                            *ngIf="auth.user$ | async"
+                            mat-raised-button>
+                        Chat with seller
+                    </button>
+                </div>
             </mat-list-item>
         </mat-list>
     </cdk-virtual-scroll-viewport>
