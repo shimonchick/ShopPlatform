@@ -1,11 +1,9 @@
 import {Component, ViewChild} from '@angular/core';
-import {CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
 import {Product} from '../models/product';
-import {MatBottomSheet} from '@angular/material';
-import {ProductBottomSheetComponent} from './product-bottom-sheet/product-bottom-sheet.component';
+import {ChangeEvent, VirtualScrollerComponent} from 'ngx-virtual-scroller';
 
 @Component({
     selector: 'app-products',
@@ -13,35 +11,43 @@ import {ProductBottomSheetComponent} from './product-bottom-sheet/product-bottom
     styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent {
-    @ViewChild(CdkVirtualScrollViewport)
-    viewport: CdkVirtualScrollViewport;
+    @ViewChild(VirtualScrollerComponent)
+    scroller: VirtualScrollerComponent;
 
-    batch = 20;
+    batch = 10;
     theEnd = false;
+    loading = false;
 
     offset = new BehaviorSubject(null);
     infinite$: Observable<Product[]>;
+    private total: number;
 
-    displayedColumns = ['img', 'name', 'description', 'options'];
+    constructor(private db: AngularFirestore) {
 
-    constructor(private db: AngularFirestore, private bottomSheet: MatBottomSheet) {
         const batchMap = this.offset.pipe(
-            tap(() => console.log('Getting new batch of data')),
-            throttleTime(500),
+            throttleTime(100),
             mergeMap(n => this.getBatch(n)),
             scan((acc, batch) => {
                 return {...acc, ...batch};
-            }, {})
+            }, {}),
+            tap(console.log),
         );
 
         this.infinite$ = batchMap.pipe(map(v => Object.values(v)));
+        this.infinite$.subscribe(all => {
+            this.total = all.length;
+        });
+        // this.infinite$.subscribe(it => {
+        //     console.log('ALL DATA:');
+        //     console.log(it);
+        // });
     }
 
     getBatch(offset) {
         return this.db
             .collection('products', ref =>
                 ref
-                    .orderBy('name')
+                    .orderBy('id')
                     .startAfter(offset)
                     .limit(this.batch)
             )
@@ -54,34 +60,32 @@ export class ProductsComponent {
                         const data = cur.payload.doc.data();
                         return {...acc, [id]: data};
                     }, {});
-                })
+                }),
+                tap(() => this.loading = false)
             );
     }
 
-    nextBatch(e, offset) {
-
+    nextBatch(event: ChangeEvent, offset) {
+        console.log(event);
+        if (event.end !== this.total - 1) {
+            // console.log('in return');
+            return;
+        }
         if (this.theEnd) {
             return;
         }
+        this.loading = true;
 
-        const end = this.viewport.getRenderedRange().end;
-        const total = this.viewport.getDataLength();
-        const limit = total - 4; // If you are 4 elements before the end - fetch more
+        // const end = this.scroller.viewPortInfo.endIndex;
+        // const total = this.total;
+        // todo
+        // const limit = total - 4; // If you are 4 elements before the end - fetch more
+        //console.log(`end: ${end} | total: ${total} | e: ${e}, limit: ${limit}`);
 
-        console.log(`${end}, '>=', ${total}`);
-        if (end >= limit) {
-            this.offset.next(offset);
-        }
+        // console.log(`${end}, '>=', ${total}`);
+        // if (end >= limit) {
+        console.log('%c next please', 'color: brown');
+        this.offset.next(offset);
+        // }
     }
-
-    trackByIdx(i) {
-        return i;
-    }
-
-    openProductDetailBottomSheet(product: Product) {
-        this.bottomSheet.open(ProductBottomSheetComponent, {
-            data: product
-        });
-    }
-
 }

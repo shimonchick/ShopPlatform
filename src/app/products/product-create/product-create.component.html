@@ -38,8 +38,7 @@
     <mat-step>
         <ng-template matStepLabel>Done</ng-template>
         <h3>Create product listing:</h3>
-        <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);
-            productName.value=''; productDescription.value='';productPrice.value=''; " mat-raised-button>
+        <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);" mat-raised-button>
             Create
         </button>
         <div>

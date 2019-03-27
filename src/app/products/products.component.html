@@ -1,30 +1,22 @@
 <ng-container *ngIf="infinite$ | async as products">
+    <virtual-scroller #scroll [items]="products" (vsUpdate)="viewportItems = $event"
+                      (vsEnd)="nextBatch($event, (products[products.length - 1].id))"
+    [bufferAmount]="20"
+    [enableUnequalChildrenSizes]="true"
+    >
 
+        <div fxLayout="row wrap" fxLayoutAlign="space-around center" #container>
+            <div class="list-item"
+                 *ngFor="let product of viewportItems"
+                 fxFlex="calc(25% - 20px)" fxFlex.md="calc(33% - 20px)" fxFlex.sm="calc(50% - 20px)" fxFlex.xs="calc(100% - 20px)"
+                 fxLayout>
+                <app-product-preview fxLayoutAlign="center center" [product]="product"></app-product-preview>
+            </div>
+        </div>
+        <!--todo test bufferamount-->
 
-    <cdk-virtual-scroll-viewport (scrolledIndexChange)="nextBatch($event, (products[products.length - 1].name))"
-                                 itemSize="200">
-
-        <mat-list>
-            <mat-list-item *cdkVirtualFor="let product of products; let i = index; trackBy: trackByIdx"
-                           class="animated fadeIn"
-                           (click)="openProductDetailBottomSheet(product)">
-                <div fxLayout fxLayoutAlign="center center" class="item-container">
-                    <div fxFlex="30%">
-                        <img [src]="product.urls" alt="product image" class="product-image"/>
-                    </div>
-                    <div fxFlex="15%">
-                        <p>{{product.price}}</p>
-                    </div>
-                    <div fxFlex="0" style="padding-left: 40px; text-align: left">
-                        <div>
-                            <h2>{{product.name}}</h2>
-                        </div>
-                        <div>
-                            #product, #buyable
-                        </div>
-                    </div>
-                </div>
-            </mat-list-item>
-        </mat-list>
-    </cdk-virtual-scroll-viewport>
+        <div class="spinner-wrapper">
+            <mat-progress-spinner *ngIf="loading" mode="indeterminate" color="primary" [strokeWidth]="10"></mat-progress-spinner>
+        </div>
+    </virtual-scroller>
 </ng-container>

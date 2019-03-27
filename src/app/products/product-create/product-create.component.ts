@@ -51,7 +51,8 @@ export class ProductCreateComponent implements OnInit {
                 sellerUid: this.user.uid,
                 urls: this.urls,
             } as Product);
-        this.router.navigateByUrl('/products');
+        // this.router.navigateByUrl('/products');
+        // todo
 
     }
 

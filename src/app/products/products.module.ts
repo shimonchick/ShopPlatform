@@ -7,12 +7,15 @@ import {SharedModule} from '../shared.module';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {VirtualScrollerModule} from 'ngx-virtual-scroller';
+import { ProductPreviewComponent } from './product-preview/product-preview.component';
 
 @NgModule({
     declarations: [
         ProductsComponent,
         ProductDetailComponent,
         ProductBottomSheetComponent,
+        ProductPreviewComponent,
     ],
     imports: [
         ProductsRoutingModule,
@@ -20,6 +23,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
         AngularFirestoreModule,
         AngularFireStorageModule,
         FlexLayoutModule,
+        VirtualScrollerModule,
     ],
     entryComponents: [
         ProductBottomSheetComponent
