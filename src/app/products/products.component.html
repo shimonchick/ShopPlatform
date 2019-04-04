@@ -1,17 +1,18 @@
 <ng-container *ngIf="infinite$ | async as products">
     <virtual-scroller #scroll [items]="products" (vsUpdate)="viewportItems = $event"
                       (vsEnd)="nextBatch($event, (products[products.length - 1].id))"
-    [bufferAmount]="20"
-    [enableUnequalChildrenSizes]="true"
-    >
+                      [bufferAmount]="20"
+                      [enableUnequalChildrenSizes]="true">
 
         <div fxLayout="row wrap" fxLayoutAlign="space-around center" #container>
             <div class="list-item"
                  *ngFor="let product of viewportItems"
                  fxFlex="calc(25% - 20px)" fxFlex.md="calc(33% - 20px)" fxFlex.sm="calc(50% - 20px)" fxFlex.xs="calc(100% - 20px)"
-                 fxLayout>
-                <app-product-preview fxLayoutAlign="center center" [product]="product"></app-product-preview>
+                 fxLayout fxLayoutAlign="center center"
+                 [routerLink]="['/products', product.id]">
+                <app-product-preview [product]="product"></app-product-preview>
             </div>
+            <!--(click)="showProductPreview(product)"-->
         </div>
         <!--todo test bufferamount-->
 

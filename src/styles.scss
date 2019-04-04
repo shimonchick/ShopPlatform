@@ -11,6 +11,14 @@ body, *:not(mat-icon) {
   font-family: 'Comfortaa', cursive !important;
 }
 
-//.bottomSheetGlobal {
-//  padding: 0 !important;
-//}
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  &.dark-backdrop {
+    background: #ffffff;
+    opacity: 0.9 !important;
+  }
+}
+
+.mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
+  transform: none !important;
+}
+

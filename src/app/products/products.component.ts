@@ -4,6 +4,8 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
 import {Product} from '../models/product';
 import {ChangeEvent, VirtualScrollerComponent} from 'ngx-virtual-scroller';
+import {ProductPreviewOverlayService} from '../services/preview-overlay/product-preview-overlay.service';
+import {ProductPreviewOverlayRef} from '../services/preview-overlay/overlay-ref';
 
 @Component({
     selector: 'app-products',
@@ -22,7 +24,8 @@ export class ProductsComponent {
     infinite$: Observable<Product[]>;
     private total: number;
 
-    constructor(private db: AngularFirestore) {
+    constructor(private db: AngularFirestore,
+                private previewDialog: ProductPreviewOverlayService) {
 
         const batchMap = this.offset.pipe(
             throttleTime(100),
@@ -80,12 +83,18 @@ export class ProductsComponent {
         // const total = this.total;
         // todo
         // const limit = total - 4; // If you are 4 elements before the end - fetch more
-        //console.log(`end: ${end} | total: ${total} | e: ${e}, limit: ${limit}`);
+        // console.log(`end: ${end} | total: ${total} | e: ${e}, limit: ${limit}`);
 
         // console.log(`${end}, '>=', ${total}`);
         // if (end >= limit) {
         console.log('%c next please', 'color: brown');
         this.offset.next(offset);
         // }
+    }
+
+    showProductPreview(product: Product) {
+        const dialogRef: ProductPreviewOverlayRef = this.previewDialog.open({
+            product: product
+        });
     }
 }

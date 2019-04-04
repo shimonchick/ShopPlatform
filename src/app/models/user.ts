@@ -12,3 +12,13 @@ export interface User {
     phoneNumber: string;
     roles: Roles;
 }
+
+interface Coordinates {
+    lat: number;
+    lon: number;
+}
+
+export interface Seller extends User {
+    coordinates: Coordinates;
+    address: string;
+}
