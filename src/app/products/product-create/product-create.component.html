@@ -36,14 +36,17 @@
         </div>
     </mat-step>
     <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
-        <h3>Create product listing:</h3>
-        <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);" mat-raised-button>
-            Create
-        </button>
-        <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button (click)="stepper.reset()" mat-button>Reset</button>
+        <div class="mat-typography">
+            <ng-template matStepLabel>Done</ng-template>
+            <h3>Create product listing:</h3>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button (click)="stepper.reset()" mat-button>Reset</button>
+                <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);"
+                        mat-raised-button color="accent">
+                    Create
+                </button>
+            </div>
         </div>
     </mat-step>
 </mat-vertical-stepper>

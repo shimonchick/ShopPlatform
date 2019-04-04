@@ -15,6 +15,8 @@ import {AngularFireModule} from '@angular/fire';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CoreModule} from './core.module';
+import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
     declarations: [
@@ -38,6 +40,12 @@ import {CoreModule} from './core.module';
         FlexLayoutModule,
         ReactiveFormsModule,
         FlexLayoutModule,
+        MatGridListModule,
+        MatCardModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        LayoutModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

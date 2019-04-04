@@ -1,0 +1,30 @@
+article img {
+  width: 100%;
+}
+
+agm-map {
+  height: 300px;
+}
+
+article#gallery {
+  gallery {
+    position: relative;
+    button {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      right: 0;
+    }
+  }
+}
+
+aside {
+  padding: 10px;
+  div {
+    padding: 10px;
+  }
+}
+
+.stretched {
+  width: 100%;
+}

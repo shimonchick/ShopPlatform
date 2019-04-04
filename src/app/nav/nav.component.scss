@@ -35,3 +35,10 @@
 //::ng-deep ngx-auth-firebaseui .mat-button-wrapper { /* Some of the icon buttons in the ngx aren't centered properly */
 //  vertical-align: middle;
 //}
+.appbar-actions {
+  width: 30%;
+}
+
+.spaced-out-button {
+  margin-right: 20px;
+}
