@@ -1,0 +1,57 @@
+<mat-drawer-container class="drawer-container">
+    <mat-drawer #drawer class="drawer"
+                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+                [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                [opened]="!(isHandset$ | async)">
+        <mat-toolbar color="primary">Menu</mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item href="#">Link 1</a>
+            <a mat-list-item href="#">Link 2</a>
+            <a mat-list-item href="#">Link 3</a>
+        </mat-nav-list>
+    </mat-drawer>
+
+    <mat-drawer-content>
+        <mat-toolbar color="primary">
+            <button
+                    type="button"
+                    aria-label="Toggle drawer"
+                    mat-icon-button
+                    (click)="drawer.toggle()"
+                    *ngIf="isHandset$ | async">
+                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+            <span>Search</span>
+        </mat-toolbar>
+        <!-- Add Content Here -->
+        <ng-container *ngIf="infinite$ | async as products">
+            <virtual-scroller [items]="products" (vsUpdate)="viewportItems = $event"
+                              (vsEnd)="nextBatch($event, (products[products.length - 1].id))"
+                              [bufferAmount]="20">
+
+                <div fxLayout="row wrap" fxLayoutAlign="space-around center" #container id="container">
+                    <div class="list-item"
+                         *ngFor="let product of viewportItems"
+                         fxFlex.gt-md="25%" fxFlex.md="33%" fxFlex.sm="50%" fxFlex.xs="100%"
+                         fxLayout
+                         [routerLink]="['/products', product.id]">
+                        <!--                    <div-->
+                        <!--                            fxLayout fxLayoutAlign="center center"-->
+                        <!--                            fxFlexFill>-->
+                        <app-product-preview [product]="product"></app-product-preview>
+                        <!--                    </div>-->
+                    </div>
+                </div>
+
+                <!--todo virtual scroller glitching-->
+                <!--todo test bufferamount-->
+
+                <div class="spinner-wrapper">
+                    <mat-progress-spinner *ngIf="loading" mode="indeterminate" color="primary"
+                                          [strokeWidth]="10"></mat-progress-spinner>
+                </div>
+            </virtual-scroller>
+        </ng-container>
+    </mat-drawer-content>
+</mat-drawer-container>
+
