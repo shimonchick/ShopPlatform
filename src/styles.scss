@@ -12,6 +12,10 @@ body, *:not(mat-icon) {
   font-family: 'Comfortaa', cursive !important;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
   &.dark-backdrop {
     background: #ffffff;

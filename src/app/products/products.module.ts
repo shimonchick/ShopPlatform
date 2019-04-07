@@ -13,6 +13,12 @@ import {ProductDetailComponent} from './product-detail/product-detail/product-de
 import {GalleryModule} from '@ngx-gallery/core';
 import {GallerizeModule} from '@ngx-gallery/gallerize';
 import {LightboxModule} from '@ngx-gallery/lightbox';
+import {environment} from '../../environments/environment';
+import {NgAisModule} from 'angular-instantsearch';
+import {SearchComponent} from './search-test/search.component';
+import {SearchBarComponent} from './search-bar/search-bar.component';
+import {LayoutModule} from '@angular/cdk/layout';
+import {MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
@@ -21,6 +27,8 @@ import {AgmCoreModule} from '@agm/core';
         ProductDetailOverlayComponent,
         ProductPreviewComponent,
         ProductDetailComponent,
+        SearchComponent,
+        SearchBarComponent,
     ],
     imports: [
         ProductsRoutingModule,
@@ -33,12 +41,19 @@ import {AgmCoreModule} from '@agm/core';
         LightboxModule,
         GallerizeModule,
         AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyCZZpfER7Nqg_yvw5q0jJfIpR3I4akGpKM'
+            apiKey: environment.maps.apiKey
             /* apiKey is required, unless you are a
             premium customer, in which case you can
             use clientId
             */
-        })
+        }),
+        NgAisModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule
     ],
     entryComponents: [
         ProductPreviewComponent

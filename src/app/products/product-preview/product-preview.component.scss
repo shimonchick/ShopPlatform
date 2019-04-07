@@ -1,10 +1,18 @@
-.spacer {
-  flex: auto;
-}
-
 .preview-image-wrapper {
   height: 500px;
   img {
     height: 100%;
   }
+}
+
+.price {
+  margin-left: 1em;
+}
+
+.name {
+  margin-right: 1em;
+}
+
+mat-card {
+  //min-width: 20%;
 }

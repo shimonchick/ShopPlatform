@@ -4,8 +4,6 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
 import {Product} from '../models/product';
 import {ChangeEvent, VirtualScrollerComponent} from 'ngx-virtual-scroller';
-import {ProductPreviewOverlayService} from '../services/preview-overlay/product-preview-overlay.service';
-import {ProductPreviewOverlayRef} from '../services/preview-overlay/overlay-ref';
 
 @Component({
     selector: 'app-products',
@@ -15,17 +13,31 @@ import {ProductPreviewOverlayRef} from '../services/preview-overlay/overlay-ref'
 export class ProductsComponent {
     @ViewChild(VirtualScrollerComponent)
     scroller: VirtualScrollerComponent;
-
-    batch = 10;
-    theEnd = false;
     loading = false;
-
-    offset = new BehaviorSubject(null);
+    viewportItems: Product[];
     infinite$: Observable<Product[]>;
+    private batch = 10;
+    private theEnd = false;
+    private offset = new BehaviorSubject(null);
     private total: number;
 
-    constructor(private db: AngularFirestore,
-                private previewDialog: ProductPreviewOverlayService) {
+    constructor(private db: AngularFirestore) {
+
+        // const chance = new Chance();
+        // for (let i = 0; i < 20; i++) {
+        //     const id = this.db.createId();
+        //     this.db.collection('products')
+        //         .doc(id)
+        //         .set({
+        //             name: chance.name(),
+        //             description: chance.paragraph(),
+        //             price: chance.integer({min: 0, max: 1500}),
+        //             sellerUid: 'ICGBWSieAWWtBKG9u0qkCw1DqTA2',
+        //             urls: [chance.avatar({protocol: 'https'})],
+        //             id: id
+        //         } as Product).then();
+        // }
+
 
         const batchMap = this.offset.pipe(
             throttleTime(100),
@@ -40,10 +52,6 @@ export class ProductsComponent {
         this.infinite$.subscribe(all => {
             this.total = all.length;
         });
-        // this.infinite$.subscribe(it => {
-        //     console.log('ALL DATA:');
-        //     console.log(it);
-        // });
     }
 
     getBatch(offset) {
@@ -71,7 +79,6 @@ export class ProductsComponent {
     nextBatch(event: ChangeEvent, offset) {
         console.log(event);
         if (event.end !== this.total - 1) {
-            // console.log('in return');
             return;
         }
         if (this.theEnd) {
@@ -90,11 +97,5 @@ export class ProductsComponent {
         console.log('%c next please', 'color: brown');
         this.offset.next(offset);
         // }
-    }
-
-    showProductPreview(product: Product) {
-        const dialogRef: ProductPreviewOverlayRef = this.previewDialog.open({
-            product: product
-        });
     }
 }

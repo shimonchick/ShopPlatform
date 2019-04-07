@@ -79,6 +79,10 @@
  */
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
+(window as any).process = { // so as to prevent algolia from throwing an error
+    env: { DEBUG: undefined },
+};
+
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

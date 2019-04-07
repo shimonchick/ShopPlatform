@@ -12,6 +12,13 @@ export const environment = {
         storageBucket: 'shopplatform-3c1c4.appspot.com',
         messagingSenderId: '878506105599'
     },
+    algolia: {
+        appId: '42JLVX3E2Y',
+        apiKey: '584ca4ba45b90dfb3e55779852881196'
+    },
+    maps: {
+        apiKey: 'AIzaSyCZZpfER7Nqg_yvw5q0jJfIpR3I4akGpKM'
+    }
 };
 
 /*
