@@ -8,6 +8,7 @@
             <mat-list-item *cdkVirtualFor="let product of products; let i = index; trackBy: trackByIdx"
                            class="animated fadeIn"
                            (click)="openProductDetailBottomSheet(product)">
+
                 <div fxLayout fxLayoutAlign="center center" class="item-container">
                     <div fxFlex="30%">
                         <img [src]="product.urls" alt="product image" class="product-image"/>
@@ -30,6 +31,12 @@
                             mat-raised-button>
                         Chat with seller
                     </button>
+                    <button (click)="orderService.create(auth.getSnapshotUser().uid, product.sellerUid, product.id)"
+                            *ngIf="auth.user$ | async"
+                            mat-raised-button>
+                        Order item
+                    </button>
+
                 </div>
             </mat-list-item>
         </mat-list>

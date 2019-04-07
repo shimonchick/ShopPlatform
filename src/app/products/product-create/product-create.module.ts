@@ -6,12 +6,14 @@ import {SharedModule} from '../../shared.module';
 import {ProductCreateRoutingModule} from './product-create-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {NgxDropzoneModule} from 'ngx-dropzone';
+import {ImageComponent} from './image/image.component';
 
 @NgModule({
     declarations: [
         ProductCreateComponent,
         UploaderComponent,
         UploadTaskComponent,
+        ImageComponent
     ],
     imports: [
         SharedModule,

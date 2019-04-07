@@ -8,6 +8,7 @@ import {MatBottomSheet} from '@angular/material';
 import {ProductBottomSheetComponent} from './product-bottom-sheet/product-bottom-sheet.component';
 import {AuthService} from '../services/auth.service';
 import {ChatService} from '../services/chat.service';
+import {OrderService} from '../services/order.service';
 
 @Component({
     selector: 'app-products',
@@ -28,8 +29,9 @@ export class ProductsComponent {
 
     constructor(private db: AngularFirestore,
                 private bottomSheet: MatBottomSheet,
-                private auth: AuthService,
-                private cs: ChatService) {
+                public auth: AuthService,
+                public cs: ChatService,
+                public orderService: OrderService) {
         const batchMap = this.offset.pipe(
             tap(() => console.log('Getting new batch of data')),
             throttleTime(500),

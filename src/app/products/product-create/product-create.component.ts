@@ -26,13 +26,10 @@ export class ProductCreateComponent implements OnInit {
     secondFormGroup: FormGroup;
 
 
-    priceFormControl = new FormControl('', [
-        Validators.required,
-    ]);
-    descriptionFormControl = new FormControl('', [
-        Validators.required,
-    ]);
     matcher = new CustomErrorStateMatcher();
+    descriptionFormControl = new FormControl('', [
+        Validators.required
+    ]);
     private MIN_LENGTH = 3;
     private MAX_LENGTH = 50;
     nameFormControl = new FormControl('', [
