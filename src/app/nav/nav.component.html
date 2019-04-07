@@ -30,6 +30,11 @@
                     routerLink="/products/create">
                 Add item
             </button>
+            <button *ngIf="auth.user$ | async"
+                    mat-raised-button
+                    routerLink="/settings/seller">
+                Become a seller
+            </button>
             <!--TODO: change chatService id-->
 
             <!--<button mat-button></button>-->
@@ -62,7 +67,7 @@
 
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item routerLink="user">Settings</button>
+                            <button mat-menu-item routerLink="settings">Settings</button>
 
                             <button *ngIf="auth.getSnapshotUser().roles.buyer" mat-menu-item routerLink="chats/buyer">
                                 Messages sent
@@ -70,6 +75,14 @@
                             <button *ngIf="auth.getSnapshotUser().roles.seller" mat-menu-item routerLink="chats/seller">
                                 Messages received
                             </button>
+                            <button *ngIf="auth.getSnapshotUser().roles.seller" mat-menu-item
+                                    routerLink="orders/seller">
+                                Orders received
+                            </button>
+                            <button *ngIf="auth.getSnapshotUser().roles.buyer" mat-menu-item routerLink="orders/buyer">
+                                Orders sent
+                            </button>
+
 
                             <button (click)="auth.signOut()" mat-menu-item>Log out</button>
                         </mat-menu>

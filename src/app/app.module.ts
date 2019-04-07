@@ -17,14 +17,14 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CoreModule} from './core.module';
 import {LoginComponent} from './login/login.component';
 import {MatPasswordStrengthModule} from '@angular-material-extensions/password-strength';
-import {UserSettingsComponent} from './user-settings/user-settings.component';
+import {SettingsModule} from './settings/settings.module';
+import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule} from '@angular/material';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
         LoginComponent,
-        UserSettingsComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
@@ -44,6 +44,12 @@ import {UserSettingsComponent} from './user-settings/user-settings.component';
         ReactiveFormsModule,
         FlexLayoutModule,
         MatPasswordStrengthModule,
+        SettingsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatCardModule
     ],
     providers: [],
     bootstrap: [AppComponent],
