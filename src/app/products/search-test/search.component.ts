@@ -2,11 +2,11 @@ import {Component} from '@angular/core';
 import {environment} from '../../../environments/environment';
 
 @Component({
-    selector: 'app-search',
+    selector: 'app-search-test',
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss']
 })
-export class SearchComponent {
+export class SearchTestComponent {
 
     showResults = false;
 

@@ -1,9 +1,9 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as algoliasearch from 'algoliasearch';
+
 admin.initializeApp();
 const env = functions.config();
-
-import * as algoliasearch from 'algoliasearch';
 
 // Initialize the Algolia Client
 const client = algoliasearch(env.algolia.appid, env.algolia.apikey);
@@ -30,3 +30,17 @@ export const unindexProduct = functions.firestore
         // Delete an ID from the index
         return index.deleteObject(objectId);
     });
+
+
+export const searchUser = functions.https.onCall(async (data, context) => {
+    const query = data['query'];
+    return await index.search({query});
+});
+
+// export const search = (text$: Observable<string>) =>
+//     text$.pipe(
+//         debounceTime(200),
+//         distinctUntilChanged(),
+//         switchMap(query => this.functions.httpsCallable('onCalls-searchUser')({query})),
+//         map(response => response.hits.map(user => user.name))
+//     );

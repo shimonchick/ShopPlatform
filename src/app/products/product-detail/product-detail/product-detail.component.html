@@ -1,9 +1,4 @@
 <main *ngIf="product$ | async as product">
-    <!--<mat-toolbar color="primary">-->
-    <!--<button mat-icon-button (click)="closeOverlay()">-->
-    <!--<mat-icon>arrow_back_ios</mat-icon>-->
-    <!--</button>-->
-    <!--</mat-toolbar>-->
     <section fxLayout="row" fxLayout.lt-sm="column">
         <article id="gallery" fxFlex="60" fxFlex.lt-sm="100">
             <gallery *ngIf="items" [items]="items" loadingMode="indeterminate">

@@ -15,11 +15,13 @@ import {GallerizeModule} from '@ngx-gallery/gallerize';
 import {LightboxModule} from '@ngx-gallery/lightbox';
 import {environment} from '../../environments/environment';
 import {NgAisModule} from 'angular-instantsearch';
-import {SearchComponent} from './search-test/search.component';
 import {SearchBarComponent} from './search-bar/search-bar.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
+import {ProductsViewComponent} from './products-view/products-view.component';
+import {SearchComponent} from './search/search.component';
+import {AngularFireFunctionsModule} from '@angular/fire/functions';
 
 @NgModule({
     declarations: [
@@ -29,6 +31,7 @@ import {AgmCoreModule} from '@agm/core';
         ProductDetailComponent,
         SearchComponent,
         SearchBarComponent,
+        ProductsViewComponent,
     ],
     imports: [
         ProductsRoutingModule,
@@ -49,11 +52,7 @@ import {AgmCoreModule} from '@agm/core';
         }),
         NgAisModule,
         LayoutModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule
+        AngularFireFunctionsModule
     ],
     entryComponents: [
         ProductPreviewComponent

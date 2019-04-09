@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, EventEmitter, ViewChild} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
@@ -22,24 +22,8 @@ export class ProductsComponent {
     private total: number;
 
     constructor(private db: AngularFirestore) {
-
-        // const chance = new Chance();
-        // for (let i = 0; i < 20; i++) {
-        //     const id = this.db.createId();
-        //     this.db.collection('products')
-        //         .doc(id)
-        //         .set({
-        //             name: chance.name(),
-        //             description: chance.paragraph(),
-        //             price: chance.integer({min: 0, max: 1500}),
-        //             sellerUid: 'ICGBWSieAWWtBKG9u0qkCw1DqTA2',
-        //             urls: [chance.avatar({protocol: 'https'})],
-        //             id: id
-        //         } as Product).then();
-        // }
-
-
         const batchMap = this.offset.pipe(
+            // shareReplay(1),
             throttleTime(100),
             mergeMap(n => this.getBatch(n)),
             scan((acc, batch) => {
@@ -55,6 +39,7 @@ export class ProductsComponent {
     }
 
     getBatch(offset) {
+        // todo should come from algolia
         return this.db
             .collection('products', ref =>
                 ref
@@ -86,16 +71,7 @@ export class ProductsComponent {
         }
         this.loading = true;
 
-        // const end = this.scroller.viewPortInfo.endIndex;
-        // const total = this.total;
-        // todo
-        // const limit = total - 4; // If you are 4 elements before the end - fetch more
-        // console.log(`end: ${end} | total: ${total} | e: ${e}, limit: ${limit}`);
-
-        // console.log(`${end}, '>=', ${total}`);
-        // if (end >= limit) {
         console.log('%c next please', 'color: brown');
         this.offset.next(offset);
-        // }
     }
 }

@@ -13,8 +13,8 @@ export const environment = {
         messagingSenderId: '878506105599'
     },
     algolia: {
-        appId: '42JLVX3E2Y',
-        apiKey: '584ca4ba45b90dfb3e55779852881196'
+        apiKey: '584ca4ba45b90dfb3e55779852881196',
+        appId: '42JLVX3E2Y'
     },
     maps: {
         apiKey: 'AIzaSyCZZpfER7Nqg_yvw5q0jJfIpR3I4akGpKM'

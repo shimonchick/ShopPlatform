@@ -9,7 +9,7 @@ html, body {
 
 body, *:not(mat-icon) {
   margin: 0;
-  font-family: 'Comfortaa', cursive !important;
+  font-family: 'Comfortaa', sans-serif !important;
 }
 
 * {
@@ -23,7 +23,6 @@ body, *:not(mat-icon) {
   }
 }
 
-.mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
-  transform: none !important;
-}
-
+//.mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
+//  transform: none !important;
+//}
