@@ -30,6 +30,37 @@
   text-align: center;
 }
 
+.drawer-container {
+  height: 100%;
+}
+
+.drawer {
+  width: 200px;
+}
+
+.drawer .mat-toolbar {
+  /*background: inherit;*/
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.spacer {
+  flex: auto;
+}
+
+.avatar {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+
 //.header-image {
 //  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
 //  background-size: cover;
