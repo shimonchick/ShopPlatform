@@ -18,13 +18,25 @@ import {CoreModule} from './core.module';
 import {LoginComponent} from './login/login.component';
 import {MatPasswordStrengthModule} from '@angular-material-extensions/password-strength';
 import {SettingsModule} from './settings/settings.module';
-import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule} from '@angular/material';
+import {
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatRadioModule,
+    MatSelectModule
+} from '@angular/material';
+import {TestComponent} from './test/test.component';
+import {LayoutModule} from '@angular/cdk/layout';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
         LoginComponent,
+        TestComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
@@ -49,7 +61,11 @@ import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelec
         MatButtonModule,
         MatSelectModule,
         MatRadioModule,
-        MatCardModule
+        MatCardModule,
+        MatGridListModule,
+        MatMenuModule,
+        MatIconModule,
+        LayoutModule
     ],
     providers: [],
     bootstrap: [AppComponent],

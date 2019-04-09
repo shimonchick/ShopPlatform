@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ChatService} from '../../services/chat.service';
 import {AuthService} from '../../services/auth.service';
+import {tap} from 'rxjs/operators';
+import {User} from '../../models/user';
+import {UserService} from '../../services/user.service';
+import {forkJoin, from, Observable} from 'rxjs';
 
 @Component({
     selector: 'app-seller-chat-list',
@@ -9,21 +13,27 @@ import {AuthService} from '../../services/auth.service';
 })
 export class SellerChatListComponent implements OnInit {
 
-    userChats$;
-    private avatarImages: any;
+    userChats: any[] = [];
+    buyers: User[] = [];
 
     constructor(
         private cs: ChatService,
-        public auth: AuthService
+        public auth: AuthService,
+        private userService: UserService
     ) {
     }
 
     ngOnInit() {
-        console.log('before chat call');
-        this.userChats$ = this.cs.getSellerChats();
-        console.log('after chat call');
-        this.avatarImages = this.userChats$.subscribe((userchats) => {
-            console.log(userchats);
+        this.cs.getBuyerChats().subscribe((chats: Chat[]) => {
+            // console.log('fetched chats');
+            console.log(chats[0]);
+            this.userChats = chats;
+            const sellerObservables: Observable<User>[] = chats
+                .map((chat) => from(this.userService.getUserById(chat.buyerId)).pipe(tap((user) => console.log(user))));
+            forkJoin(sellerObservables).subscribe((buyers) => {
+                console.log(this.buyers);
+                this.buyers = buyers;
+            });
         });
     }
 

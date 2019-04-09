@@ -1,10 +1,36 @@
+//img {
+//  border-radius: 50%;
+//  display: block;
+//  margin: auto;
+//}
+//
+//button {
+//  margin: 10px;
+//}
 
-img {
-  border-radius: 50%;
-  display: block;
-  margin: auto;
+.grid-container {
+  margin: 20px;
 }
 
-button {
-  margin: 10px;
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
 }
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
+}
+
+//.header-image {
+//  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+//  background-size: cover;
+//}

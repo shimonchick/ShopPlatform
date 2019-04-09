@@ -1,22 +1,36 @@
+<div *ngIf="auth.user$ | async as user" class="grid-container">
+    <h1 class="mat-h1">Dashboard</h1>
+    <mat-grid-list cols="2" rowHeight="200px">
+        <mat-grid-tile *ngFor="let chat of userChats; index as i" [colspan]="1" [rowspan]="1">
+            <mat-card class="dashboard-card">
+                <mat-card-header>
+                    <div [style.backgroundImage]="'url(' + sellers[i].photoURL + ')'"
+                         [style.backgroundSize]="'cover'"
+                         mat-card-avatar
+                    ></div>
+                    <mat-card-title>
+                        Your Chat with {{sellers[i].displayName}}
+                        <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu" xPosition="before">
+                            <button [routerLink]="['/chats', chat.id]" mat-menu-item>See chat</button>
+                            <!--TODO: decide whether to hide the chat locally or delete the chat from database-->
+                            <button mat-menu-item>Ignore</button>
+                        </mat-menu>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        {{ chat.messages.length }} Messages
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+                    <div>Latest message</div>
+                    <p style="overflow-wrap: break-word; margin-top: 10px;">{{chat.messages[chat.messages.length - 1].content}}</p>
 
-<div *ngIf=" auth.user$ | async as user">
-    <h1>Your chats</h1>
-    <div *ngFor="let chat of userChats">
-        <mat-card *ngIf="seller && chat.messages.length > 0">
-
-            <mat-card-actions>
-                <mat-card-title>
-                    Chat with {{seller.displayName}}
-                </mat-card-title>
-                <img [src]="seller.photoURL" mat-card-image style="max-width: 50px;">
-                <mat-card-content *ngIf="chat.messages.length > 0">
-                    {{chat.messages[chat.messages.length - 1].content}}
+                    <!--<img [src]="sellers[i].photoURL" mat-card-image style="max-width: 100px;">-->
                 </mat-card-content>
-                <a [routerLink]="['/chats', chat.id]">{{ chat.id }} - {{ chat.messages.length }} Messages </a>
-
-            </mat-card-actions>
-
-        </mat-card>
-
-    </div>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
 </div>
+

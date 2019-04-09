@@ -1,17 +1,26 @@
 
 <div *ngIf=" auth.user$ | async as user">
     <h1>Your chats</h1>
+    <div *ngFor="let chat of userChats; index as i">
+        <mat-card *ngIf="buyers[i] && chat.messages.length > 0">
 
-    <ul>
-        <li *ngFor="let chat of userChats$ | async">
+            <mat-card-title>
+                Chat with {{buyers[i].displayName}}
+            </mat-card-title>
+            <mat-card-content *ngIf="chat.messages.length > 0">
+                {{chat.messages[chat.messages.length - 1].content}}
+            </mat-card-content>
 
-        </li>
-    </ul>
-    <mat-card *ngFor="let chat of userChats$ | async">
+            <img [src]="buyers[i].photoURL" mat-card-image style="max-width: 100px;">
 
-        <mat-card-actions>
-            <a [routerLink]="chat.id">{{ chat.id }} - {{ chat.messages.length }} Messages </a>
-        </mat-card-actions>
+            <mat-card-actions>
+                <button [routerLink]="['/chats', chat.id]" mat-raised-button>
+                    {{ chat.messages.length }} Messages
+                </button>
 
-    </mat-card>
+            </mat-card-actions>
+
+        </mat-card>
+
+    </div>
 </div>
