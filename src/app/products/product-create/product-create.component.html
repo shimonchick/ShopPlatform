@@ -1,33 +1,33 @@
 <mat-vertical-stepper #stepper linear>
     <mat-step [stepControl]="firstFormGroup" label="Fill product details">
-        <form class="form-full-width">
+        <form [formGroup]="productForm" class="form-full-width">
             <ng-template matStepLabel>Fill product details</ng-template>
             <mat-form-field appearance="standard" class="form-field">
-                <input #productName [errorStateMatcher]="matcher" [formControl]="nameFormControl"
+                <input #productName
                        matInput maxlength="50"
                        minlength="3" placeholder="Name">
                 <mat-hint>
                     Product name
                 </mat-hint>
-                <mat-error *ngIf="nameFormControl.invalid">
-                    {{getErrorMessage()}}
+                <mat-error *ngIf="productForm.controls['name'].invalid">
+                    {{getNameErrorMessage()}}
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
-                <textarea #productDescription [errorStateMatcher]="matcher" [formControl]="descriptionFormControl"
+                <textarea #productDescription
                           autosize
                           matInput maxlength="10000" placeholder="Description"></textarea>
                 <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
-                <mat-error *ngIf="descriptionFormControl.hasError('required') ">
-                    Product description is <strong>required</strong>
+                <mat-error *ngIf="productForm.controls['description'].invalid ">
+                    {{getDescriptionErrorMessage()}}
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field class="form-field" hintLabel="Product Price">
-                <input #productPrice [errorStateMatcher]="matcher" [formControl]="priceFormControl" matInput
+                <input #productPrice matInput
                        placeholder="price" type="number">
-                <mat-error *ngIf="descriptionFormControl.hasError('required') ">
+                <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
                     Product description is <strong>required</strong>
                 </mat-error>
 
@@ -44,17 +44,19 @@
             <form>
                 <ng-template matStepLabel>Enter product pictures</ng-template>
                 <!--<app-image></app-image>-->
-                <app-uploader (urls)="OnUploads($event)"></app-uploader>
+                <app-image-preview (filesSelected)="onFilesSelected($event)"></app-image-preview>
+                <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
             </form>
         </div>
         <div>
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button (click)="UploadAllFiles()" mat-button matStepperNext>Next</button>
         </div>
     </mat-step>
     <mat-step label="Create product">
         <ng-template matStepLabel>Done</ng-template>
         <h3>Create product listing:</h3>
+        <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
         <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);
             productName.value=''; productDescription.value='';productPrice.value=''; " mat-raised-button>
             Create

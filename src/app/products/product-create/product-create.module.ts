@@ -6,20 +6,26 @@ import {SharedModule} from '../../shared.module';
 import {ProductCreateRoutingModule} from './product-create-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {NgxDropzoneModule} from 'ngx-dropzone';
-import {ImageComponent} from './image/image.component';
+import {ImagePreviewComponent} from './image-preview/image-preview.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {ImageCropperModule} from 'ngx-img-cropper';
 
 @NgModule({
     declarations: [
         ProductCreateComponent,
         UploaderComponent,
         UploadTaskComponent,
-        ImageComponent
+        // ImageComponent,
+        ImagePreviewComponent,
+
     ],
     imports: [
         SharedModule,
         ProductCreateRoutingModule,
         ReactiveFormsModule,
         NgxDropzoneModule,
+        DragDropModule,
+        ImageCropperModule
 
     ]
 })
