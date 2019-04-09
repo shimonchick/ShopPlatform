@@ -47,7 +47,7 @@ export class SellerRegistrationComponent {
         console.log(user);
         await this.auth.updateUserData(user);
         alert('You are now registered as a seller');
-        this.router.navigateByUrl('products');
+        this.router.navigateByUrl('chats');
     }
 
 }
