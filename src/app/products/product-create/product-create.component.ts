@@ -32,11 +32,10 @@ export class ProductCreateComponent implements OnInit {
     downloadUrls: string[];
 
     done = false;
-
+    categories: string[] = [];
     private NAME_MIN_LENGTH = 3;
     private NAME_MAX_LENGTH = 50;
     private DESCRIPTION_MAX_LENGTH = 10000;
-
     productForm = this.formBuilder.group({
         name: [null, Validators.compose(
             [Validators.required, Validators.minLength(this.NAME_MIN_LENGTH), Validators.maxLength(this.NAME_MAX_LENGTH)])],
@@ -57,6 +56,11 @@ export class ProductCreateComponent implements OnInit {
             this.user = user;
         });
 
+    }
+
+    onCategoriesChanged(categories: string[]) {
+        this.categories = categories;
+        console.log(this.categories);
     }
 
     ngOnInit() {

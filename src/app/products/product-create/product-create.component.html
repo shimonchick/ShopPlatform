@@ -32,6 +32,7 @@
                 </mat-error>
 
             </mat-form-field>
+            <app-categories (categoryChanged)="onCategoriesChanged($event)"></app-categories>
 
             <div>
                 <button mat-button matStepperNext>Next</button>
