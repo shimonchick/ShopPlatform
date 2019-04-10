@@ -7,11 +7,11 @@
                     [opened]="!(isHandset$ | async)">
             <mat-toolbar color="primary">Menu</mat-toolbar>
 
-<!--            <ais-range-slider-->
-<!--                    [min]="0"-->
-<!--                    [max]="1500"-->
-<!--                    [precision]="2">-->
-<!--            </ais-range-slider>-->
+            <!--            <ais-range-slider-->
+            <!--                    [min]="0"-->
+            <!--                    [max]="1500"-->
+            <!--                    [precision]="2">-->
+            <!--            </ais-range-slider>-->
         </mat-drawer>
 
         <mat-drawer-content>
@@ -30,12 +30,22 @@
 <!--            <ais-hits *ngIf="showResults">-->
 <!--                <ng-template let-hits="hits">-->
 
-                        <ng-container *ngIf="infinite$ | async as products">
-                            <app-products-view [products]="products" [theEnd]="theEnd"
-                                               (nextBatchEmitter)="nextOffset($event)"></app-products-view>
-                        </ng-container>
+<!--                    <ng-container *ngIf="showResults">-->
+<!--                        <app-products-view [products]="hits" [theEnd]="theEnd"-->
+<!--                                           (nextBatchEmitter)="nextOffset($event)"></app-products-view>-->
+<!--                    </ng-container>-->
+<!--                    &lt;!&ndash;                        <pre>{{hits | json}}</pre>&ndash;&gt;-->
+
+
+<!--                    &lt;!&ndash;                        <ng-container *ngIf="infinite$ | async as products">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        </ng-container>&ndash;&gt;-->
+
 <!--                </ng-template>-->
-<!--         ng-template   </ais-hits>-->
+<!--            </ais-hits>-->
+            <ng-container *ngIf="infinite$ | async as products">
+                <app-products-view [products]="products" [theEnd]="theEnd"
+                                   (more)="nextPage()"></app-products-view>
+            </ng-container>
         </mat-drawer-content>
     </mat-drawer-container>
 

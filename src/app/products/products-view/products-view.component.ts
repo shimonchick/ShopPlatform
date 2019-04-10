@@ -15,9 +15,11 @@ export class ProductsViewComponent implements OnChanges {
     @Input()
     products: Product[];
     @Input()
-    theEnd = false;
+    theEnd = false; // todo make automatic by response []
     @Output()
     nextBatchEmitter = new EventEmitter<any>();
+    @Output()
+    more = new EventEmitter();
     private get total() {
         return this.products.length;
     }
@@ -31,9 +33,11 @@ export class ProductsViewComponent implements OnChanges {
 
         console.log('%c next please', 'color: brown');
         this.nextBatchEmitter.emit(offset);
+        this.more.emit();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.loading = false; // when product changes, new products have been loaded and so stop loading
+        console.log(this.products);
     }
 }

@@ -1,10 +1,12 @@
 import {Component} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {map, mergeMap, scan, tap, throttleTime} from 'rxjs/operators';
+import {debounceTime, map, mergeMap, mergeMapTo, scan, switchMapTo, tap} from 'rxjs/operators';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Product} from '../../models/product';
 import {environment} from '../../../environments/environment';
+import {distinctUntilChanged} from 'rxjs/internal/operators/distinctUntilChanged';
+import {AngularFireFunctions} from '@angular/fire/functions';
 
 @Component({
     selector: 'app-search',
@@ -26,8 +28,6 @@ export class SearchComponent {
      */
     infinite$: Observable<Product[]>;
     theEnd = false;
-    private batch = 10;
-    private offset = new BehaviorSubject(null);
 
     /*
         Algolia
@@ -37,49 +37,68 @@ export class SearchComponent {
         indexName: 'product_search'
     };
     showResults = false;
-    searchChanged(query) {
-        this.showResults = !!query.length;
-        console.log('results: ');
-        console.log(query);
-    }
+    private searchText$ = new BehaviorSubject<string>('');
+    // private batch = 10;
+    private currentPage$ = new BehaviorSubject<number>(0); // todo
 
     constructor(private breakpointObserver: BreakpointObserver,
-                private db: AngularFirestore) {
-        const batchMap = this.offset.pipe(
-            throttleTime(100),
-            mergeMap(n => this.getBatch(n)),
+                private db: AngularFirestore,
+                private functions: AngularFireFunctions) {
+
+        this.infinite$ = this.searchText$.pipe(
+            debounceTime(200),
+            distinctUntilChanged(),
+            switchMapTo(this.currentPage$),
+            tap(page => {
+                console.log(`current page: ${page}`);
+            }),
+            mergeMapTo(this.search()),
             scan((acc, batch) => {
-                return {...acc, ...batch};
-            }, {}),
-            tap(console.log),
+                return [...acc, ...batch];
+            }, []),
+            tap((it) => console.log(it))
         );
-
-        this.infinite$ = batchMap.pipe(map(v => Object.values(v)));
+        this.searchText$.subscribe(() => {
+            this.currentPage$.next(0);
+        });
     }
 
-    getBatch(offset) {
-        console.log('getting next batch');
-        console.log(offset);
-        return this.db
-            .collection('products', ref =>
-                ref
-                    .orderBy('id')
-                    .startAfter(offset)
-                    .limit(this.batch)
-            )
-            .snapshotChanges()
-            .pipe(
-                tap(arr => (arr.length ? null : (this.theEnd = true))),
-                map(arr => {
-                    return arr.reduce((acc, cur) => {
-                        const id = cur.payload.doc.id;
-                        const data = cur.payload.doc.data();
-                        return {...acc, [id]: data};
-                    }, {});
-                })
-            );
+    // getBatch() {
+    //     console.log('getting next batch');
+    //     // console.log(offset);
+    //     return this.functions.httpsCallable('search')({
+    //         query: ''
+    //     }) // todo
+    //     // return this.db
+    //     //     .collection('products', ref =>
+    //     //         ref
+    //     //             .orderBy('id')
+    //     //             .startAfter(offset)
+    //     //             .limit(this.batch)
+    //     //     )
+    //     //     .snapshotChanges()
+    //         .pipe(
+    //             tap(arr => (arr.length ? null : (this.theEnd = true)))
+    //         );
+    // }
+
+    searchChanged(query) {
+        this.showResults = !!query.length;
+        this.searchText$.next(query);
     }
-    nextOffset(offset) {
-        this.offset.next(offset);
+
+    search() {
+        return of(this.searchText$.value).pipe(
+            tap(() => {
+                console.log(`piping page ${this.currentPage$.value}`);
+            }),
+            mergeMap(query => this.functions.httpsCallable('search')({query, page: this.currentPage$.value})),
+            tap(res => console.log(res)),
+            map(response => response.hits),
+        );
+    }
+
+    nextPage() {
+        this.currentPage$.next(this.currentPage$.value + 1);
     }
 }

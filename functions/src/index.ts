@@ -1,1 +1,1 @@
-export {indexProduct, unindexProduct} from './algolia';
+export {indexProduct, unindexProduct, search} from './algolia';

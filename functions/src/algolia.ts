@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
-
+//govnokod
 admin.initializeApp();
 const env = functions.config();
 
@@ -32,15 +32,9 @@ export const unindexProduct = functions.firestore
     });
 
 
-export const searchUser = functions.https.onCall(async (data, context) => {
+export const search = functions.https.onCall(async (data, context) => {
     const query = data['query'];
-    return await index.search({query});
+    const page = data['page'];
+    return await index.search({query, page});
 });
 
-// export const search = (text$: Observable<string>) =>
-//     text$.pipe(
-//         debounceTime(200),
-//         distinctUntilChanged(),
-//         switchMap(query => this.functions.httpsCallable('onCalls-searchUser')({query})),
-//         map(response => response.hits.map(user => user.name))
-//     );
