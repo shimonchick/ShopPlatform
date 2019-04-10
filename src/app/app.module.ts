@@ -18,15 +18,14 @@ import {CoreModule} from './core.module';
 import {LoginComponent} from './login/login.component';
 import {MatPasswordStrengthModule} from '@angular-material-extensions/password-strength';
 import {SettingsModule} from './settings/settings.module';
-import {TestComponent} from './test/test.component';
 import {LayoutModule} from '@angular/cdk/layout';
+import {SharedModule} from './shared.module';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
         LoginComponent,
-        TestComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),

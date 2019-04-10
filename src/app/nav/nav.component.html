@@ -23,22 +23,22 @@
         </div>
 
         <!-- User NOT logged in -->
-        <ng-template #guest>
-            <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"
-                                           [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>
-        </ng-template>
+<!--        <ng-template #guest>-->
+<!--            <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"-->
+<!--                                           [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>-->
+<!--        </ng-template>-->
                 <!-- User NOT logged in -->
-<!--                <ng-template #guest>-->
-<!--                    &lt;!&ndash;<button mat-raised-button routerLink="signup">Sign up</button>&ndash;&gt;-->
-<!--                    <button mat-raised-button routerLink="login">Log in</button>-->
+        <ng-template #guest>
+            <!--<button mat-raised-button routerLink="signup">Sign up</button>-->
+            <button mat-raised-button routerLink="login">Log in</button>
 
-<!--                    &lt;!&ndash;<ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"&ndash;&gt;-->
-<!--                    &lt;!&ndash;[theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>&ndash;&gt;-->
+            <!--<ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"-->
+            <!--[theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>-->
 
-<!--                    &lt;!&ndash;<ngx-auth-firebaseui (onSuccess)="printUser($event)"&ndash;&gt;-->
-<!--                    &lt;!&ndash;(onError)="printError()">&ndash;&gt;-->
-<!--                    &lt;!&ndash;</ngx-auth-firebaseui>&ndash;&gt;-->
-<!--                </ng-template>-->
+            <!--<ngx-auth-firebaseui (onSuccess)="printUser($event)"-->
+            <!--(onError)="printError()">-->
+            <!--</ngx-auth-firebaseui>-->
+        </ng-template>
 
 
         <!-- User logged in -->

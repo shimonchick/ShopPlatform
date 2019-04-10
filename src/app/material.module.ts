@@ -42,7 +42,6 @@ import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
 import {A11yModule} from '@angular/cdk/a11y';
-import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
 
 @NgModule({
     exports: [
@@ -134,7 +133,6 @@ import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
         MatTreeModule,
         ScrollingModule,
         MatBottomSheetModule,
-        TextareaAutosizeModule
     ]
 })
 export class MaterialModule {
