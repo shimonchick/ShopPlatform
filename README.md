@@ -1,5 +1,5 @@
 # ShopPlatform
-Theory of programming end of year web application. A shop platform that allows people to buy and sell stuff..
+TP end year web application. A shop platform that allows people to buy and sell stuff..
 
 ## ideas:
 - Something between Steam and Aliexpress.
