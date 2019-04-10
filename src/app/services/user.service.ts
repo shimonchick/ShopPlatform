@@ -14,6 +14,7 @@ export class UserService {
 
     async getUserById(id: string) {
         const snapshot = await this.db.doc<User>(`users/${id}`).get().toPromise();
+        console.log(snapshot);
         return snapshot.data() as User;
     }
 }

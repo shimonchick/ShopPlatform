@@ -15,17 +15,23 @@ import {AngularFireModule} from '@angular/fire';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CoreModule} from './core.module';
-import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
-import { LayoutModule } from '@angular/cdk/layout';
+import {LoginComponent} from './login/login.component';
+import {MatPasswordStrengthModule} from '@angular-material-extensions/password-strength';
+import {SettingsModule} from './settings/settings.module';
+import {TestComponent} from './test/test.component';
+import {LayoutModule} from '@angular/cdk/layout';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
+        LoginComponent,
+        TestComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
         NgxAuthFirebaseUIModule.forRoot(environment.firebase),
+        MatPasswordStrengthModule.forRoot(),
         AngularFirestoreModule,
         AngularFireStorageModule,
         AngularFireAuthModule,
@@ -40,12 +46,10 @@ import { LayoutModule } from '@angular/cdk/layout';
         FlexLayoutModule,
         ReactiveFormsModule,
         FlexLayoutModule,
-        MatGridListModule,
-        MatCardModule,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
+        MatPasswordStrengthModule,
+        SettingsModule,
         LayoutModule,
+        SharedModule
     ],
     providers: [],
     bootstrap: [AppComponent],

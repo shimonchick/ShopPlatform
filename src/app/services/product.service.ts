@@ -3,16 +3,17 @@ import {Observable} from 'rxjs';
 import {Product} from '../models/product';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProductService {
 
-
     constructor(
         private db: AngularFirestore,
         private storage: AngularFireStorage,
+        private http: HttpClient
     ) {
     }
 
@@ -22,6 +23,7 @@ export class ProductService {
 
 // TODO: store reference for the product in the service so you can manipulate it without making extra requests
     getProduct(id: string): Observable<Product> {
+
         return this.db.doc<Product>(`products/${id}`).valueChanges();
     }
 

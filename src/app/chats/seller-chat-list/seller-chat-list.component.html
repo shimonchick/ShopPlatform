@@ -1,0 +1,26 @@
+
+<div *ngIf=" auth.user$ | async as user">
+    <h1>Your chats</h1>
+    <div *ngFor="let chat of userChats; index as i">
+        <mat-card *ngIf="buyers[i] && chat.messages.length > 0">
+
+            <mat-card-title>
+                Chat with {{buyers[i].displayName}}
+            </mat-card-title>
+            <mat-card-content *ngIf="chat.messages.length > 0">
+                {{chat.messages[chat.messages.length - 1].content}}
+            </mat-card-content>
+
+            <img [src]="buyers[i].photoURL" mat-card-image style="max-width: 100px;">
+
+            <mat-card-actions>
+                <button [routerLink]="['/chats', chat.id]" mat-raised-button>
+                    {{ chat.messages.length }} Messages
+                </button>
+
+            </mat-card-actions>
+
+        </mat-card>
+
+    </div>
+</div>

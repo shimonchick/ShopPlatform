@@ -10,6 +10,12 @@
         <mat-icon>add</mat-icon>
         Add
     </button>
+    <button *ngIf="auth.user$ | async"
+            mat-raised-button
+            routerLink="/settings/seller">
+        Become a seller
+    </button>
+    <!--TODO: change chatService id-->
     <!--<button mat-button></button>-->
     <div class="providers-container">
         <div *ngIf="auth.user$ | async; then authenticated else guest">
@@ -21,13 +27,49 @@
             <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"
                                            [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>
         </ng-template>
+                <!-- User NOT logged in -->
+<!--                <ng-template #guest>-->
+<!--                    &lt;!&ndash;<button mat-raised-button routerLink="signup">Sign up</button>&ndash;&gt;-->
+<!--                    <button mat-raised-button routerLink="login">Log in</button>-->
+
+<!--                    &lt;!&ndash;<ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"&ndash;&gt;-->
+<!--                    &lt;!&ndash;[theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>&ndash;&gt;-->
+
+<!--                    &lt;!&ndash;<ngx-auth-firebaseui (onSuccess)="printUser($event)"&ndash;&gt;-->
+<!--                    &lt;!&ndash;(onError)="printError()">&ndash;&gt;-->
+<!--                    &lt;!&ndash;</ngx-auth-firebaseui>&ndash;&gt;-->
+<!--                </ng-template>-->
 
 
         <!-- User logged in -->
         <ng-template #authenticated>
             <div *ngIf="auth.user$ | async as user">
                 <!--<h3>Howdy, {{ user.displayName }}</h3>-->
-                <img [src]="user.photoURL" alt="avatar" class="avatar"/>
+
+                <button [matMenuTriggerFor]="menu" mat-button>
+                    <img [src]="user.photoURL" alt="avatar" class="avatar"/>
+
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item routerLink="settings">Settings</button>
+
+                    <button *ngIf="auth.getSnapshotUser().roles.buyer" mat-menu-item routerLink="chats/buyer">
+                        Messages sent
+                    </button>
+                    <button *ngIf="auth.getSnapshotUser().roles.seller" mat-menu-item routerLink="chats/seller">
+                        Messages received
+                    </button>
+                    <button *ngIf="auth.getSnapshotUser().roles.seller" mat-menu-item
+                            routerLink="orders/seller">
+                        Orders received
+                    </button>
+                    <button *ngIf="auth.getSnapshotUser().roles.buyer" mat-menu-item routerLink="orders/buyer">
+                        Orders sent
+                    </button>
+
+
+                    <button (click)="auth.signOut()" mat-menu-item>Log out</button>
+                </mat-menu>
             </div>
         </ng-template>
     </div>

@@ -1,21 +1,38 @@
 <mat-vertical-stepper #stepper linear>
-    <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup">
+    <mat-step [stepControl]="firstFormGroup" label="Fill product details">
+        <form [formGroup]="productForm" class="form-full-width">
             <ng-template matStepLabel>Fill product details</ng-template>
-            <mat-form-field appearance="standard" hintLabel="Product Name" style="width:70%">
-                <input #productName matInput placeholder="Name">
+            <mat-form-field appearance="standard" class="form-field">
+                <input #productName
+                       matInput maxlength="50"
+                       minlength="3" placeholder="Name">
+                <mat-hint>
+                    Product name
+                </mat-hint>
+                <mat-error *ngIf="productForm.controls['name'].invalid">
+                    {{getNameErrorMessage()}}
+                </mat-error>
             </mat-form-field>
 
-            <mat-form-field hintLabel="Max 500 characters" style="width:70%">
-                <textarea #productDescription matInput
-                          maxlength="500"
-                          placeholder="Description"></textarea>
-                <mat-hint align="end">{{productDescription.value?.length || 0}}/500</mat-hint>
+            <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
+                <textarea #productDescription
+                          autosize
+                          matInput maxlength="10000" placeholder="Description"></textarea>
+                <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
+                <mat-error *ngIf="productForm.controls['description'].invalid ">
+                    {{getDescriptionErrorMessage()}}
+                </mat-error>
             </mat-form-field>
-            <mat-form-field hintLabel="Product Price" style="width:70%">
-                <input #productPrice matInput placeholder="price"
-                       type="number">
+
+            <mat-form-field class="form-field" hintLabel="Product Price">
+                <input #productPrice matInput
+                       placeholder="price" type="number">
+                <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
+                    Product description is <strong>required</strong>
+                </mat-error>
+
             </mat-form-field>
+            <app-categories (categoryChanged)="onCategoriesChanged($event)"></app-categories>
 
             <div>
                 <button mat-button matStepperNext>Next</button>
@@ -23,29 +40,32 @@
 
         </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step [stepControl]="secondFormGroup" label="Upload product images">
         <div>
-            <form [formGroup]="secondFormGroup">
+            <form>
                 <ng-template matStepLabel>Enter product pictures</ng-template>
-                <app-uploader (urls)="OnUploads($event)"></app-uploader>
+                <!--<app-image></app-image>-->
+                <app-image-preview (filesSelected)="onFilesSelected($event)"></app-image-preview>
+                <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
             </form>
         </div>
         <div>
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button (click)="UploadAllFiles()" mat-button matStepperNext>Next</button>
         </div>
     </mat-step>
-    <mat-step>
+    <mat-step label="Create product">
         <div class="mat-typography">
             <ng-template matStepLabel>Done</ng-template>
             <h3>Create product listing:</h3>
+            <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
+            <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);
+            productName.value=''; productDescription.value='';productPrice.value=''; " mat-raised-button>
+                Create
+            </button>
             <div>
                 <button mat-button matStepperPrevious>Back</button>
                 <button (click)="stepper.reset()" mat-button>Reset</button>
-                <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);"
-                        mat-raised-button color="accent">
-                    Create
-                </button>
             </div>
         </div>
     </mat-step>
