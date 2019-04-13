@@ -7,6 +7,7 @@ import {Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition} from '@n
 import {Lightbox} from '@ngx-gallery/lightbox';
 import {Seller} from '../../../models/user';
 import {UserService} from '../../../services/user.service';
+import {ChatService} from '../../../services/chat.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -25,7 +26,8 @@ export class ProductDetailComponent implements OnInit {
                 private productService: ProductService,
                 public gallery: Gallery,
                 public lightbox: Lightbox,
-                public userService: UserService) {
+                public userService: UserService,
+                public chatService: ChatService) {
     }
 
 

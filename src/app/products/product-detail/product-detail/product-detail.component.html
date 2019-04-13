@@ -13,7 +13,7 @@
                 <!--todo add a currency to the user-->
             </div>
             <div>
-                <button class="stretched" mat-raised-button color="accent">
+                <button (click)="chatService.chatWith(seller.uid)" class="stretched" color="accent" mat-raised-button>
                     <mat-icon>chat</mat-icon>
                     Chat
                 </button>

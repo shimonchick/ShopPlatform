@@ -9,10 +9,10 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-buyer-chat-list',
-    templateUrl: './buyer-chat-list.component.html',
-    styleUrls: ['./buyer-chat-list.component.scss']
+    templateUrl: './chat-list.component.html',
+    styleUrls: ['./chat-list.component.scss']
 })
-export class BuyerChatListComponent implements OnInit {
+export class ChatListComponent implements OnInit {
 
     userChats: any[] = [];
     sellers: User[] = [];
@@ -25,7 +25,8 @@ export class BuyerChatListComponent implements OnInit {
     }
 
     async ngOnInit() {
-        const chats = await this.cs.getBuyerChats().pipe(first()).toPromise() as Chat[];
+        const chats = await this.cs.getChats().pipe(first()).toPromise() as Chat[];
+        console.log(chats);
         // console.log('fetched chats');
         // console.log(chats);
         this.userChats = chats.filter((chat) => {

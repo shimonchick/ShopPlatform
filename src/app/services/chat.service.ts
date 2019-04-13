@@ -3,8 +3,8 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {AuthService} from './auth.service';
 import {Router} from '@angular/router';
 import {firestore} from 'firebase/app';
-import {map, switchMap} from 'rxjs/operators';
-import {combineLatest, Observable, of} from 'rxjs';
+import {first, map, switchMap} from 'rxjs/operators';
+import {combineLatest, merge, Observable, of} from 'rxjs';
 import {UserService} from './user.service';
 
 @Injectable({
@@ -19,64 +19,93 @@ export class ChatService {
     ) {
     }
 
-    get(chatId) {
+    getChat(sellerId) {
         return this.afs
-            .collection<any>('chats')
-            .doc(chatId)
+            .collection('chats', ref => ref.where('sellerId', '==', sellerId).limit(1))
             .snapshotChanges()
             .pipe(
-                map(doc => {
-                    return {id: doc.payload.id, ...doc.payload.data()};
-                })
+                map((actions) => {
+                    return actions.map(a => {
+                        const data: Object = a.payload.doc.data();
+                        const id = a.payload.doc.id;
+                        return {id, ...data};
+                    });
+                }),
+                first()
             );
     }
 
-    getBuyerChats() {
+    getChats() {
         return this.auth.user$.pipe(
             switchMap(user => {
-                return this.afs
-                    .collection('chats', ref => ref.where('buyerId', '==', user.uid))
-                    .snapshotChanges()
+                const buyerChats = this.afs.collection('chats', ref => ref.where('buyerId', '==', user.uid));
+                const sellerChats = this.afs.collection('chats', ref => ref.where('sellerId', '==', user.uid));
+                const buyerChatObservables = buyerChats.snapshotChanges();
+                const sellerChatObservables = sellerChats.snapshotChanges();
+                return merge(buyerChatObservables, sellerChatObservables)
                     .pipe(
-                        map(actions => {
-                            return actions.map(a => {
-                                const data: Object = a.payload.doc.data();
-                                const id = a.payload.doc.id;
-                                return {id, ...data};
-                            });
-                        })
+                        map((actions) => {
+                                return actions.map(a => {
+                                    const data: Object = a.payload.doc.data();
+                                    const id = a.payload.doc.id;
+                                    return {id, ...data};
+                                });
+                            }
+                        )
                     );
+                // return chatObservables
+                //     .pipe(
+                //         map((observables) => {
+                //             return observables.map(observable => {
+                //                 return observable.map((a) => {
+                //                     const data: Object = a.payload.doc.data();
+                //                     const id = a.payload.doc.id;
+                //                     return {id, ...data};
+                //                 });
+                //             });
+                //         })
+                //     );
             })
         );
     }
 
-    getSellerChats() {
-        return this.auth.user$.pipe(
-            switchMap(user => {
-                return this.afs
-                    .collection('chats', ref => ref.where('sellerId', '==', user.uid))
-                    .snapshotChanges()
-                    .pipe(
-                        map(actions => {
-                            return actions.map(a => {
-                                const data: Object = a.payload.doc.data();
-                                const id = a.payload.doc.id;
-                                return {id, ...data};
-                            });
-                        })
-                    );
-            })
-        );
+    // getSellerChats() {
+    //     return this.auth.user$.pipe(
+    //         switchMap(user => {
+    //             return this.afs
+    //                 .collection('chats', ref => ref.where('sellerId', '==', user.uid))
+    //                 .snapshotChanges()
+    //                 .pipe(
+    //                     map(actions => {
+    //                         return actions.map(a => {
+    //                             const data: Object = a.payload.doc.data();
+    //                             const id = a.payload.doc.id;
+    //                             return {id, ...data};
+    //                         });
+    //                     })
+    //                 );
+    //         })
+    //     );
+    // }
+
+    async chatWith(sellerId: string) {
+        const chat = await this.getChat(sellerId).toPromise();
+        console.log(chat);
+        const firstChat = chat[0];
+        console.log(firstChat);
+        if (firstChat === undefined) {
+            await this.createChat(sellerId);
+        }
+        this.router.navigate(['chats', firstChat.id]);
     }
 
-    async create(sellerId: string, productId: string) {
+    async createChat(sellerId: string) {
         const buyer = await this.auth.getUserAsPromise();
         const buyerId = buyer.uid;
 
         const data = {
             buyerId: buyerId,
             sellerId: sellerId,
-            productId: productId,
             createdAt: Date.now(),
             count: 0,
             messages: []

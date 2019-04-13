@@ -5,11 +5,10 @@ import {ChatRoutingModule} from './chat-routing.module';
 import {ChatComponent} from './chat/chat.component';
 import {SharedModule} from '../shared.module';
 import {MaterialModule} from '../material.module';
-import {BuyerChatListComponent} from './buyer-chat-list/buyer-chat-list.component';
-import {SellerChatListComponent} from './seller-chat-list/seller-chat-list.component';
+import {ChatListComponent} from './chat-list/chat-list.component';
 
 @NgModule({
-    declarations: [ChatComponent, BuyerChatListComponent, SellerChatListComponent],
+    declarations: [ChatComponent, ChatListComponent],
     imports: [
         CommonModule,
         ChatRoutingModule,
