@@ -7,11 +7,14 @@ import {NgxAuthFirebaseUIModule} from 'ngx-auth-firebaseui';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared.module';
 import {SellerRegistrationComponent} from './seller-registration/seller-registration.component';
+import {SettingsComponent} from './settings.component';
+import {MatTabsModule} from '@angular/material';
 
 @NgModule({
     declarations: [
         UserSettingsComponent,
-        SellerRegistrationComponent
+        SellerRegistrationComponent,
+        SettingsComponent
     ],
     imports: [
         CommonModule,
@@ -20,6 +23,7 @@ import {SellerRegistrationComponent} from './seller-registration/seller-registra
         ReactiveFormsModule,
         FormsModule,
         SharedModule,
+        MatTabsModule,
 
     ]
 })

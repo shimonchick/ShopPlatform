@@ -1,11 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {UserSettingsComponent} from './user-settings/user-settings.component';
-import {SellerRegistrationComponent} from './seller-registration/seller-registration.component';
+import {SettingsComponent} from './settings.component';
 
 const routes: Routes = [
-    {path: '', component: UserSettingsComponent},
-    {path: 'seller', component: SellerRegistrationComponent}
+    {path: ':id', component: SettingsComponent},
+    // {path: 'seller', component: SellerRegistrationComponent}
 ];
 
 @NgModule({

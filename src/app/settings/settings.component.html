@@ -1,0 +1,13 @@
+<mat-tab-group [selectedIndex]="this.tabIndex" mat-stretch-tabs>
+    <mat-tab label="User">
+        <ng-template matTabContent>
+            <app-user-settings></app-user-settings>
+        </ng-template>
+
+    </mat-tab>
+    <mat-tab label="Seller">
+        <ng-template matTabContent>
+            <app-seller-registration></app-seller-registration>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>
