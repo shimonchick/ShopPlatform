@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ChatService} from '../../services/chat.service';
 import {ActivatedRoute} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {AuthService} from '../../services/auth.service';
+import {tap} from 'rxjs/operators';
+
 
 @Component({
     selector: 'app-chat',
@@ -12,6 +14,8 @@ import {AuthService} from '../../services/auth.service';
 export class ChatComponent implements OnInit {
     chat$: Observable<any>;
     newMsg: string;
+    // @Input() source: Chat;
+    @Input() chat: Chat;
 
     constructor(
         public cs: ChatService,
@@ -21,11 +25,18 @@ export class ChatComponent implements OnInit {
     }
 
     ngOnInit() {
-        const chatId = this.route.snapshot.paramMap.get('id');
-        const source = this.cs.get(chatId);
+        // const chatId = this.route.snapshot.paramMap.get('id');
+        // const source = this.cs.getChat(this.chatId);
+        // console.log(of(this.source) === source);
         // this.chat$ = this.cs.get(chatId);
-        this.chat$ = this.cs.joinUsers(source); // .pipe(tap(v => this.scrollBottom(v)));
 
+        this.chat$ = this.cs.joinUser(of(this.chat)).pipe(
+            tap(it => console.log(it))
+        ); // .pipe(tap(v => this.scrollBottom()));
+        // console.log(this.source);
+        // this.chat$ = this.cs.joinUser(of(this.source).pipe(first())); // .pipe(tap(v => this.scrollBottom()));
+        // this.chat$ = of(this.source);
+        // console.log(this.chat$);
         this.scrollBottom();
     }
 

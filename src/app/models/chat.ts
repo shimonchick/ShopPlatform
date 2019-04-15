@@ -4,6 +4,5 @@ interface Chat {
     createdAt: number;
     id: string;
     messages: string[];
-    productId: string;
     sellerId: string;
 }

@@ -1,61 +1,39 @@
-<mat-drawer-container class="drawer-container">
-    <mat-drawer #drawer [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-                [mode]="(isHandset$ | async) ? 'over' : 'side'"
-                [opened]="!(isHandset$ | async)"
-                class="drawer">
-        <mat-toolbar color="primary">Menu</mat-toolbar>
-        <div *ngIf="auth.user$ | async as user" class="grid-container">
-            <h1 class="mat-h1">Dashboard</h1>
-            <!-- Add Content Here -->
-            <mat-grid-list cols="1" rowHeight="200px">
-                <mat-grid-tile *ngFor="let chat of userChats; index as i" [colspan]="1" [rowspan]="1">
-                    <mat-card class="dashboard-card">
-                        <mat-card-header>
-                            <div [style.backgroundImage]="'url(' + sellers[i].photoURL + ')'"
-                                 [style.backgroundSize]="'cover'"
-                                 mat-card-avatar
-                            ></div>
-                            <mat-card-title>
-                                Your Chat with {{sellers[i].displayName}}
-                                <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button"
-                                        mat-icon-button>
-                                    <mat-icon>more_vert</mat-icon>
-                                </button>
-                                <mat-menu #menu="matMenu" xPosition="before">
-                                    <button [routerLink]="['/chats', chat.id]" mat-menu-item>See chat</button>
-                                    <!--TODO: decide whether to hide the chat locally or delete the chat from database-->
-                                    <button mat-menu-item>Ignore</button>
-                                </mat-menu>
-                            </mat-card-title>
-                            <mat-card-subtitle>
-                                {{ chat.messages.length }} Messages
-                            </mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content class="dashboard-card-content">
-                            <div>Latest message</div>
-                            <p style="overflow-wrap: break-word; margin-top: 10px;">{{chat.messages[chat.messages.length - 1].content}}</p>
+<mat-sidenav-container *ngIf="auth.user$ | async as user" class="sidenav-container">
+    <mat-sidenav #drawer [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+                 [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                 [opened]="!(isHandset$ | async)"
+                 class="sidenav"
+                 fixedInViewport="true"
+    >
+        <mat-nav-list>
+            <ng-container *ngIf="(chats$ | async) as chats">
+                <ng-container *ngIf="(users$ | async) as users">
+                    <div (click)="onSelect(chat)" *ngFor="let chat of chats; index as i">
+                        <mat-card style="max-width: 300px;">
+                            <mat-card-header>
+                                <div [style.backgroundImage]="'url(' + users[i].photoURL + ')'"
+                                     [style.backgroundSize]="'cover'"
+                                     mat-card-avatar
+                                ></div>
+                                <mat-card-title>
+                                    {{users[i].displayName}}
+                                </mat-card-title>
+                                <!--TODO: add delete chat button-->
+                                <mat-card-subtitle style="max-width: 150px;">
+                                    <!--{{ chat.messages.length }} Messages-->
+                                    <p class="latest-message">{{chat.messages[chat.messages.length - 1].content}}</p>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                        </mat-card>
+                    </div>
 
-                            <!--<img [src]="sellers[i].photoURL" mat-card-image style="max-width: 100px;">-->
-                        </mat-card-content>
-                    </mat-card>
-                </mat-grid-tile>
-            </mat-grid-list>
-        </div>
+                </ng-container>
+            </ng-container>
 
-    </mat-drawer>
-    <mat-drawer-content>
-        <mat-toolbar color="primary">
-            <button
-                    (click)="drawer.toggle()"
-                    *ngIf="isHandset$ | async"
-                    aria-label="Toggle sidenav"
-                    mat-icon-button
-                    type="button">
-                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-            </button>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <app-chat *ngIf="selectedChat" [chat]="selectedChat"></app-chat>
 
-            <span>Chats</span>
-        </mat-toolbar>
-
-    </mat-drawer-content>
-</mat-drawer-container>
+    </mat-sidenav-content>
+</mat-sidenav-container>

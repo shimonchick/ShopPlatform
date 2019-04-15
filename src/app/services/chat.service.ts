@@ -3,8 +3,8 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {AuthService} from './auth.service';
 import {Router} from '@angular/router';
 import {firestore} from 'firebase/app';
-import {first, map, switchMap} from 'rxjs/operators';
-import {combineLatest, merge, Observable, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+import {combineLatest, forkJoin, Observable, of} from 'rxjs';
 import {UserService} from './user.service';
 
 @Injectable({
@@ -19,31 +19,38 @@ export class ChatService {
     ) {
     }
 
-    getChat(sellerId) {
-        return this.afs
-            .collection('chats', ref => ref.where('sellerId', '==', sellerId).limit(1))
-            .snapshotChanges()
-            .pipe(
-                map((actions) => {
-                    return actions.map(a => {
-                        const data: Object = a.payload.doc.data();
-                        const id = a.payload.doc.id;
-                        return {id, ...data};
-                    });
-                }),
-                first()
-            );
+    getChat(id: string) {
+        return this.afs.doc(`chats/${id}`).snapshotChanges();
+        // const buyerChat = this.afs.collection('chats', ref => ref.where('buyerId', '==', id));
+        // const sellerChat = this.afs.collection('chats', ref => ref.where('sellerId', '==', id));
+        // const buyerChatObservables = buyerChat.snapshotChanges();
+        // const sellerChatObservables = sellerChat.snapshotChanges();
+        // return merge(buyerChatObservables, sellerChatObservables);
+        // .pipe(
+        //     map((actions) => {
+        //             return actions.map(a => {
+        //                 const data: Object = a.payload.doc.data();
+        //                 const id = a.payload.doc.id;
+        //                 return {id, ...data};
+        //             });
+        //         }
+        //     )
+        // );
+
     }
 
-    getChats() {
+    getChats(): Observable<Chat[]> {
         return this.auth.user$.pipe(
             switchMap(user => {
                 const buyerChats = this.afs.collection('chats', ref => ref.where('buyerId', '==', user.uid));
                 const sellerChats = this.afs.collection('chats', ref => ref.where('sellerId', '==', user.uid));
                 const buyerChatObservables = buyerChats.snapshotChanges();
                 const sellerChatObservables = sellerChats.snapshotChanges();
-                return merge(buyerChatObservables, sellerChatObservables)
+                return forkJoin(buyerChatObservables, sellerChatObservables)
                     .pipe(
+                        // TODO: find another flat implementation
+                        map(them => them.flat(1)),
+                        // map(them => [].concat.apply([], them)),
                         map((actions) => {
                                 return actions.map(a => {
                                     const data: Object = a.payload.doc.data();
@@ -53,20 +60,8 @@ export class ChatService {
                             }
                         )
                     );
-                // return chatObservables
-                //     .pipe(
-                //         map((observables) => {
-                //             return observables.map(observable => {
-                //                 return observable.map((a) => {
-                //                     const data: Object = a.payload.doc.data();
-                //                     const id = a.payload.doc.id;
-                //                     return {id, ...data};
-                //                 });
-                //             });
-                //         })
-                //     );
             })
-        );
+        ) as Observable<Chat[]>;
     }
 
     // getSellerChats() {
@@ -147,7 +142,7 @@ export class ChatService {
         }
     }
 
-    joinUsers(chat$: Observable<any>) {
+    joinUser(chat$: Observable<any>) {
         let chat;
         const joinKeys = {};
 
@@ -155,7 +150,7 @@ export class ChatService {
             switchMap(c => {
                 // Unique User IDs
                 chat = c;
-                console.log(c);
+                // console.log(c);
 
                 const uids = Array.from(new Set(c.messages.map(v => v.uid)));
                 if (uids) {
