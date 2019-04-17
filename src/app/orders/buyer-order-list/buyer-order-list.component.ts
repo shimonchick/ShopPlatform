@@ -25,7 +25,7 @@ export class BuyerOrderListComponent implements OnInit {
         this.orderService.getBuyerOrders().subscribe(async (orders: any) => {
                 console.log(orders);
                 for (let i = 0; i < orders.length; i++) {
-                    this._newOrder.seller = await this.userService.getUserById(orders[i].sellerId);
+                    this._newOrder.seller = await this.userService.getUserByIdAsPromise(orders[i].sellerId);
                     this.productService.getProduct(orders[i].productId).subscribe((product) => {
                         this._newOrder.product = product;
                         this.orders.push(this._newOrder);

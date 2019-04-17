@@ -1,3 +1,4 @@
+
 <mat-sidenav-container *ngIf="auth.user$ | async as user" class="sidenav-container">
     <mat-sidenav #drawer [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                  [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -6,29 +7,29 @@
                  fixedInViewport="true"
     >
         <mat-nav-list>
-            <ng-container *ngIf="(chats$ | async) as chats">
-                <ng-container *ngIf="(users$ | async) as users">
-                    <div (click)="onSelect(chat)" *ngFor="let chat of chats; index as i">
-                        <mat-card style="max-width: 300px;">
-                            <mat-card-header>
-                                <div [style.backgroundImage]="'url(' + users[i].photoURL + ')'"
-                                     [style.backgroundSize]="'cover'"
-                                     mat-card-avatar
-                                ></div>
-                                <mat-card-title>
-                                    {{users[i].displayName}}
-                                </mat-card-title>
-                                <!--TODO: add delete chat button-->
-                                <mat-card-subtitle style="max-width: 150px;">
-                                    <!--{{ chat.messages.length }} Messages-->
-                                    <p class="latest-message">{{chat.messages[chat.messages.length - 1].content}}</p>
-                                </mat-card-subtitle>
-                            </mat-card-header>
-                        </mat-card>
-                    </div>
+            <ng-container *ngIf="chats$ | async as chats">
+                <div (click)="onSelect(chat)" *ngFor="let chat of chats; trackBy: trackByIndex">
+                    <mat-card style="max-width: 300px;">
+                        <!--<mat-card-header *ngIf="getOtherUser(chat) | async as otherUser">-->
+                        <!--{{otherUser | json}}-->
+                        <!--&lt;!&ndash;<div [style.backgroundImage]="'url(' + otherUser.photoURL + ')'"&ndash;&gt;-->
+                        <!--&lt;!&ndash;[style.backgroundSize]="'cover'"&ndash;&gt;-->
+                        <!--&lt;!&ndash;mat-card-avatar&ndash;&gt;-->
+                        <!--&lt;!&ndash;&gt;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<mat-card-title>&ndash;&gt;-->
+                        <!--&lt;!&ndash;{{otherUser.displayName}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;</mat-card-title>&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;TODO: add delete chat button&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<mat-card-subtitle style="max-width: 150px;">&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;{{ chat.messages.length }} Messages&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<p class="latest-message">{{chat.messages[chat.messages.length - 1].content}}</p>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</mat-card-subtitle>&ndash;&gt;-->
+                        <!--</mat-card-header>-->
+                    </mat-card>
+                </div>
 
-                </ng-container>
             </ng-container>
+
 
         </mat-nav-list>
     </mat-sidenav>

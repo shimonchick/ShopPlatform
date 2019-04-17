@@ -3,8 +3,8 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {AuthService} from './auth.service';
 import {Router} from '@angular/router';
 import {firestore} from 'firebase/app';
-import {map, switchMap} from 'rxjs/operators';
-import {combineLatest, forkJoin, Observable, of} from 'rxjs';
+import {first, map, switchMap, tap} from 'rxjs/operators';
+import {combineLatest, Observable, of} from 'rxjs';
 import {UserService} from './user.service';
 
 @Injectable({
@@ -44,10 +44,16 @@ export class ChatService {
             switchMap(user => {
                 const buyerChats = this.afs.collection('chats', ref => ref.where('buyerId', '==', user.uid));
                 const sellerChats = this.afs.collection('chats', ref => ref.where('sellerId', '==', user.uid));
+                // console.log(buyerChats);
+                // console.log(sellerChats);
                 const buyerChatObservables = buyerChats.snapshotChanges();
                 const sellerChatObservables = sellerChats.snapshotChanges();
-                return forkJoin(buyerChatObservables, sellerChatObservables)
+                // TODO: forkJoin observables never finish. Replace forkJoin with another function
+                return combineLatest(buyerChatObservables, sellerChatObservables)
                     .pipe(
+                        tap((them) => {
+                            console.log(them);
+                        }),
                         // TODO: find another flat implementation
                         map(them => them.flat(1)),
                         // map(them => [].concat.apply([], them)),
@@ -84,7 +90,7 @@ export class ChatService {
     // }
 
     async chatWith(sellerId: string) {
-        const chat = await this.getChat(sellerId).toPromise();
+        const chat = await this.getChat(sellerId).pipe(first()).toPromise();
         console.log(chat);
         const firstChat = chat[0];
         console.log(firstChat);

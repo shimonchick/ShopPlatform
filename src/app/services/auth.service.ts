@@ -3,7 +3,7 @@ import {Observable, of} from 'rxjs';
 import {User} from '../models/user';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
-import {first, share, switchMap} from 'rxjs/operators';
+import {first, shareReplay, switchMap} from 'rxjs/operators';
 import {AuthProcessService} from 'ngx-auth-firebaseui';
 import {Product} from '../models/product';
 import {CoreModule} from '../core.module';
@@ -33,10 +33,12 @@ export class AuthService {
                     return of(null);
                 }
             }),
-            share() // make it hot baby!!
+            shareReplay(1)
         );
         this.user$.subscribe(user => {
+            console.log('you found me!!');
             this.snapshotUser = user;
+            // console.log(this.snapshotUser);
         });
     }
 
