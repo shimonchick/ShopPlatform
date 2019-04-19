@@ -40,4 +40,7 @@ export class ProductsViewComponent implements OnChanges {
         this.loading = false; // when product changes, new products have been loaded and so stop loading
         console.log(this.products);
     }
+    trackById(index, item) {
+        return 4;
+    }
 }

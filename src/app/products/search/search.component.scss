@@ -3,7 +3,7 @@
 }
 
 .drawer {
-  width: 200px;
+  width: 300px;
 }
 
 .drawer .mat-toolbar {
@@ -18,4 +18,12 @@
 
 ais-search-box {
   margin: 0 auto;
+}
+
+::ng-deep .ais-InfiniteHits {
+  height: calc(100% - 64px);
+}
+
+::ng-deep .ais-RangeSlider {
+  margin: 25px;
 }
