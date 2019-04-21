@@ -8,11 +8,22 @@
                     [opened]="!(isHandset$ | async)">
             <mat-toolbar color="primary">Menu</mat-toolbar>
 
-            <ais-range-slider
-                    [min]="0"
-                    [max]="1500"
-                    attribute="price">
-            </ais-range-slider>
+            <div id="algolia-widgets">
+                <ais-range-slider
+                        [min]="0"
+                        [max]="1500"
+                        attribute="price">
+                </ais-range-slider>
+<!--                <ais-hierarchical-menu-->
+<!--                        [attributes]="[-->
+<!--                            'hierarchicalCategories.lvl0',-->
+<!--                            'hierarchicalCategories.lvl1',-->
+<!--                            'hierarchicalCategories.lvl2'-->
+<!--                        ]"-->
+<!--                >-->
+
+<!--                </ais-hierarchical-menu>-->
+            </div>
         </mat-drawer>
 
         <mat-drawer-content>
@@ -29,7 +40,8 @@
             </mat-toolbar>
             <ais-infinite-hits>
                 <ng-template let-hits="hits" let-results="results" let-refine="showMore" let-end="isLastPage">
-                    <app-products-view *ngIf="hits.length" [products]="hits" (more)="refine()" [theEnd]="end"></app-products-view>
+                    <app-products-view *ngIf="hits.length" [products]="hits" (more)="refine()"
+                                       [theEnd]="end"></app-products-view>
                 </ng-template>
             </ais-infinite-hits>
         </mat-drawer-content>
