@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Product} from '../../../models/product';
+import {Product} from '../../models/product';
 import {Observable} from 'rxjs';
-import {ProductService} from '../../../services/product.service';
+import {ProductService} from '../../services/product.service';
 import {Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition} from '@ngx-gallery/core';
 import {Lightbox} from '@ngx-gallery/lightbox';
-import {Seller} from '../../../models/user';
-import {UserService} from '../../../services/user.service';
+import {Seller} from '../../models/user';
+import {UserService} from '../../services/user.service';
 
 @Component({
     selector: 'app-product-detail',
