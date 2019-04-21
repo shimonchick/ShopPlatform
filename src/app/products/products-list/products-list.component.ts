@@ -4,10 +4,10 @@ import {Product} from '../../models/product';
 
 @Component({
     selector: 'app-products-view',
-    templateUrl: './products-view.component.html',
-    styleUrls: ['./products-view.component.scss']
+    templateUrl: './products-list.component.html',
+    styleUrls: ['./products-list.component.scss']
 })
-export class ProductsViewComponent implements OnChanges {
+export class ProductsListComponent implements OnChanges {
     @ViewChild(VirtualScrollerComponent)
     scroller: VirtualScrollerComponent;
     loading = false;
