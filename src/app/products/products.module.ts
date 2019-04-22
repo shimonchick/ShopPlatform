@@ -59,7 +59,6 @@ import {ChatService} from '../services/chat.service';
     ],
     providers: [
         ProductPreviewOverlayService,
-        ChatService
     ]
 })
 export class ProductsModule {

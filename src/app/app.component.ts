@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, QueryList, ViewChildren} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {AuthService} from './services/auth.service';
-import {ChatAdapter, IChatController, Theme} from 'ng-chat';
+import {ChatAdapter, ChatParticipantStatus, ChatParticipantType, IChatController, Theme} from 'ng-chat';
 import {ProductChatAdapter} from './models/ProductChatAdapter';
 import {ChatService} from './services/chat.service';
 
@@ -10,26 +10,27 @@ import {ChatService} from './services/chat.service';
     styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
     title = 'ShopPlatform';
     chatTheme: Theme = Theme.Dark;
     public adapter: ChatAdapter;
 
-    @ViewChildren('ngChatInstance')
-    public chatElement: QueryList<HTMLElement>;
-
-    protected chatController: IChatController;
+    // @ViewChildren('ngChatInstance')
+    // public chatElement: QueryList<HTMLElement>;
+    @ViewChild('ngChatInstance')
+    chatController: IChatController;
 
     constructor(private chatService: ChatService, public auth: AuthService) {
         this.adapter = new ProductChatAdapter(this.chatService);
-
-    }
-
-    ngAfterViewInit(): void {
-        this.chatElement.changes.subscribe((query: QueryList<IChatController>) => {
-            this.chatController = query.first;
-            console.log(this.chatController);
-            this.chatService.registerController(this.chatController);
+        this.chatService.newChat$.subscribe(otherUser => {
+            console.log(otherUser);
+                this.chatController.triggerOpenChatWindow({
+                    displayName: otherUser.displayName,
+                    id: otherUser.uid,
+                    participantType: ChatParticipantType.User,
+                    avatar: otherUser.photoURL,
+                    status: ChatParticipantStatus.Offline
+                });
         });
     }
 }

@@ -1,7 +1,0 @@
-<div class="chat-container">
-    <app-chat-provider *ngIf="!mainBtnActive" [fbPageName]="fbPageName" [phoneNumber]="whatsapp"></app-chat-provider>
-    <div (click)="mainBtnActive = !mainBtnActive" (mouseenter)="mainBtnActive = false"
-         [ngClass]="{'toggled': !mainBtnActive}" class="main-btn">
-        <i [ngClass]="{'ion-chat-bubble': mainBtnActive, 'ion-close-empty': !mainBtnActive}"></i>
-    </div>
-</div>

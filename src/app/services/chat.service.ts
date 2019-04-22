@@ -1,19 +1,20 @@
 import {Injectable} from '@angular/core';
-import {IChatParticipant, Message, ParticipantResponse} from 'ng-chat';
+import {Message} from 'ng-chat';
 import {UserService} from './user.service';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {AuthService} from './auth.service';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {switchMap} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {firestore} from 'firebase';
+import {User} from '../models/user';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChatService {
-    mockedParticipants: IChatParticipant[];
+    // mockedParticipants: IChatParticipant[];
 
-    private _newChat$ = new BehaviorSubject<string>(null);
+    private _newChat$ = new Subject<User>();
     newChat$ = this._newChat$.asObservable();
 
     constructor(private db: AngularFirestore,
@@ -66,16 +67,11 @@ export class ChatService {
     }
 
     listFriends() {
-        return of(this.mockedParticipants.map(user => {
-            const participantResponse = new ParticipantResponse();
-
-            participantResponse.participant = user;
-            participantResponse.metadata = {
-                totalUnreadMessages: Math.floor(Math.random() * 10)
-            };
-
-            return participantResponse;
-        }));
+        return of([]);
+        // return this.auth.user$.pipe(
+        //     switchMap(user => this.db.doc(`friends/${user.uid}`).valueChanges()),
+        //     map((friendIds: string[]) => )
+        // );
     }
 
     async sendMessage(message: Message) {
@@ -90,7 +86,6 @@ export class ChatService {
         // this.onMessageReceived(this.mockedParticipants[0], replyMessage);
     }
 
-    //
     // listFriends(): Observable<ParticipantResponse[]> {
     //     new ParticipantResponse();
     //     this.db.collection('chats', ref => {
@@ -112,4 +107,7 @@ export class ChatService {
     //     // map response to ParticipantResponse
     // }
 
+    openChat(otherUser: User) {
+        this._newChat$.next(otherUser);
+    }
 }
