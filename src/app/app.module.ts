@@ -20,12 +20,17 @@ import {MatPasswordStrengthModule} from '@angular-material-extensions/password-s
 import {SettingsModule} from './settings/settings.module';
 import {LayoutModule} from '@angular/cdk/layout';
 import {SharedModule} from './shared.module';
+import {NgChatModule} from 'ng-chat';
+import {TestComponent} from './test/test.component';
+import {NgxAddchatModule} from './test/ngx-addchat/ngx-addchat.module';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
         LoginComponent,
+        TestComponent,
+
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
@@ -48,7 +53,10 @@ import {SharedModule} from './shared.module';
         MatPasswordStrengthModule,
         SettingsModule,
         LayoutModule,
-        SharedModule
+        SharedModule,
+        NgChatModule,
+        NgxAddchatModule
+
     ],
     providers: [],
     bootstrap: [AppComponent],

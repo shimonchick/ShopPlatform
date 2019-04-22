@@ -7,6 +7,7 @@ import {Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition} from '@n
 import {Lightbox} from '@ngx-gallery/lightbox';
 import {Seller} from '../../../models/user';
 import {UserService} from '../../../services/user.service';
+import {ChatParticipantStatus, ChatParticipantType} from 'ng-chat';
 import {ChatService} from '../../../services/chat.service';
 
 @Component({
@@ -38,7 +39,7 @@ export class ProductDetailComponent implements OnInit {
 
         /** Basic Gallery Example */
         this.product$.subscribe(async product => {
-           // Creat gallery items
+            // Creat gallery items
             this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
             this.seller = await this.userService.getUserByIdAsPromise(product.sellerUid) as Seller;
 
@@ -60,4 +61,24 @@ export class ProductDetailComponent implements OnInit {
         });
 
     }
+
+    async chatWith(uid: string) {
+        // TODO: create Chat in db
+        const chatController = this.chatService.getChatController();
+        console.log('product detail chat controller');
+        console.log(chatController);
+        const user = await this.userService.getUserByIdAsPromise(uid);
+
+        chatController.triggerOpenChatWindow({
+            displayName: user.displayName,
+            id: user.uid,
+            participantType: ChatParticipantType.User,
+            avatar: user.photoURL,
+            status: ChatParticipantStatus.Offline
+        });
+
+
+    }
+
+
 }

@@ -1,8 +1,6 @@
-interface Chat {
-    buyerId: string;
-    count: number;
-    createdAt: number;
-    id: string;
-    messages: string[];
-    sellerId: string;
-}
+import {Message} from 'ng-chat';
+
+// interface Chat {
+//     messages: Message[];
+// }
+export type Chat = Message[];

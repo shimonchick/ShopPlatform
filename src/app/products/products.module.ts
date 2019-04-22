@@ -17,11 +17,11 @@ import {environment} from '../../environments/environment';
 import {NgAisModule} from 'angular-instantsearch';
 import {SearchBarComponent} from './search-bar/search-bar.component';
 import {LayoutModule} from '@angular/cdk/layout';
-import {MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {ProductsViewComponent} from './products-view/products-view.component';
 import {SearchComponent} from './search/search.component';
 import {AngularFireFunctionsModule} from '@angular/fire/functions';
+import {ChatService} from '../services/chat.service';
 
 @NgModule({
     declarations: [
@@ -58,7 +58,8 @@ import {AngularFireFunctionsModule} from '@angular/fire/functions';
         ProductPreviewComponent
     ],
     providers: [
-        ProductPreviewOverlayService
+        ProductPreviewOverlayService,
+        ChatService
     ]
 })
 export class ProductsModule {
