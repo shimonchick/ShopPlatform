@@ -1,72 +1,107 @@
-<mat-vertical-stepper #stepper linear>
-    <mat-step [stepControl]="firstFormGroup" label="Fill product details">
-        <form [formGroup]="productForm" class="form-full-width">
-            <ng-template matStepLabel>Fill product details</ng-template>
-            <mat-form-field appearance="standard" class="form-field">
-                <input #productName
-                       matInput maxlength="50"
-                       minlength="3" placeholder="Name">
-                <mat-hint>
-                    Product name
-                </mat-hint>
-                <mat-error *ngIf="productForm.controls['name'].invalid">
-                    {{getNameErrorMessage()}}
-                </mat-error>
-            </mat-form-field>
+<div class="product-container">
+    <mat-vertical-stepper #stepper linear>
+        <mat-step [stepControl]="firstFormGroup" label="Fill product details">
+            <form [formGroup]="productForm" class="form-full-width">
+                <ng-template matStepLabel>Fill product details</ng-template>
+                <mat-form-field appearance="standard" class="form-field">
+                    <input #productName
+                           matInput maxlength="50"
+                           minlength="3" placeholder="Name">
+                    <mat-hint>
+                        Product name
+                    </mat-hint>
+                    <mat-error *ngIf="productForm.controls['name'].invalid">
+                        {{getNameErrorMessage()}}
+                    </mat-error>
+                </mat-form-field>
 
-            <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
+                <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
                 <textarea #productDescription
                           autosize
                           matInput maxlength="10000" placeholder="Description"></textarea>
-                <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
-                <mat-error *ngIf="productForm.controls['description'].invalid ">
-                    {{getDescriptionErrorMessage()}}
-                </mat-error>
-            </mat-form-field>
+                    <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
+                    <mat-error *ngIf="productForm.controls['description'].invalid ">
+                        {{getDescriptionErrorMessage()}}
+                    </mat-error>
+                </mat-form-field>
 
-            <mat-form-field class="form-field" hintLabel="Product Price">
-                <input #productPrice matInput
-                       placeholder="price" type="number">
-                <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
-                    Product description is <strong>required</strong>
-                </mat-error>
+                <mat-form-field class="form-field" hintLabel="Product Price">
+                    <input #productPrice matInput
+                           placeholder="price" type="number">
+                    <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
+                        Product description is <strong>required</strong>
+                    </mat-error>
 
-            </mat-form-field>
-            <app-categories (categoryChanged)="onCategoriesChanged($event)"></app-categories>
+                </mat-form-field>
 
+                <app-categories (categoryChanged)="onCategoriesChanged($event)"></app-categories>
+                <mat-radio-group formControlName="address">
+                    <mat-radio-button value="seller">Use your address</mat-radio-button>
+                    <mat-radio-button value="custom">Chose another address</mat-radio-button>
+                </mat-radio-group>
+                <ng-container *ngIf="productForm.controls['address'].value !== 'seller' &&coordinates"
+                >
+                    <agm-map
+
+                            (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
+                            [fullscreenControl]="true"
+                            [latitude]="coordinates.latitude"
+                            [longitude]="coordinates.longitude"
+                            style="height: 300px;"
+                    >
+                        <agm-marker *ngIf="coordinates"
+                                    [latitude]="coordinates.latitude"
+                                    [longitude]="coordinates.longitude"
+                                    [markerDraggable]="true"
+                        >
+                        </agm-marker>
+                    </agm-map>
+                    <p>
+                        longitude {{coordinates.longitude}} latitude {{coordinates.latitude}}
+                    </p>
+                </ng-container>
+
+
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" label="Upload product images">
             <div>
-                <button mat-button matStepperNext>Next</button>
+                <form>
+                    <ng-template matStepLabel>Enter product pictures</ng-template>
+                    <!--<app-image></app-image>-->
+                    <app-image-preview (filesSelected)="onFilesSelected($event)"></app-image-preview>
+                    <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
+                </form>
             </div>
 
-        </form>
-    </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Upload product images">
-        <div>
-            <form>
-                <ng-template matStepLabel>Enter product pictures</ng-template>
-                <!--<app-image></app-image>-->
-                <app-image-preview (filesSelected)="onFilesSelected($event)"></app-image-preview>
-                <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
-            </form>
-        </div>
-        <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button (click)="UploadAllFiles()" mat-button matStepperNext>Next</button>
-        </div>
-    </mat-step>
-    <mat-step label="Create product">
-        <div class="mat-typography">
-            <ng-template matStepLabel>Done</ng-template>
-            <h3>Create product listing:</h3>
-            <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
-            <button (click)="createProduct(productName.value, productDescription.value, productPrice.value);
-            productName.value=''; productDescription.value='';productPrice.value=''; " mat-raised-button>
-                Create
-            </button>
             <div>
                 <button mat-button matStepperPrevious>Back</button>
-                <button (click)="stepper.reset()" mat-button>Reset</button>
+                <button (click)="UploadAllFiles(); createProduct(productName.value, productDescription.value, productPrice.value)"
+                        mat-button matStepperNext>Next
+                </button>
             </div>
-        </div>
-    </mat-step>
-</mat-vertical-stepper>
+        </mat-step>
+        <mat-step label="Create product">
+            <div class="mat-typography">
+                <ng-template matStepLabel>Done</ng-template>
+                <h3>Create product listing:</h3>
+                <app-product-preview *ngIf="previewProduct" [product]="previewProduct"></app-product-preview>
+                <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
+                <button (click)="uploadProduct();
+            productName.value=''; productDescription.value='';productPrice.value=''; " mat-raised-button>
+                    Create
+                </button>
+
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button (click)="stepper.reset()" mat-button>Reset</button>
+                </div>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+
+</div>

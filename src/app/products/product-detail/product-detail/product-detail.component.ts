@@ -5,9 +5,13 @@ import {Observable} from 'rxjs';
 import {ProductService} from '../../../services/product.service';
 import {Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition} from '@ngx-gallery/core';
 import {Lightbox} from '@ngx-gallery/lightbox';
-import {Seller} from '../../../models/user';
 import {UserService} from '../../../services/user.service';
 import {ChatService} from '../../../services/chat.service';
+import {OrderService} from '../../../services/order.service';
+import {AuthService} from '../../../services/auth.service';
+import {first} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material';
+import {Seller} from '../../../models/seller';
 
 @Component({
     selector: 'app-product-detail',
@@ -20,6 +24,7 @@ export class ProductDetailComponent implements OnInit {
     items: GalleryItem[];
     seller: Seller;
     showMap = true;
+    product: Product;
 
     constructor(private router: Router,
                 private activatedRoute: ActivatedRoute,
@@ -27,7 +32,10 @@ export class ProductDetailComponent implements OnInit {
                 public gallery: Gallery,
                 public lightbox: Lightbox,
                 public userService: UserService,
-                public chatService: ChatService) {
+                public chatService: ChatService,
+                public orderService: OrderService,
+                public auth: AuthService,
+                private snackBar: MatSnackBar) {
     }
 
 
@@ -38,7 +46,8 @@ export class ProductDetailComponent implements OnInit {
 
         /** Basic Gallery Example */
         this.product$.subscribe(async product => {
-           // Creat gallery items
+            this.product = product;
+            // Creat gallery items
             this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
             this.seller = await this.userService.getUserByIdAsPromise(product.sellerUid) as Seller;
 
@@ -59,5 +68,18 @@ export class ProductDetailComponent implements OnInit {
             lightboxRef.load(this.items);
         });
 
+    }
+
+    async orderItem() {
+        const user = await this.auth.user$.pipe(first()).toPromise();
+        console.log('user fetched');
+        await this.orderService.create(user.uid, this.seller.uid, this.product.id);
+        console.log('order created');
+        const snackBarRef = this.snackBar.open('Successfully ordered item', 'View', {
+            duration: 2000
+        });
+        snackBarRef.onAction().subscribe(() => {
+            this.router.navigateByUrl('orders/buyer');
+        });
     }
 }

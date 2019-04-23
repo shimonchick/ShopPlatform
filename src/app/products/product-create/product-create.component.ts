@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
-import {User} from '../../models/user';
 import {AuthService} from '../../services/auth.service';
 import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {forkJoin, from, Observable} from 'rxjs';
+import {Seller} from '../../models/seller';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
@@ -24,7 +24,7 @@ export class CustomErrorStateMatcher implements ErrorStateMatcher {
 })
 export class ProductCreateComponent implements OnInit {
 
-    user: User;
+    user: Seller;
     // firstFormGroup: FormGroup;
     // secondFormGroup: FormGroup;
 
@@ -33,6 +33,8 @@ export class ProductCreateComponent implements OnInit {
 
     done = false;
     categories: string[] = [];
+    previewProduct: Product;
+    coordinates;
     private NAME_MIN_LENGTH = 3;
     private NAME_MAX_LENGTH = 50;
     private DESCRIPTION_MAX_LENGTH = 10000;
@@ -41,7 +43,8 @@ export class ProductCreateComponent implements OnInit {
             [Validators.required, Validators.minLength(this.NAME_MIN_LENGTH), Validators.maxLength(this.NAME_MAX_LENGTH)])],
         description: [null, Validators.compose(
             [Validators.required, Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)])],
-        price: [null, Validators.required]
+        price: [null, Validators.required],
+        address: ['seller', Validators.required],
     });
 
     constructor(
@@ -52,31 +55,38 @@ export class ProductCreateComponent implements OnInit {
         private storage: AngularFireStorage,
     ) {
 
-        auth.user$.subscribe(user => {
-            this.user = user;
-        });
-
     }
 
+    createProduct(name: string, description: string, price: string) {
+        const priceInt = parseInt(price, 10);
+        this.previewProduct = {
+            name: name,
+            description: description,
+            price: priceInt,
+            sellerUid: this.user.uid,
+            urls: this.downloadUrls,
+            coordinates: this.coordinates
+        } as Product;
+    }
     onCategoriesChanged(categories: string[]) {
         this.categories = categories;
         console.log(this.categories);
     }
 
     ngOnInit() {
+        this.auth.user$.subscribe(user => {
+            this.user = user as Seller;
+            this.coordinates = {
+                longitude: this.user.coordinates.longitude,
+                latitude: this.user.coordinates.latitude
+            };
+        });
     }
 
-    createProduct(name: string, description: string, price: number) {
+    uploadProduct() {
 
-        this.productService.createProduct(
-            {
-                name: name,
-                description: description,
-                price: price,
-                sellerUid: this.user.uid,
-                urls: this.downloadUrls,
-            } as Product);
-        // this.router.navigateByUrl('/products');
+        this.productService.createProduct(this.previewProduct);
+        this.router.navigateByUrl('/products');
         // todo
 
     }
@@ -127,5 +137,10 @@ export class ProductCreateComponent implements OnInit {
                     this.done = true;
                 });
             });
+    }
+
+    selectMarker(lat: number, lng: number) {
+        this.coordinates.latitude = lat;
+        this.coordinates.longitude = lng;
     }
 }

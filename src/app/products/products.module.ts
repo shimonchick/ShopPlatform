@@ -13,21 +13,19 @@ import {ProductDetailComponent} from './product-detail/product-detail/product-de
 import {GalleryModule} from '@ngx-gallery/core';
 import {GallerizeModule} from '@ngx-gallery/gallerize';
 import {LightboxModule} from '@ngx-gallery/lightbox';
-import {environment} from '../../environments/environment';
 import {NgAisModule} from 'angular-instantsearch';
 import {SearchBarComponent} from './search-bar/search-bar.component';
 import {LayoutModule} from '@angular/cdk/layout';
-import {MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {ProductsViewComponent} from './products-view/products-view.component';
 import {SearchComponent} from './search/search.component';
 import {AngularFireFunctionsModule} from '@angular/fire/functions';
+import {ProductSharedModule} from './product-shared.module';
 
 @NgModule({
     declarations: [
         ProductsComponent,
         ProductDetailOverlayComponent,
-        ProductPreviewComponent,
         ProductDetailComponent,
         SearchComponent,
         SearchBarComponent,
@@ -43,16 +41,11 @@ import {AngularFireFunctionsModule} from '@angular/fire/functions';
         GalleryModule,
         LightboxModule,
         GallerizeModule,
-        AgmCoreModule.forRoot({
-            apiKey: environment.maps.apiKey
-            /* apiKey is required, unless you are a
-            premium customer, in which case you can
-            use clientId
-            */
-        }),
+        AgmCoreModule,
         NgAisModule,
         LayoutModule,
-        AngularFireFunctionsModule
+        AngularFireFunctionsModule,
+        ProductSharedModule
     ],
     entryComponents: [
         ProductPreviewComponent

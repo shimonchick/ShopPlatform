@@ -6,7 +6,8 @@
 .product-container {
   //min-width: 150px;
   //max-width: 500px;
-  width: 50%;
+  width: 100%;
+  align-content: center;
   margin: 0 auto;
 }
 
@@ -22,6 +23,7 @@
 }
 
 .form-field {
-  width: 70%;
+  width: 100%;
+  //max-width: 600px;
   margin-top: 10px;
 }

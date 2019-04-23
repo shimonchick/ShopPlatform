@@ -64,8 +64,6 @@ export class ImagePreviewComponent {
         if (!files) {
             return;
         }
-        // console.log(input.onchange());
-        // console.log();
         this.files = this.files.concat(files);
         console.log(this.files);
         this.filesSelected.emit(files);

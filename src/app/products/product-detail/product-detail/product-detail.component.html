@@ -2,7 +2,8 @@
     <section fxLayout="row" fxLayout.lt-sm="column">
         <article id="gallery" fxFlex="60" fxFlex.lt-sm="100">
             <gallery *ngIf="items" [items]="items" loadingMode="indeterminate">
-                <button mat-raised-button color="accent" (click)="lightbox.open(0, 'lightbox', {panelClass: 'fullscreen'})">
+                <button (click)="lightbox.open(0, 'lightbox', {panelClass: 'fullscreen'})" color="accent"
+                        mat-raised-button>
                     <mat-icon>fullscreen</mat-icon>
                 </button>
             </gallery>
@@ -12,6 +13,13 @@
                 {{product.price | currency}}
                 <!--todo add a currency to the user-->
             </div>
+            <div>
+                <button (click)="orderItem()" class="stretched" color="accent" mat-raised-button>
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    Order
+                </button>
+            </div>
+
             <div>
                 <button (click)="chatService.chatWith(seller.uid)" class="stretched" color="accent" mat-raised-button>
                     <mat-icon>chat</mat-icon>
@@ -25,9 +33,9 @@
                 </button>
             </div>
             <agm-map *ngIf="showMap"
-                    [latitude]="seller.coordinates.lat"
-                    [longitude]="seller.coordinates.lon"
-                    [fullscreenControl]="true">
+                     [fullscreenControl]="true"
+                     [latitude]="seller.coordinates.latitude"
+                     [longitude]="seller.coordinates.longitude">
                 <agm-marker
                         [latitude]="seller.coordinates.lat"
                         [longitude]="seller.coordinates.lon">
