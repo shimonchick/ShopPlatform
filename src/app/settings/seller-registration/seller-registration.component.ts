@@ -1,9 +1,9 @@
 import {AuthService} from '../../services/auth.service';
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-
-
-import {Router} from '@angular/router';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {Seller} from '../../models/seller';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-seller-registration',
@@ -17,37 +17,53 @@ export class SellerRegistrationComponent {
         lastName: [null, Validators.required],
         phoneNumber: [null, Validators.required],
         address: [null, Validators.required],
-        city: [null, Validators.required],
-        postalCode: [null, Validators.compose([
-            Validators.required, Validators.minLength(3), Validators.maxLength(5)])
-        ],
         delivery: ['standard', Validators.required]
     });
 
+    latitude = 42.6977;
+    longitude = 23.3219;
+    selectedMarker = {
+        latitude: this.latitude,
+        longitude: this.longitude
+    };
+
     constructor(
         private fb: FormBuilder,
-        private router: Router,
-        private auth: AuthService
+        private location: Location,
+        private auth: AuthService,
+        private db: AngularFirestore,
     ) {
     }
 
-    async registerSeller(company: string | null, firstName: string, lastName: string, phoneNumber: string, city: string,
-                         address: string, postCode: string) {
+    async registerSeller(company: string | null, firstName: string, lastName: string, phoneNumber: string,
+                         address: string) {
         // if (!this.addressForm.valid) { return; }
         const user = this.auth.getSnapshotUser();
-        user.company = company;
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.phoneNumber = phoneNumber;
-        user.city = city;
-        user.address = address;
-        user.postalCode = postCode;
+        const seller: Seller = {
+            ...user,
+            company: company,
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: phoneNumber,
+            address: address,
+            coordinates: {
+                latitude: this.selectedMarker.latitude,
+                longitude: this.selectedMarker.longitude
+            } as Coordinates,
+            roles: {
+                seller: true
+            }
+        };
+        this.db.doc(`users/${user.uid}`).set(seller, {merge: true});
 
-        user.roles.seller = true;
-        console.log(user);
-        await this.auth.updateUserData(user);
         alert('You are now registered as a seller');
-        this.router.navigateByUrl('chats');
+        setTimeout(() => this.location.back(), 1000);
+
+    }
+
+    selectMarker(lat: number, lng: number) {
+        this.selectedMarker.latitude = lat;
+        this.selectedMarker.longitude = lng;
     }
 
 }

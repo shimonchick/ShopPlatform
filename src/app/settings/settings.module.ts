@@ -9,6 +9,7 @@ import {SharedModule} from '../shared.module';
 import {SellerRegistrationComponent} from './seller-registration/seller-registration.component';
 import {SettingsComponent} from './settings.component';
 import {MatTabsModule} from '@angular/material';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,7 @@ import {MatTabsModule} from '@angular/material';
         FormsModule,
         SharedModule,
         MatTabsModule,
-
+        AgmCoreModule,
     ]
 })
 export class SettingsModule {

@@ -20,6 +20,7 @@ import {MatPasswordStrengthModule} from '@angular-material-extensions/password-s
 import {SettingsModule} from './settings/settings.module';
 import {LayoutModule} from '@angular/cdk/layout';
 import {SharedModule} from './shared.module';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,10 @@ import {SharedModule} from './shared.module';
         MatPasswordStrengthModule,
         SettingsModule,
         LayoutModule,
-        SharedModule
+        SharedModule,
+        AgmCoreModule.forRoot({
+            apiKey: environment.maps.apiKey
+        }),
     ],
     providers: [],
     bootstrap: [AppComponent],

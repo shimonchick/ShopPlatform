@@ -37,7 +37,7 @@ export class ProductService {
         const key: string = this.db.createId();
         const product: Product = {id: key, ...data};
         const documentReference = this.db.doc<Product>(`/products/${key}`);
-        return documentReference.set(product);
+        return documentReference.set(Object.assign({}, product));
     }
 
 

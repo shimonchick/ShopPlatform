@@ -1,10 +1,21 @@
-<div class="wrapper">
+<div *ngIf="auth.user$ | async as user" class="wrapper">
     <form (ngSubmit)="registerSeller(company.value, firstName.value,
-                        lastName.value, phoneNumber.value, city.value, address.value, postalCode.value)"
+                        lastName.value, phoneNumber.value, address.value)"
           [formGroup]="addressForm" novalidate>
         <mat-card class="shipping-card">
             <mat-card-header>
-                <mat-card-title>Seller registration</mat-card-title>
+                <div *ngIf=" user.roles.seller === true;then sellerSettingsTitle;else sellerRegistrationTitle">
+
+                </div>
+                <ng-template #sellerSettingsTitle>
+
+                    <mat-card-title>Seller settings</mat-card-title>
+                </ng-template>
+                <ng-template #sellerRegistrationTitle>
+
+                    <mat-card-title>Seller registration</mat-card-title>
+                </ng-template>
+
             </mat-card-header>
             <mat-card-content>
                 <div class="row">
@@ -46,16 +57,6 @@
                 <div class="row">
                     <div class="col">
                         <mat-form-field class="full-width">
-                            <input #city formControlName="city" matInput placeholder="City">
-                            <mat-error *ngIf="addressForm.controls['city'].hasError('required')">
-                                City is <strong>required</strong>
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <mat-form-field class="full-width">
                             <textarea #address formControlName="address" matInput placeholder="Address"></textarea>
                             <mat-error *ngIf="addressForm.controls['address'].hasError('required')">
                                 Address is <strong>required</strong>
@@ -63,17 +64,22 @@
                         </mat-form-field>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col">
-                        <mat-form-field class="full-width">
-                            <input #postalCode formControlName="postalCode" matInput maxlength="5"
-                                   placeholder="Postal Code"
-                                   type="number">
-                            <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-                        </mat-form-field>
-                    </div>
+                <div class="map-container">
+                    <agm-map
+                            (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
+                            [fullscreenControl]="true"
+                            [latitude]="latitude"
+                            [longitude]="longitude"
+                    >
+                        <agm-marker
+                                [latitude]="selectedMarker.latitude"
+                                [longitude]="selectedMarker.longitude"
+                                [markerDraggable]="true"
+                        >
+                        </agm-marker>
+                    </agm-map>
                 </div>
+
                 <div class="row">
                     <div class="col">
                         <mat-radio-group formControlName="delivery">

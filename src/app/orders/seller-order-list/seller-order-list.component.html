@@ -1,25 +1,28 @@
-<div *ngIf=" auth.user$ | async as user" class="cards" fxLayout="row" fxLayoutWrap>
-    <h1>Your Orders</h1>
-    <div *ngFor="let order of orders; let i = index" class="card">
-        <mat-card *ngIf="order.seller">
-            <mat-card-header>
-                <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
+<h1>Orders received</h1>
+<div *ngIf=" auth.user$ | async as user" class="wrapper card-container">
 
-                <!--</div>-->
-                <mat-card-title>
-                    Order from {{order.seller.displayName}}
-                </mat-card-title>
-            </mat-card-header>
-            <img [src]="order.product.urls[0]" mat-card-image style="max-width:200px">
-            <mat-card-content>
+    <mat-card *ngFor="let order of orders; let i = index" class="card">
+        <mat-card-header>
+            <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
+
+            <!--</div>-->
+            <mat-card-title *ngIf="order.seller">
+                Order from {{order.seller.displayName}}
+            </mat-card-title>
+            <mat-card-subtitle>
                 {{order.product.name}}
-            </mat-card-content>
+            </mat-card-subtitle>
+            <div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"
+                 [style.backgroundSize]="'cover'"
+                 mat-card-avatar
+            ></div>
+        </mat-card-header>
+        <mat-card-content class="limited">
+            <p>{{order.product.description}}</p>
+        </mat-card-content>
 
-            <mat-card-actions>
-                <button mat-button> VIEW</button>
-            </mat-card-actions>
 
-        </mat-card>
+    </mat-card>
 
-    </div>
 </div>
+

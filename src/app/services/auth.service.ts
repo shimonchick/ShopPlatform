@@ -76,25 +76,21 @@ export class AuthService {
         return this.snapshotUser;
     }
 
-    // private updateUserData({uid, photoURL, displayName, email, phoneNumber}) {
-    //     // Sets user data in firestore on login
-    //     const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
-    //     const customUserData = {
-    //         uid: uid,
-    //         photoURL: photoURL,
-    //         displayName: displayName,
-    //         email: email,
-    //         phoneNumber: phoneNumber,
-    //         roles: {
-    //             buyer: true
-    //         }
-    //     };
-    //     // @ts-ignore
-    //     return userRef.set(customUserData, {merge: true});
-    // }
-    updateUserData(user: User) {
-        const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${user.uid}`);
-        return userRef.set(user, {merge: true});
+    async signOut() {
+        await this.ngxAuth.afa.auth.signOut();
+        return this.router.navigate(['/']);
+    }
+
+    private updateUserData({uid, photoURL, displayName, email, phoneNumber}) {
+        // Sets user data in firestore on login
+        const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
+        const customUserData = {
+            roles: {
+                buyer: true
+            }
+        };
+        // @ts-ignore
+        return userRef.set(customUserData, {merge: true});
     }
 
     private isLoggedIn() {
@@ -112,10 +108,5 @@ export class AuthService {
             }
         }
         return false;
-    }
-
-    async signOut() {
-        await this.ngxAuth.afa.auth.signOut();
-        return this.router.navigate(['/']);
     }
 }
