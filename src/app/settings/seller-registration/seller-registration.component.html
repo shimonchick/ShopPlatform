@@ -70,6 +70,7 @@
                             [fullscreenControl]="true"
                             [latitude]="latitude"
                             [longitude]="longitude"
+
                     >
                         <agm-marker
                                 [latitude]="selectedMarker.latitude"
@@ -93,7 +94,8 @@
             </mat-card-content>
             <mat-card-actions>
                 <!--<button mat-raised-button color="primary" type="submit">Submit</button>-->
-                <button [disabled]="!addressForm.valid" class="full-width" mat-raised-button type="submit">
+                <button [disabled]="!addressForm.valid" class="full-width" color="primary" mat-raised-button
+                        type="submit">
                     Register as seller
                 </button>
             </mat-card-actions>

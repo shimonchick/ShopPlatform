@@ -1,5 +1,6 @@
 <ais-instantsearch
         [config]="searchConfig">
+
     <mat-drawer-container class="drawer-container">
         <mat-drawer #drawer class="drawer"
                     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
@@ -7,11 +8,22 @@
                     [opened]="!(isHandset$ | async)">
             <mat-toolbar color="primary">Menu</mat-toolbar>
 
-            <!--            <ais-range-slider-->
-            <!--                    [min]="0"-->
-            <!--                    [max]="1500"-->
-            <!--                    [precision]="2">-->
-            <!--            </ais-range-slider>-->
+            <div id="algolia-widgets">
+                <ais-range-slider
+                        [max]="1500"
+                        [min]="0"
+                        attribute="price">
+                </ais-range-slider>
+                <!--                <ais-hierarchical-menu-->
+                <!--                        [attributes]="[-->
+                <!--                            'hierarchicalCategories.lvl0',-->
+                <!--                            'hierarchicalCategories.lvl1',-->
+                <!--                            'hierarchicalCategories.lvl2'-->
+                <!--                        ]"-->
+                <!--                >-->
+
+                <!--                </ais-hierarchical-menu>-->
+            </div>
         </mat-drawer>
 
         <mat-drawer-content>
@@ -24,28 +36,14 @@
                         *ngIf="isHandset$ | async">
                     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
                 </button>
-                <ais-search-box (change)="searchChanged($event)"></ais-search-box>
+                <ais-search-box></ais-search-box>
             </mat-toolbar>
-            <!-- Add Content Here -->
-<!--            <ais-hits *ngIf="showResults">-->
-<!--                <ng-template let-hits="hits">-->
-
-<!--                    <ng-container *ngIf="showResults">-->
-<!--                        <app-products-view [products]="hits" [theEnd]="theEnd"-->
-<!--                                           (nextBatchEmitter)="nextOffset($event)"></app-products-view>-->
-<!--                    </ng-container>-->
-<!--                    &lt;!&ndash;                        <pre>{{hits | json}}</pre>&ndash;&gt;-->
-
-
-<!--                    &lt;!&ndash;                        <ng-container *ngIf="infinite$ | async as products">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        </ng-container>&ndash;&gt;-->
-
-<!--                </ng-template>-->
-<!--            </ais-hits>-->
-            <ng-container *ngIf="infinite$ | async as products">
-                <app-products-view [products]="products" [theEnd]="theEnd"
-                                   (more)="nextPage()"></app-products-view>
-            </ng-container>
+            <ais-infinite-hits>
+                <ng-template let-end="isLastPage" let-hits="hits" let-refine="showMore" let-results="results">
+                    <app-products-view (more)="refine()" *ngIf="hits.length" [products]="hits"
+                                       [theEnd]="end"></app-products-view>
+                </ng-template>
+            </ais-infinite-hits>
         </mat-drawer-content>
     </mat-drawer-container>
 

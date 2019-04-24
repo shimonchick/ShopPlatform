@@ -4,10 +4,10 @@ import {Product} from '../../models/product';
 
 @Component({
     selector: 'app-products-view',
-    templateUrl: './products-view.component.html',
-    styleUrls: ['./products-view.component.scss']
+    templateUrl: './products-list.component.html',
+    styleUrls: ['./products-list.component.scss']
 })
-export class ProductsViewComponent implements OnChanges {
+export class ProductsListComponent implements OnChanges {
     @ViewChild(VirtualScrollerComponent)
     scroller: VirtualScrollerComponent;
     loading = false;
@@ -39,5 +39,9 @@ export class ProductsViewComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.loading = false; // when product changes, new products have been loaded and so stop loading
         console.log(this.products);
+    }
+
+    trackById(index, item: Product) {
+        return item.id;
     }
 }

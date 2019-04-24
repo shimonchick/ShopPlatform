@@ -1,10 +1,5 @@
-import {User} from './user';
+import {Buyer} from './buyer';
 
-export interface Seller extends User {
+export interface Seller extends Buyer {
     company: string | null;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    address: string;
-    coordinates: Coordinates;
 }

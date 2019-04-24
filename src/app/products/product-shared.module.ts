@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {ProductPreviewComponent} from './product-preview/product-preview.component';
+import {ProductPreviewComponent} from './product-preview-card/product-preview.component';
 import {SharedModule} from '../shared.module';
 
 @NgModule({

@@ -1,0 +1,54 @@
+<main *ngIf="product$ | async as product">
+    <section fxLayout="row" fxLayout.lt-sm="column">
+        <article fxFlex="60" fxFlex.lt-sm="100" id="gallery">
+            <gallery *ngIf="items" [items]="items" loadingMode="indeterminate">
+                <button (click)="lightbox.open(0, 'lightbox', {panelClass: 'fullscreen'})" color="accent"
+                        mat-raised-button>
+                    <mat-icon>fullscreen</mat-icon>
+                </button>
+            </gallery>
+        </article>
+        <aside *ngIf="seller" fxFlex="40" fxFlex.lt-sm="100" fxLayout="column" fxLayoutAlign="start stretch">
+            <div class="mat-headline">
+                {{product.price | currency}}
+                <!--todo add a currency to the user-->
+            </div>
+            <div>
+                <button class="stretched" color="accent" mat-raised-button>
+                    <mat-icon>chat</mat-icon>
+                    Chat
+                </button>
+            </div>
+            <div>
+                <button class="stretched" color="accent" mat-raised-button>
+                    <mat-icon>phone</mat-icon>
+                    {{seller.phoneNumber}}
+                </button>
+            </div>
+            <agm-map *ngIf="showMap"
+                     [fullscreenControl]="true"
+                     [latitude]="seller.coordinates.lat"
+                     [longitude]="seller.coordinates.lon">
+                <agm-marker
+                        [latitude]="seller.coordinates.lat"
+                        [longitude]="seller.coordinates.lon">
+                </agm-marker>
+            </agm-map>
+            <div *ngIf="!showMap">
+                tap to show map
+            </div>
+        </aside>
+    </section>
+    <mat-divider></mat-divider>
+    <section>
+        <!--{{product.info}}-->
+        used: used
+    </section>
+    <mat-divider></mat-divider>
+    <section>
+        <mat-card>
+            <mat-card-title>{{product.name}}</mat-card-title>
+            <mat-card-content>{{product.description}}</mat-card-content>
+        </mat-card>
+    </section>
+</main>

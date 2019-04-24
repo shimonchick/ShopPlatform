@@ -47,9 +47,9 @@ export class SellerRegistrationComponent {
             phoneNumber: phoneNumber,
             address: address,
             coordinates: {
-                latitude: this.selectedMarker.latitude,
-                longitude: this.selectedMarker.longitude
-            } as Coordinates,
+                lat: this.selectedMarker.latitude,
+                lng: this.selectedMarker.longitude,
+            },
             roles: {
                 seller: true
             }

@@ -77,8 +77,8 @@ export class ProductCreateComponent implements OnInit {
         this.auth.user$.subscribe(user => {
             this.user = user as Seller;
             this.coordinates = {
-                longitude: this.user.coordinates.longitude,
-                latitude: this.user.coordinates.latitude
+                longitude: this.user.coordinates.lng,
+                latitude: this.user.coordinates.lat
             };
         });
     }

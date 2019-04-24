@@ -5,5 +5,5 @@ export class Product {
     price: number;
     id: string;
     urls: string[];
-    coordinates: Coordinates;
+    coordinates: Location;
 }

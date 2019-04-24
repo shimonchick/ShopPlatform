@@ -2,20 +2,20 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {SettingsRoutingModule} from './settings-routing.module';
-import {UserSettingsComponent} from './user-settings/user-settings.component';
 import {NgxAuthFirebaseUIModule} from 'ngx-auth-firebaseui';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared.module';
 import {SellerRegistrationComponent} from './seller-registration/seller-registration.component';
 import {SettingsComponent} from './settings.component';
-import {MatTabsModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule, MatTabsModule} from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
+import {BuyerSettingsComponent} from './buyer-settings/buyer-settings.component';
 
 @NgModule({
     declarations: [
-        UserSettingsComponent,
+        BuyerSettingsComponent,
         SellerRegistrationComponent,
-        SettingsComponent
+        SettingsComponent,
     ],
     imports: [
         CommonModule,
@@ -25,6 +25,12 @@ import {AgmCoreModule} from '@agm/core';
         FormsModule,
         SharedModule,
         MatTabsModule,
+        AgmCoreModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatCardModule,
         AgmCoreModule,
     ]
 })

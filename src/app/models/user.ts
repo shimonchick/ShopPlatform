@@ -12,9 +12,3 @@ export interface User {
     roles: Roles;
 }
 
-//todo move everything into seller class
-
-interface Coordinates {
-    lat: number;
-    lon: number;
-}
