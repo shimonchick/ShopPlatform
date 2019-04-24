@@ -4,3 +4,6 @@
   margin: 10px auto;
 }
 
+::ng-deep ngx-auth-firebaseui .mat-button-wrapper { /* Some of the icon buttons in the ngx aren't centered properly */
+  vertical-align: middle;
+}

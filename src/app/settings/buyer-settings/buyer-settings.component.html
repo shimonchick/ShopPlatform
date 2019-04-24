@@ -1,0 +1,65 @@
+<form (ngSubmit)="registerBuyer()" [formGroup]="addressForm" class="wrapper" novalidate>
+    <mat-card class="shipping-card">
+        <mat-card-header>
+            <mat-card-title>Buyer information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input formControlName="firstName" matInput placeholder="First name">
+                        <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
+                            First name is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input formControlName="lastName" matInput placeholder="Last name">
+                        <mat-error *ngIf="addressForm.controls['lastName'].hasError('required')">
+                            Last name is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+
+                <mat-form-field class="full-width" hintLabel="Your address">
+                    <input (change)="addressToCoordinates()"
+                           [value]="address" formControlName="address" matInput placeholder="eg. Sofia ...">
+                    <mat-error *ngIf="addressForm.controls['address'].hasError('required')">
+                        Address is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <p> Choose address on map:</p>
+            <div *ngIf="location" class="map-container">
+                <agm-map
+                        (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
+                        (mapReady)="mapReady()"
+                        [fullscreenControl]="true"
+                        [latitude]="location.lat"
+                        [longitude]="location.lng"
+
+                >
+
+
+                    <agm-marker *ngIf="selectedMarker"
+                                [latitude]="selectedMarker.lat"
+                                [longitude]="selectedMarker.lng"
+                                [markerDraggable]="true"
+                    >
+
+                    </agm-marker>
+                </agm-map>
+                <p *ngIf="loading">Loading...</p>
+                <p>Lat: {{selectedMarker?.lat}} Lng: {{selectedMarker?.lng}}</p>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button [disabled]="!addressForm.valid" class="full-width" color="primary" mat-raised-button type="submit">
+                Register as buyer
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</form>
