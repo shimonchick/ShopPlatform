@@ -1,14 +1,5 @@
 <app-nav>
-    <router-outlet>
-        <ng-container *ngIf="auth.user$ | async as user">
-            <ng-chat #ngChatInstance [adapter]="adapter"
-                     [isCollapsed]="true"
-                     [pollFriendsList]="true"
-                     [theme]="chatTheme"
-                     [userId]="user.uid"
-                     [hideFriendsListOnUnsupportedViewport]="false"
-            ></ng-chat>
-        </ng-container>
-    </router-outlet>
+    <router-outlet></router-outlet>
+    <app-chat></app-chat>
 </app-nav>
 

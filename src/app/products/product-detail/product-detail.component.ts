@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Product} from '../../../models/product';
+import {Product} from '../../models/product';
 import {Observable} from 'rxjs';
-import {ProductService} from '../../../services/product.service';
+import {ProductService} from '../../services/product.service';
 import {Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition} from '@ngx-gallery/core';
 import {Lightbox} from '@ngx-gallery/lightbox';
-import {Seller, User} from '../../../models/user';
-import {UserService} from '../../../services/user.service';
-import {ChatService} from '../../../services/chat.service';
+import {Seller, User} from '../../models/user';
+import {UserService} from '../../services/user.service';
+import {ChatService} from '../../services/chat.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -63,23 +63,5 @@ export class ProductDetailComponent implements OnInit {
 
     chatWith(otherUser: User) {
         this.chatService.openChat(otherUser);
-        // TODO: create Chat in db
-        // this.chatService.openChat(uid);
-        // const chatController = this.chatService.getChatController();
-        // console.log('product detail chat controller');
-        // console.log(chatController);
-        // const user = await this.userService.getUserByIdAsPromise(uid);
-        //
-        // chatController.triggerOpenChatWindow({
-        //     displayName: user.displayName,
-        //     id: user.uid,
-        //     participantType: ChatParticipantType.User,
-        //     avatar: user.photoURL,
-        //     status: ChatParticipantStatus.Offline
-        // });
-
-
     }
-
-
 }

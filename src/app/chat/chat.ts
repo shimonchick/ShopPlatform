@@ -1,6 +1,5 @@
 import {Message} from 'ng-chat';
 
-interface Chat {
+export interface Chat {
     messages: Message[];
 }
-// export type Chat = Message[];

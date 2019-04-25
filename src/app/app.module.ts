@@ -21,12 +21,14 @@ import {SettingsModule} from './settings/settings.module';
 import {LayoutModule} from '@angular/cdk/layout';
 import {SharedModule} from './shared.module';
 import {NgChatModule} from 'ng-chat';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
         LoginComponent,
+        ChatComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
