@@ -10,11 +10,6 @@
         <mat-icon>add</mat-icon>
         Add
     </button>
-    <button *ngIf="auth.user$ | async"
-            mat-raised-button
-            routerLink="/settings/1">
-        Become a seller
-    </button>
     <!--TODO: change chatService id-->
     <!--<button mat-button></button>-->
     <div class="providers-container">
@@ -25,10 +20,10 @@
         <!-- User NOT logged in -->
         <ng-template #guest>
             <!--<button mat-raised-button routerLink="signup">Sign up</button>-->
-            <button mat-raised-button routerLink="login">Log in</button>
+            <!--<button mat-raised-button routerLink="login">Log in</button>-->
 
-            <!--<ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"-->
-            <!--[theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>-->
+            <ngx-auth-firebaseui-providers *ngIf="!(auth.user$ | async)" [providers]="['google']"
+                                           [theme]="theme.MINI_FAB"></ngx-auth-firebaseui-providers>
 
             <!--<ngx-auth-firebaseui (onSuccess)="printUser($event)"-->
             <!--(onError)="printError()">-->
@@ -46,13 +41,13 @@
 
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item routerLink="settings/0">Settings</button>
+                    <button mat-menu-item routerLink="settings">Settings</button>
 
-                    <button *ngIf="auth.getSnapshotUser().roles.seller" mat-menu-item
+                    <button *ngIf="auth.getSnapshotUser().roles?.seller" mat-menu-item
                             routerLink="orders/seller">
                         Orders received
                     </button>
-                    <button *ngIf="auth.getSnapshotUser().roles.buyer" mat-menu-item routerLink="orders/buyer">
+                    <button *ngIf="auth.getSnapshotUser().roles?.buyer" mat-menu-item routerLink="orders/buyer">
                         Orders sent
                     </button>
 
