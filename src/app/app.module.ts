@@ -21,6 +21,7 @@ import {SettingsModule} from './settings/settings.module';
 import {LayoutModule} from '@angular/cdk/layout';
 import {SharedModule} from './shared.module';
 import {AgmCoreModule} from '@agm/core';
+import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule} from '@angular/material';
 
 @NgModule({
     declarations: [
@@ -53,6 +54,11 @@ import {AgmCoreModule} from '@agm/core';
         AgmCoreModule.forRoot({
             apiKey: environment.maps.apiKey
         }),
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatCardModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

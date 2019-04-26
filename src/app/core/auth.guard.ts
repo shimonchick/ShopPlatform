@@ -5,7 +5,9 @@ import {AuthService} from '../services/auth.service';
 import {Observable} from 'rxjs';
 import {map, take, tap} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthGuard implements CanActivate {
     constructor(private auth: AuthService, private router: Router) {
     }
@@ -22,8 +24,12 @@ export class AuthGuard implements CanActivate {
                 if (!loggedIn) {
                     console.log('access denied');
                     this.router.navigate(['/login']);
+                    return false;
+                } else {
+                    return true;
                 }
             })
         );
+
     }
 }
