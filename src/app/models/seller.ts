@@ -1,5 +1,10 @@
-import {Buyer} from './buyer';
+import {User} from './user';
+import {MapsLocation} from './location';
 
-export interface Seller extends Buyer {
-    company: string | null;
+export interface Seller extends User {
+    coordinates: MapsLocation;
+    address: string;
+    phoneNumber: string;
+    firstName: string;
+    lastName: string;
 }
