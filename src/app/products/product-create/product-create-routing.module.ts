@@ -1,9 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {ProductCreateComponent} from './product-create.component';
+import {AuthGuard} from '../../core/auth.guard';
+import {SellerGuard} from '../../core/seller.guard';
 
 const routes = [
-    {path: '', component: ProductCreateComponent},
+    {path: '', canActivate: [AuthGuard, SellerGuard], component: ProductCreateComponent},
 ];
 
 @NgModule({

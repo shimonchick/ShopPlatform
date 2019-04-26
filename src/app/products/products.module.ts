@@ -17,6 +17,7 @@ import {SearchComponent} from './search/search.component';
 import {AngularFireFunctionsModule} from '@angular/fire/functions';
 import {ProductsListComponent} from './products-list/products-list.component';
 import {ProductSharedModule} from './product-shared.module';
+import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import {ProductSharedModule} from './product-shared.module';
         ProductDetailComponent,
         SearchComponent,
         ProductsListComponent,
+        ConfirmationDialogComponent
     ],
     imports: [
         ProductsRoutingModule,
@@ -42,7 +44,8 @@ import {ProductSharedModule} from './product-shared.module';
         ProductSharedModule
     ],
     entryComponents: [
-        ProductPreviewComponent
+        ProductPreviewComponent,
+        ConfirmationDialogComponent,
     ]
 })
 export class ProductsModule {

@@ -13,6 +13,13 @@
                 {{product.price | currency}}
                 <!--todo add a currency to the user-->
             </div>
+
+            <div *ngIf="auth.isSeller()">
+                <button (click)="openDialog()" class="stretched" color="accent" mat-raised-button>
+                    <mat-icon>shopping_cart</mat-icon>
+                    Order
+                </button>
+            </div>
             <div>
                 <button class="stretched" color="accent" mat-raised-button>
                     <mat-icon>chat</mat-icon>

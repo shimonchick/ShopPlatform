@@ -5,13 +5,14 @@ import {Observable} from 'rxjs';
 import {ProductService} from '../../services/product.service';
 import {Gallery, GalleryItem, ImageItem, ImageSize, ThumbnailsPosition} from '@ngx-gallery/core';
 import {Lightbox} from '@ngx-gallery/lightbox';
-import {first} from 'rxjs/operators';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {Seller} from '../../models/seller';
 import {UserService} from '../../services/user.service';
-import {ChatService} from '../../services/chat.service';
 import {OrderService} from '../../services/order.service';
 import {AuthService} from '../../services/auth.service';
+import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {User} from '../../models/user';
 
 @Component({
     selector: 'app-product-detail',
@@ -32,10 +33,11 @@ export class ProductDetailComponent implements OnInit {
                 public gallery: Gallery,
                 public lightbox: Lightbox,
                 public userService: UserService,
-                public chatService: ChatService,
                 public orderService: OrderService,
                 public auth: AuthService,
-                private snackBar: MatSnackBar) {
+                private snackBar: MatSnackBar,
+                private dialog: MatDialog,
+                private db: AngularFirestore) {
     }
 
 
@@ -70,16 +72,43 @@ export class ProductDetailComponent implements OnInit {
 
     }
 
+    openDialog() {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.orderItem();
+            }
+        });
+    }
+
+    setBuyerRole(user: User) {
+        const newUser = {
+            ...user,
+            roles: {
+                buyer: true
+            }
+        };
+
+        this.db.doc(`users/${user.uid}`).set(newUser, {merge: true});
+    }
+
     async orderItem() {
-        const user = await this.auth.user$.pipe(first()).toPromise();
+        const user = await this.auth.getUserAsPromise();
         console.log('user fetched');
         await this.orderService.create(user.uid, this.seller.uid, this.product.id);
         console.log('order created');
+        if (!user.roles.buyer) {
+            this.setBuyerRole(user);
+        }
         const snackBarRef = this.snackBar.open('Successfully ordered item', 'View', {
-            duration: 2000
+            duration: 10000
         });
         snackBarRef.onAction().subscribe(() => {
             this.router.navigateByUrl('orders/buyer');
         });
     }
+
+
 }
+
