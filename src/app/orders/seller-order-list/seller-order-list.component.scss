@@ -1,9 +1,21 @@
-.cards {
-  width: 400px;
-}
 
 .card {
-  min-width: 100%;
-  margin: 40px;
+  max-width: 300px;
+  margin: 10px auto;
+  align-content: space-around;
 }
 
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.wrapper {
+  margin: 10px auto;
+}
+
+.limited {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
