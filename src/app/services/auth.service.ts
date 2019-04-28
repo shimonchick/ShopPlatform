@@ -41,7 +41,7 @@ export class AuthService {
         return false;
     }
 
-    getUserAsPromise() {
+    getUser() {
         return this.user$.pipe(first()).toPromise();
     }
 

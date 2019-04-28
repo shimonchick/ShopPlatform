@@ -11,4 +11,3 @@ export interface User {
     displayName: string;
     roles: Roles;
 }
-

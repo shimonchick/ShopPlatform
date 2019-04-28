@@ -60,7 +60,7 @@ export class SettingsComponent implements OnInit {
 
     async registerSeller(firstName: string, lastName: string, phoneNumber: string) {
         // if (!this.addressForm.valid) { return; }
-        const user = await this.auth.getUserAsPromise();
+        const user = await this.auth.getUser();
         const seller: Seller = {
             ...user,
             firstName: firstName,

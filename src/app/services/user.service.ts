@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {User} from '../models/user';
 import {AuthService} from './auth.service';
+import {Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,14 +17,15 @@ export class UserService {
     }
 
     async getUserByIdAsPromise(id: string) {
-        const snapshot = await this.db.doc<User>(`users/${id}`).get().toPromise();
-        const snapshotData = snapshot.data() as User;
-        console.log(snapshotData);
-        return snapshotData;
+        const user: User = await this.db.doc<User>(`users/${id}`).valueChanges().pipe(first()).toPromise();
+        console.log(user);
+        return user;
     }
 
-    getUserById(id: string) {
-        return this.db.doc<User>(`users/${id}`).valueChanges();
-        // return of(this.auth.getSnapshotUser());
+    getUserById(id: string): Observable<User> {
+        const user = this.db.doc<User>(`users/${id}`).valueChanges();
+        console.log('fetched user');
+        return user;
     }
+
 }

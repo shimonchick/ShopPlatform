@@ -1,8 +1,5 @@
-interface Chat {
-    buyerId: string;
-    count: number;
-    createdAt: number;
-    id: string;
-    messages: string[];
-    sellerId: string;
+import {Message} from '@progress/kendo-angular-conversational-ui';
+
+export interface Chat {
+    messages: Message[];
 }

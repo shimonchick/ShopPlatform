@@ -22,6 +22,7 @@ import {LayoutModule} from '@angular/cdk/layout';
 import {SharedModule} from './shared.module';
 import {AgmCoreModule} from '@agm/core';
 import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule} from '@angular/material';
+import {ChatModule} from './chat/chat.module';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelec
         SettingsModule,
         LayoutModule,
         SharedModule,
+        ChatModule,
         AgmCoreModule.forRoot({
             apiKey: environment.maps.apiKey
         }),

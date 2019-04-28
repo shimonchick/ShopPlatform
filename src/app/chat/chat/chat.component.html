@@ -1,0 +1,8 @@
+<ng-container *ngIf="auth.user$ | async as user">
+    <kendo-chat
+            [messages]="messages$ | async"
+            [user]="toKendo(user)"
+            (sendMessage)="sendMessage($event)"
+    >
+    </kendo-chat>
+</ng-container>

@@ -48,7 +48,6 @@ export class ProductDetailComponent implements OnInit {
 
         /** Basic Gallery Example */
         this.product$.subscribe(async product => {
-            this.product = product;
             // Creat gallery items
             this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
             this.seller = await this.userService.getUserByIdAsPromise(product.sellerUid) as Seller;
@@ -94,7 +93,7 @@ export class ProductDetailComponent implements OnInit {
     }
 
     async orderItem() {
-        const user = await this.auth.getUserAsPromise();
+        const user = await this.auth.getUser();
         console.log('user fetched');
         await this.orderService.create(user.uid, this.seller.uid, this.product.id);
         console.log('order created');

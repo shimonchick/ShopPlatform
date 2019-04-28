@@ -6,10 +6,11 @@ import {AuthGuard} from './core/auth.guard';
 const routes: Routes = [
     {path: '', redirectTo: 'products', pathMatch: 'full'},
     {path: 'products', loadChildren: './products/products.module#ProductsModule'},
-    {path: 'chats', loadChildren: './chats/chats.module#ChatsModule'},
+    {path: 'settings', loadChildren: './settings/settings.module#SettingsModule'},
     {path: 'settings', canActivate: [AuthGuard], loadChildren: './settings/settings.module#SettingsModule'},
     {path: 'login', component: LoginComponent},
     {path: 'orders', canActivate: [AuthGuard], loadChildren: './orders/orders.module#OrdersModule'},
+    {path: 'chat', loadChildren: './chat/chat.module#ChatModule'}
 ];
 
 @NgModule({

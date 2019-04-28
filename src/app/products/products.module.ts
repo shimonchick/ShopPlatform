@@ -21,7 +21,6 @@ import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-di
 
 @NgModule({
     declarations: [
-        // ProductPreviewComponent,
         ProductDetailComponent,
         SearchComponent,
         ProductsListComponent,

@@ -1,0 +1,18 @@
+<div>
+    <app-header [sidenav]="drawer"></app-header>
+    <mat-drawer-container class="drawer-container">
+        <mat-drawer #drawer
+                    [mode]="'side'"
+                    [opened]="true"
+                    class="drawer">
+
+            <app-contacts></app-contacts>
+
+        </mat-drawer>
+        <mat-drawer-content [@onMainContentChange]="(onSideNavChange$ | async) ? 'open' : 'close'">
+
+            <app-chat *ngIf="mediatorService.selectedUserId$ | async"></app-chat>
+
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

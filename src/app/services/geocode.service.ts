@@ -20,7 +20,7 @@ export class GeocodeService {
         return this.waitForMapsToLoad().pipe(
             // filter(loaded => loaded),
             switchMap(() => {
-                return new Observable(observer => {
+                return new Observable<MapsLocation>(observer => {
                     this.geocoder.geocode({'address': location}, (results, status) => {
                         if (status === google.maps.GeocoderStatus.OK) {
                             console.log(results);
