@@ -68,7 +68,7 @@ export class AuthService {
         return this.checkAuthorization(this.snapshotUser, allowed);
     }
 
-    getUserAsPromise() {
+    getUser() {
         return this.user$.pipe(first()).toPromise();
     }
 

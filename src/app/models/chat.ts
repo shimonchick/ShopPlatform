@@ -1,6 +1,5 @@
-import {Message} from 'ng-chat';
+import {Message} from '@progress/kendo-angular-conversational-ui';
 
-interface Chat {
+export interface Chat {
     messages: Message[];
 }
-// export type Chat = Message[];

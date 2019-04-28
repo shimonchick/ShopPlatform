@@ -20,15 +20,15 @@ import {MatPasswordStrengthModule} from '@angular-material-extensions/password-s
 import {SettingsModule} from './settings/settings.module';
 import {LayoutModule} from '@angular/cdk/layout';
 import {SharedModule} from './shared.module';
-import {NgChatModule} from 'ng-chat';
-import { ChatComponent } from './chat/chat.component';
+import { ChatModule } from '@progress/kendo-angular-conversational-ui';
+
+// import {NgChatModule} from 'ng-chat';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavComponent,
         LoginComponent,
-        ChatComponent,
     ],
     imports: [
         AngularFireModule.initializeApp(environment.firebase, 'ShopPlatform'),
@@ -52,7 +52,8 @@ import { ChatComponent } from './chat/chat.component';
         SettingsModule,
         LayoutModule,
         SharedModule,
-        NgChatModule,
+        ChatModule,
+        // NgChatModule,
 
     ],
     providers: [],

@@ -8,6 +8,7 @@ const routes: Routes = [
     {path: 'settings', loadChildren: './settings/settings.module#SettingsModule'},
     {path: 'login', component: LoginComponent},
     {path: 'orders', loadChildren: './orders/orders.module#OrdersModule'},
+    {path: 'chat', loadChildren: './chat/chat.module#ChatModule'}
 ];
 
 @NgModule({
