@@ -11,7 +11,7 @@ export const archiveChat = functions.firestore
 
         const data: DocumentData | undefined = change.after.data();
         if (data === undefined) {
-            return;
+            return null;
         }
         const maxLen = 100;
         const msgLen = data.messages.length > 0 ? data.messages.length : 0;

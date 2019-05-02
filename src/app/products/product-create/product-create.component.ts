@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Product} from '../../models/product';
+import {CategoryTree, Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import {AuthService} from '../../services/auth.service';
 import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ErrorStateMatcher} from '@angular/material';
+import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {forkJoin, from, Observable} from 'rxjs';
 import {Seller} from '../../models/seller';
+import {ChooseCategoryComponent} from './choose-category/choose-category.component';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
@@ -32,7 +33,7 @@ export class ProductCreateComponent implements OnInit {
     downloadUrls: string[];
 
     done = false;
-    categories: string[] = [];
+    categories: CategoryTree;
     previewProduct: Product;
     coordinates;
     private NAME_MIN_LENGTH = 3;
@@ -53,9 +54,10 @@ export class ProductCreateComponent implements OnInit {
         private router: Router,
         private formBuilder: FormBuilder,
         private storage: AngularFireStorage,
+        private dialog: MatDialog
     ) {
-
     }
+
 
     createProduct(name: string, description: string, price: string) {
         const priceInt = parseInt(price, 10);
@@ -68,10 +70,6 @@ export class ProductCreateComponent implements OnInit {
             coordinates: this.coordinates
         } as Product;
     }
-    onCategoriesChanged(categories: string[]) {
-        this.categories = categories;
-        console.log(this.categories);
-    }
 
     ngOnInit() {
         this.auth.user$.subscribe(user => {
@@ -83,9 +81,9 @@ export class ProductCreateComponent implements OnInit {
         });
     }
 
-    uploadProduct() {
+    async uploadProduct() {
 
-        this.productService.createProduct(this.previewProduct);
+        await this.productService.createProduct(this.previewProduct);
         this.router.navigateByUrl('/products');
         // todo
 
@@ -142,5 +140,15 @@ export class ProductCreateComponent implements OnInit {
     selectMarker(lat: number, lng: number) {
         this.coordinates.latitude = lat;
         this.coordinates.longitude = lng;
+    }
+
+    chooseCategory() {
+        const dialogRef = this.dialog.open(ChooseCategoryComponent, {
+            maxHeight: '90vh'
+        });
+
+        dialogRef.afterClosed().subscribe(categories => {
+            this.categories = categories;
+        });
     }
 }

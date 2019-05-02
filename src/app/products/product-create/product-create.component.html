@@ -1,6 +1,6 @@
 <div class="product-container">
     <mat-vertical-stepper #stepper linear>
-        <mat-step [stepControl]="firstFormGroup" label="Fill product details">
+        <mat-step [stepControl]="productForm" label="Fill product details">
             <form [formGroup]="productForm" class="form-full-width">
                 <ng-template matStepLabel>Fill product details</ng-template>
                 <mat-form-field appearance="standard" class="form-field">
@@ -34,7 +34,8 @@
 
                 </mat-form-field>
 
-                <app-categories (categoryChanged)="onCategoriesChanged($event)"></app-categories>
+                <button mat-button (click)="chooseCategory()">Choose Category</button>
+
                 <mat-radio-group formControlName="address">
                     <mat-radio-button value="seller">Use your address</mat-radio-button>
                     <mat-radio-button value="custom">Chose another address</mat-radio-button>
@@ -65,10 +66,10 @@
                 <div>
                     <button mat-button matStepperNext>Next</button>
                 </div>
-
             </form>
+
         </mat-step>
-        <mat-step [stepControl]="secondFormGroup" label="Upload product images">
+        <mat-step label="Upload product images">
             <div>
                 <form>
                     <ng-template matStepLabel>Enter product pictures</ng-template>

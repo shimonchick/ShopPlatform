@@ -1,4 +1,13 @@
-export class Product {
+export interface Category {
+    name: string;
+}
+
+export interface CategoryTree {
+    lvl0: string;
+    lvl1: string;
+}
+
+export interface Product {
     sellerUid: string;
     name: string;
     description: string;
@@ -6,4 +15,5 @@ export class Product {
     id: string;
     urls: string[];
     coordinates: Location;
+    categories: CategoryTree;
 }

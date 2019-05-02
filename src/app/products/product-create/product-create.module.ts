@@ -9,9 +9,9 @@ import {NgxDropzoneModule} from 'ngx-dropzone';
 import {ImagePreviewComponent} from './image-preview/image-preview.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ImageCropperModule} from 'ngx-img-cropper';
-import {CategoriesComponent} from './categories/categories.component';
 import {AgmCoreModule} from '@agm/core';
 import {ProductSharedModule} from '../product-shared.module';
+import { ChooseCategoryComponent } from './choose-category/choose-category.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +20,7 @@ import {ProductSharedModule} from '../product-shared.module';
         UploadTaskComponent,
         // ImageComponent,
         ImagePreviewComponent,
-        CategoriesComponent,
+        ChooseCategoryComponent,
 
     ],
     imports: [
@@ -32,6 +32,9 @@ import {ProductSharedModule} from '../product-shared.module';
         ImageCropperModule,
         AgmCoreModule,
         ProductSharedModule
+    ],
+    entryComponents: [
+        ChooseCategoryComponent,
     ]
 })
 export class ProductCreateModule {

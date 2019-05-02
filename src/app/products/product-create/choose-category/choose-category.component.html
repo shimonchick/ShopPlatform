@@ -1,0 +1,15 @@
+<div *ngIf="allCategories$ | async as allLvl0Categories; else loadingSpinner" fxLayout="row wrap">
+        <mat-card *ngFor="let category of allLvl0Categories" (click)="chooseCategory(category.name)"
+                  fxFlex="25%" fxFlex.md="33%" fxFlex.sm="50%" fxFlex.xs="100%">
+            <mat-card-header>
+                <mat-card-title>{{category.name}}</mat-card-title>
+            </mat-card-header>
+            <!--        <img matCardImage src="Card wide image source">-->
+            <!--        todo add an image as an icon-->
+        </mat-card>
+</div>
+
+
+<ng-template #loadingSpinner>
+    <mat-spinner></mat-spinner>
+</ng-template>

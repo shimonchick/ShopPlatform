@@ -8,7 +8,7 @@ import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {AuthService} from '../../services/auth.service';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {ChatMediatorService} from '../mediator/chat-mediator.service';
-import * as firebase from 'firebase';
+import {firestore} from 'firebase/app';
 
 @Component({
     selector: 'app-chat',
@@ -30,6 +30,7 @@ export class ChatComponent implements OnInit {
             this.auth.user$.pipe(map(user => user.uid)),
             this.mediatorService.selectedUserId$
         ).pipe(
+            // todo chat not working, make the chat id concat the smaller of the two ids
             map(([userId, selectedUserId]) => {
                 console.log(`new id selected: ${selectedUserId}`);
                 /*
@@ -57,7 +58,7 @@ export class ChatComponent implements OnInit {
         const ref = this.chatRef$.value;
         console.log(`sending message: ${$event.message}`);
         await ref.set({
-            messages: firebase.firestore.FieldValue.arrayUnion($event.message)
+            messages: firestore.FieldValue.arrayUnion($event.message)
         }, {merge: true});
     }
 }
