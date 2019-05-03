@@ -1,8 +1,6 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
-//govnokod
-admin.initializeApp();
+
 const env = functions.config();
 
 // Initialize the Algolia Client
