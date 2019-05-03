@@ -8,3 +8,5 @@ typings/
 .runtimeconfig.json
 
 node_modules/
+
+service-account.json
