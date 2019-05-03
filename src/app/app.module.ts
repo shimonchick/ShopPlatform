@@ -46,7 +46,6 @@ import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelec
         CoreModule,
         FlexLayoutModule,
         ReactiveFormsModule,
-        FlexLayoutModule,
         MatPasswordStrengthModule,
         SettingsModule,
         LayoutModule,
