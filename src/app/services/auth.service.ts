@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {User} from '../models/user';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {first, shareReplay, switchMap} from 'rxjs/operators';
 import {AuthProcessService} from 'ngx-auth-firebaseui';
@@ -18,6 +18,11 @@ export class AuthService {
     constructor(private ngxAuth: AuthProcessService,
                 private db: AngularFirestore,
                 private router: Router) {
+        this.ngxAuth.onSuccessEmitter.subscribe(user => {
+            console.log('updating user data');
+            console.log(user);
+            this.updateUserData(user);
+        });
         this.user$ = this.ngxAuth.afa.authState.pipe(
             switchMap(user => {
                 if (user) {
@@ -47,6 +52,23 @@ export class AuthService {
 
     getSnapshotUser() {
         return this.snapshotUser;
+    }
+
+    private updateUserData({uid, photoURL, displayName, email, phoneNumber}) {
+        // Sets user data in firestore on login
+        const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
+        const customUserData = {
+            uid: uid,
+            photoURL: photoURL,
+            displayName: displayName,
+            email: email,
+            phoneNumber: phoneNumber,
+            roles: {
+                buyer: false,
+                seller: false
+            }
+        };
+        return userRef.set(customUserData, {merge: true});
     }
 
     async signOut() {
