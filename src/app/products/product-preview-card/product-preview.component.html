@@ -1,7 +1,9 @@
 <mat-card>
-    <img mat-card-image [src]="product.urls[0]" alt="Product image"/>
+    <img *ngIf="product.urls" [src]="product.urls[0]" mat-card-image/>
+    <img *ngIf="!product.urls" [src]="'src/assets/placeholder.png'" mat-card-image/>
+
     <mat-card-footer fxLayout fxLayoutAlign="space-between center">
-        <span class="name">{{product.name}}</span>
-        <span class="price">{{product.price}}лв</span>
+        <span class="name">{{product.name ? product.name : 'Name'}}</span>
+        <span class="price">{{product.price ? product.price : 10}}лв</span>
     </mat-card-footer>
 </mat-card>
