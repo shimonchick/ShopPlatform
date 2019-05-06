@@ -1,10 +1,9 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MapsLocation} from '../models/location';
 import {AuthService} from '../services/auth.service';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {GeocodeService} from '../services/geocode.service';
 import {Seller} from '../models/seller';
 // import {google} from '@agm/core/services/google-maps-types';
 declare let google: any;
@@ -32,15 +31,27 @@ export class SettingsComponent implements OnInit {
         private page: Location,
         private auth: AuthService,
         private db: AngularFirestore,
-        private geocodeService: GeocodeService,
-        private ref: ChangeDetectorRef,
     ) {
     }
 
     ngOnInit() {
         this.auth.user$.subscribe((seller: Seller) => {
-            this.location = seller.coordinates === undefined ? {lat: 42.6977, lng: 23.3219} : seller.coordinates;
-            this.selectedMarker = this.location;
+            this.location = seller.coordinates;
+            if (this.location === undefined) {
+                if (navigator.geolocation) {
+                    new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition((data) => {
+                            resolve({lat: data.coords.latitude, lng: data.coords.longitude});
+                        }, err => resolve({lat: -74.006, lng: 40.71}));
+                    }).then((location: MapsLocation) => {
+                        this.location = location;
+                        this.selectedMarker = location;
+                    });
+                }
+            } else {
+                this.selectedMarker = this.location;
+
+            }
             if (seller.firstName) {
                 this.addressForm.get('firstName').setValue(seller.firstName);
             }
@@ -51,11 +62,6 @@ export class SettingsComponent implements OnInit {
                 this.addressForm.get('phoneNumber').setValue(seller.phoneNumber);
             }
         });
-        // const seller: Seller = await this.auth.getUserAsPromise() as Seller;
-        // console.log(seller);
-        // console.log(seller.coordinates);
-        // this.location = seller.coordinates === undefined ? {lat: 42.6977, lng: 23.3219} : seller.coordinates;
-        // this.selectedMarker = this.location;
     }
 
     async registerSeller(firstName: string, lastName: string, phoneNumber: string) {
@@ -86,18 +92,6 @@ export class SettingsComponent implements OnInit {
         this.getAddress(lat, lng);
     }
 
-    addressToCoordinates() {
-        this.loading = true;
-        this.geocodeService.geocodeAddress(this.address)
-            .subscribe((location: MapsLocation) => {
-                console.log(location);
-                this.location = location;
-                    this.selectedMarker = location;
-                    this.loading = false;
-                    this.ref.detectChanges();
-                }
-            );
-    }
 
     getAddress(lat: number, lng: number) {
         console.log('Finding Address');

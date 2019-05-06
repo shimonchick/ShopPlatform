@@ -8,13 +8,11 @@ import {SharedModule} from '../shared.module';
 import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule, MatTabsModule} from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {SettingsComponent} from './settings.component';
-import {AttachCardComponent} from './attach-card/attach-card.component';
 import {AngularFireFunctionsModule} from '@angular/fire/functions';
 
 @NgModule({
     declarations: [
         SettingsComponent,
-        AttachCardComponent,
     ],
     imports: [
         CommonModule,

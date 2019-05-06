@@ -49,6 +49,7 @@ export class ProductDetailComponent implements OnInit {
         /** Basic Gallery Example */
         this.product$.subscribe(async product => {
             // Creat gallery items
+            this.product = product;
             this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
             this.seller = await this.userService.getUserByIdAsPromise(product.sellerUid) as Seller;
 
