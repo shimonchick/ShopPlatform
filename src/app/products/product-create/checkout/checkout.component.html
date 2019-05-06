@@ -1,0 +1,11 @@
+<button (click)="checkout($event)"
+        [color]="color"
+        mat-raised-button>
+    Buy {{listingType}} listing
+</button>
+<mat-error *ngIf="error">{{error}}</mat-error>
+<ng-container *ngIf="loading">
+    <span> Processing payment ...</span>
+    <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+</ng-container>
+<mat-divider></mat-divider>

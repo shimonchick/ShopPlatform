@@ -13,6 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@progress/kendo-angular-conversational-ui": "^1.1.1",
     "algoliasearch": "^3.32.1",
     "express": "^4.16.4",
     "firebase-admin": "~7.0.0",

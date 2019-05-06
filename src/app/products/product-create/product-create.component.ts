@@ -6,8 +6,9 @@ import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '
 import {Router} from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {forkJoin, from, Observable} from 'rxjs';
 import {Seller} from '../../models/seller';
+import {last} from 'rxjs/operators';
+import {MapsLocation} from '../../models/location';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
@@ -31,10 +32,10 @@ export class ProductCreateComponent implements OnInit {
     files: File[] = [];
     downloadUrls: string[];
 
-    done = false;
+    done = true;
     categories: string[] = [];
-    previewProduct: Product;
-    coordinates;
+    product = new Product();
+    coordinates: MapsLocation;
     private NAME_MIN_LENGTH = 3;
     private NAME_MAX_LENGTH = 50;
     private DESCRIPTION_MAX_LENGTH = 10000;
@@ -45,6 +46,7 @@ export class ProductCreateComponent implements OnInit {
             [Validators.required, Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)])],
         price: [null, Validators.required],
         address: ['seller', Validators.required],
+        listingType: ['normal', Validators.required],
     });
 
     constructor(
@@ -57,38 +59,41 @@ export class ProductCreateComponent implements OnInit {
 
     }
 
-    createProduct(name: string, description: string, price: string) {
-        const priceInt = parseInt(price, 10);
-        this.previewProduct = {
-            name: name,
-            description: description,
-            price: priceInt,
-            sellerUid: this.user.uid,
-            urls: this.downloadUrls,
-            coordinates: this.coordinates
-        } as Product;
-    }
+    // createProduct(name: string, description: string, price: string) {
+    //     const priceInt = parseInt(price, 10);
+    //     this.product = {
+    //         name: name,
+    //         description: description,
+    //         price: priceInt,
+    //         sellerUid: this.user.uid,
+    //         urls: this.downloadUrls,
+    //         coordinates: this.coordinates
+    //     } as Product;
+    // }
+
     onCategoriesChanged(categories: string[]) {
         this.categories = categories;
         console.log(this.categories);
     }
 
     ngOnInit() {
-        this.auth.user$.subscribe(user => {
-            this.user = user as Seller;
-            this.coordinates = {
-                longitude: this.user.coordinates.lng,
-                latitude: this.user.coordinates.lat
+        this.auth.user$.subscribe((user: Seller) => {
+            this.product.coordinates = {
+                lng: user.coordinates.lng,
+                lat: user.coordinates.lat
             };
+            this.product.sellerUid = user.uid;
+            this.product.priority = 1; // normal offer priority, higher is better
         });
     }
 
-    uploadProduct() {
-
-        this.productService.createProduct(this.previewProduct);
-        this.router.navigateByUrl('/products');
-        // todo
-
+    async uploadProduct() {
+        this.done = false;
+        await this.uploadAllFiles();
+        const productId = await this.productService.createProduct(this.product);
+        this.done = true;
+        alert('product successfully created');
+        this.router.navigate(['products', productId]);
     }
 
 
@@ -118,29 +123,29 @@ export class ProductCreateComponent implements OnInit {
         this.files = files;
     }
 
-    uploadFile(file: File): Observable<UploadTaskSnapshot> {
+    uploadFile(file: File): Promise<UploadTaskSnapshot> {
         const path = `images/${Date.now()}_${file.name}`;
         const task = this.storage.upload(path, file);
-        return task.snapshotChanges();
+        return task.snapshotChanges().pipe(last()).toPromise();
     }
 
-    UploadAllFiles() {
-
-        forkJoin(this.files.map((file) => this.uploadFile(file)))
-            .subscribe(uploads => {
-
-                const downloadUrlObservables: Observable<any>[] = uploads
-                    .map((upload) => from(upload.ref.getDownloadURL()));
-
-                forkJoin(downloadUrlObservables).subscribe(downloadUrls => {
-                    this.downloadUrls = downloadUrls;
-                    this.done = true;
-                });
-            });
+    async uploadAllFiles() {
+        const uploads = await Promise.all(this.files.map(file => this.uploadFile(file)));
+        this.product.urls = await Promise.all(uploads.map(upload => upload.ref.getDownloadURL()));
     }
 
     selectMarker(lat: number, lng: number) {
-        this.coordinates.latitude = lat;
-        this.coordinates.longitude = lng;
+        this.product.coordinates.lat = lat;
+        this.product.coordinates.lng = lng;
     }
+
+
+    onListingPayAttempt(confirmation: any, priority: number) {
+        if (!confirmation.paid || confirmation.status !== 'succeeded') {
+            return;
+        }
+        this.product.priority = priority;
+
+    }
+
 }

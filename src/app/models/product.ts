@@ -1,3 +1,5 @@
+import {MapsLocation} from './location';
+
 export class Product {
     sellerUid: string;
     name: string;
@@ -5,5 +7,6 @@ export class Product {
     price: number;
     id: string;
     urls: string[];
-    coordinates: Location;
+    coordinates: MapsLocation;
+    priority: number;
 }

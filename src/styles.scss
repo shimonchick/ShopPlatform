@@ -29,3 +29,11 @@ body, *:not(mat-icon) {
   width: 70%;
   margin: 10px auto;
 }
+
+.content {
+  display: flex;
+  padding: 10vh 10vw;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

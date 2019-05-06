@@ -10,6 +10,8 @@ import {ImageCropperModule} from 'ngx-img-cropper';
 import {CategoriesComponent} from './categories/categories.component';
 import {AgmCoreModule} from '@agm/core';
 import {ProductSharedModule} from '../product-shared.module';
+import {CheckoutDirective} from './checkout.directive';
+import {CheckoutComponent} from './checkout/checkout.component';
 
 @NgModule({
     declarations: [
@@ -17,6 +19,8 @@ import {ProductSharedModule} from '../product-shared.module';
         // ImageComponent,
         ImagePreviewComponent,
         CategoriesComponent,
+        CheckoutDirective,
+        CheckoutComponent,
 
     ],
     imports: [

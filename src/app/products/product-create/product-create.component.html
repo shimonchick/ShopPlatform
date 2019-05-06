@@ -1,4 +1,4 @@
-<div class="product-container">
+<div class="content">
     <mat-vertical-stepper #stepper linear>
         <mat-step [stepControl]="firstFormGroup" label="Fill product details">
             <form [formGroup]="productForm" class="form-full-width">
@@ -35,30 +35,58 @@
                 </mat-form-field>
 
                 <app-categories (categoryChanged)="onCategoriesChanged($event)"></app-categories>
+
+                <!--<button mat-raised-button color="accent"-->
+                <!--[disabled]="product.priority !== 1"-->
+                <!--appCheckout-->
+                <!--[amount]="100"-->
+                <!--[description]="'VIP product listing'"-->
+                <!--(paid)="onListingPayAttempt($event, 2)">-->
+                <!--Buy VIP product listing-->
+                <!--</button>-->
+
+                <app-checkout
+                        (paid)="onListingPayAttempt($event, 2)"
+                        *ngIf="product.priority === 1"
+                        [amount]="100"
+                        [color]="'primary'"
+                        [description]="'VIP product listing'"
+                        [listingType]="'VIP'"
+                ></app-checkout>
+
+                <app-checkout
+                        (paid)="onListingPayAttempt($event, 3)"
+                        *ngIf="product.priority === 1"
+                        [amount]="200"
+                        [color]="'accent'"
+                        [description]="'TOP product listing'"
+                        [listingType]="'TOP'"
+                ></app-checkout>
+                <!--Product priority:-->
+                <!--{{product.priority}}-->
                 <mat-radio-group formControlName="address">
                     <mat-radio-button value="seller">Use your address</mat-radio-button>
                     <mat-radio-button value="custom">Chose another address</mat-radio-button>
                 </mat-radio-group>
-                <ng-container *ngIf="productForm.controls['address'].value !== 'seller' &&coordinates"
+                <ng-container *ngIf="productForm.controls['address'].value !== 'seller' && product.coordinates"
                 >
                     <agm-map
 
                             (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
                             [fullscreenControl]="true"
-                            [latitude]="coordinates.latitude"
-                            [longitude]="coordinates.longitude"
+                            [latitude]="product.coordinates.lat"
+                            [longitude]="product.coordinates.lng"
+                            [zoom]="12"
                             style="height: 300px;"
                     >
-                        <agm-marker *ngIf="coordinates"
-                                    [latitude]="coordinates.latitude"
-                                    [longitude]="coordinates.longitude"
+                        <agm-marker *ngIf="product.coordinates"
+                                    [latitude]="product.coordinates.lat"
+                                    [longitude]="product.coordinates.lng"
                                     [markerDraggable]="true"
                         >
                         </agm-marker>
                     </agm-map>
-                    <p>
-                        longitude {{coordinates.longitude}} latitude {{coordinates.latitude}}
-                    </p>
+
                 </ng-container>
 
 
@@ -80,8 +108,7 @@
 
             <div>
                 <button mat-button matStepperPrevious>Back</button>
-                <button (click)="UploadAllFiles(); createProduct(productName.value, productDescription.value, productPrice.value)"
-                        mat-button matStepperNext>Next
+                <button mat-button matStepperNext>Next
                 </button>
             </div>
         </mat-step>
@@ -89,12 +116,11 @@
             <div class="mat-typography">
                 <ng-template matStepLabel>Done</ng-template>
                 <h3>Create product listing:</h3>
-                <app-product-preview *ngIf="previewProduct" [product]="previewProduct"></app-product-preview>
-                <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
-                <button (click)="uploadProduct();
-            productName.value=''; productDescription.value='';productPrice.value=''; " mat-raised-button>
+                <app-product-preview *ngIf="product" [product]="product"></app-product-preview>
+                <button (click)="uploadProduct()" mat-raised-button>
                     Create
                 </button>
+                <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
 
                 <div>
                     <button mat-button matStepperPrevious>Back</button>

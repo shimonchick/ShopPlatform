@@ -1,21 +1,27 @@
-import {Directive, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import {AngularFireFunctions} from '@angular/fire/functions';
-import {catchError, retry} from 'rxjs/operators';
-import {throwError} from 'rxjs';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../../services/auth.service';
+import {catchError} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 declare var StripeCheckout; // : StripeCheckoutStatic;
 
-@Directive({
-    selector: '[appCheckout]'
+@Component({
+    selector: 'app-checkout',
+    templateUrl: './checkout.component.html',
+    styleUrls: ['./checkout.component.scss']
 })
-export class CheckoutDirective implements OnInit {
-
+export class CheckoutComponent implements OnInit {
 
     @Input() amount;
     @Input() description;
+    @Input() color;
+    @Input() listingType;
     @Output() paid = new EventEmitter<any>();
     handler; // : StripeCheckoutHandler;
+    error = null;
+    // confirmation: any;
+    loading = false;
 
     constructor(private auth: AuthService, private functions: AngularFireFunctions) {
     }
@@ -32,21 +38,22 @@ export class CheckoutDirective implements OnInit {
                 console.log('checkout form closed');
             },
             source: async (source) => {
+                this.loading = true;
                 const user = await this.auth.getUser();
                 const fun = this.functions.httpsCallable('stripeCreateCharge');
                 const confirmation = await fun({source: source.id, uid: user.uid, amount: this.amount})
-                    .pipe(retry(1), catchError(this.handleError))
+                    .pipe(catchError(this.handleError))
                     .toPromise();
+                this.loading = false;
                 console.log(confirmation);
                 this.paid.emit(confirmation);
-
             }
         });
     }
 
     @HostListener('click')
     // Open the checkout handler
-    async checkout() {
+    async checkout(e) {
         const user = await this.auth.getUser();
         this.handler.open({
             name: 'ShopPlatform',
@@ -54,7 +61,7 @@ export class CheckoutDirective implements OnInit {
             amount: this.amount,
             email: user.email,
         });
-        // e.preventDefault();
+        e.preventDefault();
     }
 
     // Close on navigate
@@ -74,7 +81,9 @@ export class CheckoutDirective implements OnInit {
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
         console.log(errorMessage);
-        window.alert(errorMessage);
-        return throwError(errorMessage);
+        this.error = errorMessage;
+        // window.alert(errorMessage);
+        return of(null);
+        // return throwError(errorMessage); // if you want to rethrow the error
     }
 }
