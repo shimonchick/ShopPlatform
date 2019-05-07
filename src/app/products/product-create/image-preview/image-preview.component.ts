@@ -32,14 +32,11 @@ export class ImagePreviewComponent {
         // this.cropperSettings.canvasHeight = 300;
     }
 
-    ngInit() {
-
-    }
-
 //  @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
 
 
     drop(event: CdkDragDrop<any>) {
+        console.log(this.files);
         moveItemInArray(this.files, event.previousIndex, event.currentIndex);
     }
 

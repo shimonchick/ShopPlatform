@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material';
-import {Category} from '../../../models/product';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef, MatStepper} from '@angular/material';
+import {Category, CategoryTree} from '../../../models/product';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
     selector: 'app-choose-category',
@@ -11,8 +12,15 @@ import {map, tap} from 'rxjs/operators';
     styleUrls: ['./choose-category.component.scss']
 })
 export class ChooseCategoryComponent implements OnInit {
+    @ViewChild(MatStepper)
+    stepper: MatStepper;
+
     allCategories$: Observable<Category[]>;
     loading = true;
+    selectedCategory: Category;
+    categoryControl = new FormGroup({
+        categoryLvl0: new FormControl(null, Validators.required)
+    });
 
     constructor(public dialogRef: MatDialogRef<ChooseCategoryComponent>,
                 private db: AngularFirestore) {
@@ -27,12 +35,20 @@ export class ChooseCategoryComponent implements OnInit {
             map(snapshots => snapshots.map(snapshot => {
                 return {
                     name: snapshot.payload.doc.id, ...snapshot.payload.doc.data()
-                };
+                } as Category;
             }))
         );
     }
 
-    chooseCategory(category: string) {
-        this.dialogRef.close(category);
+    chooseCategoryTree(subCategory: string) {
+        this.dialogRef.close({
+            lvl0: this.selectedCategory.name,
+            lvl1: subCategory
+        } as CategoryTree);
+    }
+
+    chooseCategoryLvl0(category: Category) {
+        this.selectedCategory = category;
+        this.stepper.next();
     }
 }

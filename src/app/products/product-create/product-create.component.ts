@@ -6,7 +6,7 @@ import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '
 import {Router} from '@angular/router';
 import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {forkJoin, from, Observable} from 'rxjs';
+import {BehaviorSubject, forkJoin, from, Observable} from 'rxjs';
 import {Seller} from '../../models/seller';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
@@ -35,6 +35,7 @@ export class ProductCreateComponent implements OnInit {
     done = false;
     categories: CategoryTree;
     previewProduct: Product;
+    previewProduct$ = new BehaviorSubject<Product>(null);
     coordinates;
     private NAME_MIN_LENGTH = 3;
     private NAME_MAX_LENGTH = 50;

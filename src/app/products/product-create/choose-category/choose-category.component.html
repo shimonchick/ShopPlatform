@@ -1,13 +1,40 @@
-<div *ngIf="allCategories$ | async as allLvl0Categories; else loadingSpinner" fxLayout="row wrap">
-        <mat-card *ngFor="let category of allLvl0Categories" (click)="chooseCategory(category.name)"
-                  fxFlex="25%" fxFlex.md="33%" fxFlex.sm="50%" fxFlex.xs="100%">
-            <mat-card-header>
-                <mat-card-title>{{category.name}}</mat-card-title>
-            </mat-card-header>
-            <!--        <img matCardImage src="Card wide image source">-->
-            <!--        todo add an image as an icon-->
-        </mat-card>
-</div>
+<mat-horizontal-stepper>
+    <mat-step [stepControl]="categoryControl">
+        <ng-template matStepLabel>Lvl 0</ng-template>
+
+        <div *ngIf="allCategories$ | async as allLvl0Categories; else loadingSpinner" fxLayout="row wrap" fxLayoutAlign="space-between stretch">
+            <mat-card *ngFor="let category of allLvl0Categories" (click)="chooseCategoryLvl0(category)"
+                      fxFlex="22%" fxFlex.md="30%" fxFlex.sm="40%" fxFlex.xs="100%">
+                <mat-card-header>
+                    <mat-card-title>{{category.name}}</mat-card-title>
+                </mat-card-header>
+                <!--        <img matCardImage src="Card wide image source">-->
+                <!--        todo add an image as an icon-->
+            </mat-card>
+        </div>
+        <form [formGroup]="categoryControl">
+            <label>
+                <input hidden formControlName="categoryLvl0"/>
+            </label>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Lvl 1</ng-template>
+        <div *ngIf="selectedCategory" fxLayout="row wrap" fxLayoutAlign="space-between stretch">
+            <mat-card *ngFor="let subCategory of selectedCategory.subCategories" (click)="chooseCategoryTree(subCategory)"
+                      fxFlex="22%" fxFlex.md="30%" fxFlex.sm="40%" fxFlex.xs="100%">
+                <mat-card-header>
+                    <mat-card-title>{{subCategory}}</mat-card-title>
+                </mat-card-header>
+                <!--        <img matCardImage src="Card wide image source">-->
+                <!--        todo add an image as an icon-->
+            </mat-card>
+        </div>
+        <div>
+            <button mat-button matStepperPrevious>Previous</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>
 
 
 <ng-template #loadingSpinner>

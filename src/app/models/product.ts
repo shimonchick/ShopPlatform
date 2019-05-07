@@ -1,5 +1,6 @@
 export interface Category {
     name: string;
+    subCategories: string[];
 }
 
 export interface CategoryTree {

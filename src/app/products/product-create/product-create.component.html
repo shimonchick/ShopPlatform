@@ -1,10 +1,11 @@
-<div class="product-container">
-    <mat-vertical-stepper #stepper linear>
+<div fxLayout>
+    <mat-vertical-stepper #stepper linear fxFlex="60%">
         <mat-step [stepControl]="productForm" label="Fill product details">
             <form [formGroup]="productForm" class="form-full-width">
                 <ng-template matStepLabel>Fill product details</ng-template>
                 <mat-form-field appearance="standard" class="form-field">
                     <input #productName
+                           formControlName="name"
                            matInput maxlength="50"
                            minlength="3" placeholder="Name">
                     <mat-hint>
@@ -17,6 +18,7 @@
 
                 <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
                 <textarea #productDescription
+                          formControlName="description"
                           autosize
                           matInput maxlength="10000" placeholder="Description"></textarea>
                     <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
@@ -27,6 +29,7 @@
 
                 <mat-form-field class="form-field" hintLabel="Product Price">
                     <input #productPrice matInput
+                           formControlName="price"
                            placeholder="price" type="number">
                     <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
                         Product description is <strong>required</strong>
@@ -104,5 +107,5 @@
             </div>
         </mat-step>
     </mat-vertical-stepper>
-
+    <app-product-preview [product]="previewProduct" fxFlex="40%"></app-product-preview>
 </div>
