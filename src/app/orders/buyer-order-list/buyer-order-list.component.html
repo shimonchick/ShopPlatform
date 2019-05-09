@@ -1,27 +1,34 @@
-<h1>Your Orders</h1>
-<div *ngIf=" auth.user$ | async as user" class="wrapper card-container">
-
-    <mat-card *ngFor="let order of orders; let i = index" class="card">
+<ng-container *ngIf=" auth.user$ | async as user">
+    <mat-card class="content">
         <mat-card-header>
-            <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
-
-            <!--</div>-->
-            <mat-card-title *ngIf="order.seller">
-                You ordered from {{order.seller.displayName}}
+            <mat-card-title>
+                Your orders
             </mat-card-title>
-            <mat-card-subtitle>
-                {{order.product.name}}
-            </mat-card-subtitle>
-            <div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"
-                 [style.backgroundSize]="'cover'"
-                 mat-card-avatar
-            ></div>
         </mat-card-header>
-        <mat-card-content class="limited">
-            <p>{{order.product.description}}</p>
+        <mat-card-content>
+            <ng-container *ngFor="let order of displayOrders" style="display: flex; flex-wrap: wrap">
+                <mat-card class="card">
+                    <mat-card-header>
+                        <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
+
+                        <!--</div>-->
+                        <mat-card-title *ngIf="order.person">
+                            You ordered from {{order.person.displayName}}
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            {{order.product.name}}
+                        </mat-card-subtitle>
+                        <div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"
+                             [style.backgroundSize]="'cover'"
+                             mat-card-avatar
+                        ></div>
+                    </mat-card-header>
+                    <mat-card-content class="limited">
+                        <p>{{order.product.description}}</p>
+                    </mat-card-content>
+                </mat-card>
+            </ng-container>
+
         </mat-card-content>
-
-
     </mat-card>
-
-</div>
+</ng-container>

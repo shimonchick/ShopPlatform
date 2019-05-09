@@ -1,27 +1,62 @@
-<h1>Orders received</h1>
-<div *ngIf=" auth.user$ | async as user" class="wrapper card-container">
+<!--<h1>Orders received</h1>-->
+<!--<div *ngIf=" auth.user$ | async as user" class="wrapper card-container">-->
 
-    <mat-card *ngFor="let order of orders; let i = index" class="card">
+<!--<mat-card *ngFor="let order of orders; let i = index" class="card">-->
+<!--<mat-card-header>-->
+<!--&lt;!&ndash;<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<mat-card-title *ngIf="order.seller">-->
+<!--You ordered from {{order.seller.displayName}}-->
+<!--</mat-card-title>-->
+<!--<mat-card-subtitle>-->
+<!--{{order.product.name}}-->
+<!--</mat-card-subtitle>-->
+<!--<div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"-->
+<!--[style.backgroundSize]="'cover'"-->
+<!--mat-card-avatar-->
+<!--&gt;</div>-->
+<!--</mat-card-header>-->
+<!--<mat-card-content class="limited">-->
+<!--<p>{{order.product.description}}</p>-->
+<!--</mat-card-content>-->
+
+
+<!--</mat-card>-->
+
+<!--</div>-->
+
+<ng-container *ngIf=" auth.user$ | async as user">
+    <mat-card class="content">
         <mat-card-header>
-            <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
-
-            <!--</div>-->
-            <mat-card-title *ngIf="order.seller">
-                You ordered from {{order.seller.displayName}}
+            <mat-card-title>
+                Your orders
             </mat-card-title>
-            <mat-card-subtitle>
-                {{order.product.name}}
-            </mat-card-subtitle>
-            <div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"
-                 [style.backgroundSize]="'cover'"
-                 mat-card-avatar
-            ></div>
         </mat-card-header>
-        <mat-card-content class="limited">
-            <p>{{order.product.description}}</p>
+        <mat-card-content>
+            <ng-container *ngFor="let order of orders; let i = index" class="content">
+                <mat-card class="card">
+                    <mat-card-header>
+                        <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
+
+                        <!--</div>-->
+                        <mat-card-title *ngIf="order.seller">
+                            You ordered from {{order.seller.displayName}}
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            {{order.product.name}}
+                        </mat-card-subtitle>
+                        <div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"
+                             [style.backgroundSize]="'cover'"
+                             mat-card-avatar
+                        ></div>
+                    </mat-card-header>
+                    <mat-card-content class="limited">
+                        <p>{{order.product.description}}</p>
+                    </mat-card-content>
+                </mat-card>
+            </ng-container>
+
         </mat-card-content>
-
-
     </mat-card>
-
-</div>
+</ng-container>
