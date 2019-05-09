@@ -23,6 +23,11 @@ import {SharedModule} from './shared.module';
 import {AgmCoreModule} from '@agm/core';
 import {MatButtonModule, MatCardModule, MatInputModule, MatRadioModule, MatSelectModule} from '@angular/material';
 import {ChatModule} from './chat/chat.module';
+import {registerLocaleData} from '@angular/common';
+import localeBg from '@angular/common/locales/bg';
+import localeBgExtra from '@angular/common/locales/extra/bg';
+
+registerLocaleData(localeBg, 'bg', localeBgExtra);
 
 @NgModule({
     declarations: [
@@ -65,4 +70,5 @@ import {ChatModule} from './chat/chat.module';
     bootstrap: [AppComponent],
 })
 export class AppModule {
+
 }

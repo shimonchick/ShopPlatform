@@ -1,13 +1,13 @@
 <div class="content">
     <mat-vertical-stepper #stepper linear>
-        <mat-step [stepControl]="firstFormGroup" label="Fill product details">
+        <mat-step i18n-label="Fill product details" label="Fill product details">
             <form [formGroup]="productForm" class="form-full-width">
-                <ng-template matStepLabel>Fill product details</ng-template>
+                <ng-template i18n="Fill product details" matStepLabel>Fill product details</ng-template>
                 <mat-form-field appearance="standard" class="form-field">
                     <input #productName
                            matInput maxlength="50"
-                           minlength="3" placeholder="Name">
-                    <mat-hint>
+                           i18n-placeholder="product name" minlength="3" placeholder="Name">
+                    <mat-hint i18n="product name">
                         Product name
                     </mat-hint>
                     <mat-error *ngIf="productForm.controls['name'].invalid">
@@ -18,15 +18,17 @@
                 <mat-form-field class="form-field" hintLabel="Max 10 000 characters">
                 <textarea #productDescription
                           autosize
-                          matInput maxlength="10000" placeholder="Description"></textarea>
+                          i18n-placeholder="description| product description" matInput maxlength="10000"
+                          placeholder="Description"></textarea>
                     <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
                     <mat-error *ngIf="productForm.controls['description'].invalid ">
                         {{getDescriptionErrorMessage()}}
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="form-field" hintLabel="Product Price">
+                <mat-form-field class="form-field" hintLabel="Product Price" i18n-hintlabel="product price">
                     <input #productPrice matInput
+                           i18n-placeholder="product price"
                            placeholder="price" type="number">
                     <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
                         Product description is <strong>required</strong>
@@ -65,8 +67,9 @@
                 <!--Product priority:-->
                 <!--{{product.priority}}-->
                 <mat-radio-group formControlName="address">
-                    <mat-radio-button value="seller">Use your address</mat-radio-button>
-                    <mat-radio-button value="custom">Chose another address</mat-radio-button>
+                    <mat-radio-button i18n="Use your address" value="seller">Use your address</mat-radio-button>
+                    <mat-radio-button i18n="Chose another address" value="custom">Chose another address
+                    </mat-radio-button>
                 </mat-radio-group>
                 <ng-container *ngIf="productForm.controls['address'].value !== 'seller' && product.coordinates"
                 >
@@ -91,15 +94,15 @@
 
 
                 <div>
-                    <button mat-button matStepperNext>Next</button>
+                    <button i18n="Next" mat-button matStepperNext>Next</button>
                 </div>
 
             </form>
         </mat-step>
-        <mat-step [stepControl]="secondFormGroup" label="Upload product images">
+        <mat-step i18n-label="Upload product images" label="Upload product images">
             <div>
                 <form>
-                    <ng-template matStepLabel>Enter product pictures</ng-template>
+                    <ng-template i18n="Select product pictures" matStepLabel>Select product pictures</ng-template>
                     <!--<app-image></app-image>-->
                     <app-image-preview (filesSelected)="onFilesSelected($event)"></app-image-preview>
                     <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
@@ -107,24 +110,24 @@
             </div>
 
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext>Next
+                <button i18n="Back" mat-button matStepperPrevious>Back</button>
+                <button i18n="Next" mat-button matStepperNext>Next
                 </button>
             </div>
         </mat-step>
         <mat-step label="Create product">
             <div class="mat-typography">
-                <ng-template matStepLabel>Done</ng-template>
-                <h3>Create product listing:</h3>
+                <ng-template i18n="Done" matStepLabel>Done</ng-template>
+                <h3 i18n="Create product lisitng">Create product listing:</h3>
                 <app-product-preview *ngIf="product" [product]="product"></app-product-preview>
-                <button (click)="uploadProduct()" mat-raised-button>
+                <button (click)="uploadProduct()" i18n="Create | Create product listing button" mat-raised-button>
                     Create
                 </button>
                 <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
 
                 <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button (click)="stepper.reset()" mat-button>Reset</button>
+                    <button i18n="Back" mat-button matStepperPrevious>Back</button>
+                    <button (click)="stepper.reset()" i18n="Next" mat-button>Reset</button>
                 </div>
             </div>
         </mat-step>

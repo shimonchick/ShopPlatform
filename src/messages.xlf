@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="ng2.template">
+        <body>
+            <trans-unit id="a4e7da5ddd2f2db3f0b322b0a162a524dfe6cb81" datatype="html">
+                <source>Type a message...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        ../node_modules/@progress/kendo-angular-conversational-ui/dist/es2015/chat/chat.component.d.ts
+                    </context>
+                    <context context-type="linenumber">5</context>
+                </context-group>
+                <note priority="1" from="description">The placholder text of the message text input</note>
+                <note priority="1" from="meaning">kendo.chat.messagePlaceholder</note>
+            </trans-unit>
+            <trans-unit id="94410f5d089bd36108a60e3b1b04d47f8ea1b94a" datatype="html">
+                <source>Send...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        ../node_modules/@progress/kendo-angular-conversational-ui/dist/es2015/chat/chat.component.d.ts
+                    </context>
+                    <context context-type="linenumber">8</context>
+                </context-group>
+                <note priority="1" from="description">The text for the Send button</note>
+                <note priority="1" from="meaning">kendo.chat.send</note>
+            </trans-unit>
+            <trans-unit id="6ce0ad211f2dc2fb53e375e20803f8078ab31926" datatype="html">
+                <source>Fill product details</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">5</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">3</context>
+                </context-group>
+                <note priority="1" from="description">Fill product details</note>
+            </trans-unit>
+            <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
+                <source>Name</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">9</context>
+                </context-group>
+                <note priority="1" from="description">product name</note>
+            </trans-unit>
+            <trans-unit id="c940b7dc24c5382a9553f31bc96962ff7e6c7aff" datatype="html">
+                <source>
+                    Product name
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">10</context>
+                </context-group>
+                <note priority="1" from="description">product name</note>
+            </trans-unit>
+            <trans-unit id="eb1fb11b2300177e9e4f66af643664ca98893879" datatype="html">
+                <source>Description</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">22</context>
+                </context-group>
+                <note priority="1" from="description">product description</note>
+                <note priority="1" from="meaning">description</note>
+            </trans-unit>
+            <trans-unit id="f5e6255be7cd5cb3f90a318ccc46c9ba930d4f06" datatype="html">
+                <source>price</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">32</context>
+                </context-group>
+                <note priority="1" from="description">product price</note>
+            </trans-unit>
+            <trans-unit id="77d25d6841d6fd57164759ca2e287482ae17faf4" datatype="html">
+                <source>Use your address</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">70</context>
+                </context-group>
+                <note priority="1" from="description">Use your address</note>
+            </trans-unit>
+            <trans-unit id="37c415e0098b34fdd832764e05c0cb4023be779b" datatype="html">
+                <source>Chose another address</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">71</context>
+                </context-group>
+                <note priority="1" from="description">Chose another address</note>
+            </trans-unit>
+            <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982" datatype="html">
+                <source>Next</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">96</context>
+                </context-group>
+                <note priority="1" from="description">Next</note>
+            </trans-unit>
+            <trans-unit id="53182e8acfe72fafcdeb134c6fad7563ac3c5d11" datatype="html">
+                <source>Select product pictures</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">104</context>
+                </context-group>
+                <note priority="1" from="description">Select product pictures</note>
+            </trans-unit>
+            <trans-unit id="cda31dbd724cf5f4fa7a4274d9120651490c8a8c" datatype="html">
+                <source>Back</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">112</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">128</context>
+                </context-group>
+                <note priority="1" from="description">Back</note>
+            </trans-unit>
+            <trans-unit id="1eec2a367cf2cd3246e9a1d67c55aa48f76d823a" datatype="html">
+                <source>Next
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">113</context>
+                </context-group>
+                <note priority="1" from="description">Next</note>
+            </trans-unit>
+            <trans-unit id="ef683029667c58d358e9f872dee3f32b0313fc0c" datatype="html">
+                <source>Upload product images</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">101</context>
+                </context-group>
+                <note priority="1" from="description">Upload product images</note>
+            </trans-unit>
+            <trans-unit id="8dd413cee2228118c536f503709329a4d1a395e2" datatype="html">
+                <source>Done</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">119</context>
+                </context-group>
+                <note priority="1" from="description">Done</note>
+            </trans-unit>
+            <trans-unit id="b492c820af54c6b072440eec142b7e9848933fb0" datatype="html">
+                <source>Create product listing:</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">120</context>
+                </context-group>
+                <note priority="1" from="description">Create product lisitng</note>
+            </trans-unit>
+            <trans-unit id="54fc6bf595235e3e43ab787b0e962d8df6eb0cca" datatype="html">
+                <source>
+                    Create
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">122</context>
+                </context-group>
+                <note priority="1" from="description">Create product listing button</note>
+                <note priority="1" from="meaning">Create</note>
+            </trans-unit>
+            <trans-unit id="06c663bf1474713f57551123a46b34318543b67d" datatype="html">
+                <source>Reset</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">app/products/product-create/product-create.component.html
+                    </context>
+                    <context context-type="linenumber">129</context>
+                </context-group>
+                <note priority="1" from="description">Next</note>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

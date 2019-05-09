@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private page: Location,
-        private auth: AuthService,
+        public auth: AuthService,
         private db: AngularFirestore,
     ) {
     }

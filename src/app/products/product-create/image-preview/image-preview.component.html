@@ -1,15 +1,13 @@
 <div class="container">
-    <div>
-        <ngx-dropzone
-                (filesDropped)="onSelectFile($event)"
-                accept="image/png,image/jpeg,image/jpg,image/"
-                label="Click or drag images here to upload"
-                maxFileSize="10485760"
-                multiple="true"
-        >
-        </ngx-dropzone>
-        <input (change)="onFileChange($event)" hidden id="hiddenFileInput" type="file">
-    </div>
+    <ngx-dropzone
+            (filesDropped)="onSelectFile($event)"
+            accept="image/png,image/jpeg,image/jpg,image/"
+            i18n-label="Click or drag images here"
+            label="Click or drag images here"
+            maxFileSize="10485760"
+            multiple="true"
+    >
+    </ngx-dropzone>
 
     <!--<input #input hidden type="file" (change)="fileChangeEvent($event)" />-->
     <!--<image-cropper-->
