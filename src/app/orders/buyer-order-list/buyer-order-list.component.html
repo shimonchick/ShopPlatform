@@ -1,18 +1,16 @@
 <ng-container *ngIf=" auth.user$ | async as user">
     <mat-card class="content">
         <mat-card-header>
-            <mat-card-title>
+            <mat-card-title i18n="your orders">
                 Your orders
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <ng-container *ngFor="let order of displayOrders" style="display: flex; flex-wrap: wrap">
-                <mat-card class="card">
+                <mat-card [routerLink]="['/products', order.product.id]"
+                          class="card">
                     <mat-card-header>
-                        <!--<div [ngStyle]="`{background-image: sellers[i].photoURL;}`" mat-card-avatar>-->
-
-                        <!--</div>-->
-                        <mat-card-title *ngIf="order.person">
+                        <mat-card-title *ngIf="order.person" i18n="you ordered from">
                             You ordered from {{order.person.displayName}}
                         </mat-card-title>
                         <mat-card-subtitle>

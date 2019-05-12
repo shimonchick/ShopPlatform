@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {Seller} from '../../models/seller';
-import {last} from 'rxjs/operators';
+import {last, tap} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
@@ -46,7 +46,6 @@ export class ProductCreateComponent implements OnInit {
             [Validators.required, Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)])],
         price: [null, Validators.required],
         address: ['seller', Validators.required],
-        listingType: ['normal', Validators.required],
     });
 
     constructor(
@@ -59,32 +58,15 @@ export class ProductCreateComponent implements OnInit {
 
     }
 
-    // createProduct(name: string, description: string, price: string) {
-    //     const priceInt = parseInt(price, 10);
-    //     this.product = {
-    //         name: name,
-    //         description: description,
-    //         price: priceInt,
-    //         sellerUid: this.user.uid,
-    //         urls: this.downloadUrls,
-    //         coordinates: this.coordinates
-    //     } as Product;
-    // }
-
-    onCategoriesChanged(categories: string[]) {
-        this.categories = categories;
-        console.log(this.categories);
-    }
-
     ngOnInit() {
-        this.auth.user$.subscribe((user: Seller) => {
+        this.auth.user$.pipe(tap((user: Seller) => {
             this.product.coordinates = {
                 lng: user.coordinates.lng,
                 lat: user.coordinates.lat
             };
             this.product.sellerUid = user.uid;
             this.product.priority = 1; // normal offer priority, higher is better
-        });
+        }));
     }
 
     async uploadProduct() {
@@ -148,4 +130,12 @@ export class ProductCreateComponent implements OnInit {
 
     }
 
+    fillProductDetails(name: string, description: string, price: string) {
+        name = name.trim();
+        description = description.trim();
+        const priceInt = parseInt(price.trim(), 10);
+        this.product.name = name;
+        this.product.description = description;
+        this.product.price = priceInt;
+    }
 }

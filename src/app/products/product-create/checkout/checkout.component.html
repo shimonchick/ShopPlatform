@@ -7,7 +7,7 @@
 </button>
 <mat-error *ngIf="error">{{error}}</mat-error>
 <ng-container *ngIf="loading">
-    <span> Processing payment ...</span>
+    <span i18n="processing payment"> Processing payment ...</span>
     <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
 </ng-container>
 <mat-divider></mat-divider>

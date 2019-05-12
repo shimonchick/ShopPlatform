@@ -39,8 +39,8 @@ export class ImagePreviewComponent {
 //  @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
 
 
-    drop(event: CdkDragDrop<any>) {
-        moveItemInArray(this.files, event.previousIndex, event.currentIndex);
+    drop(event: CdkDragDrop<File>) {
+        moveItemInArray(this.urls, event.previousIndex, event.currentIndex);
     }
 
     // imageCropped(event: ImageCroppedEvent) {
