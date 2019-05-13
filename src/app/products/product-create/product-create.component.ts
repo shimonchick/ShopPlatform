@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {Seller} from '../../models/seller';
-import {last, tap} from 'rxjs/operators';
+import {last} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
@@ -59,14 +59,14 @@ export class ProductCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.auth.user$.pipe(tap((user: Seller) => {
+        this.auth.user$.subscribe((user: Seller) => {
             this.product.coordinates = {
                 lng: user.coordinates.lng,
                 lat: user.coordinates.lat
             };
             this.product.sellerUid = user.uid;
             this.product.priority = 1; // normal offer priority, higher is better
-        }));
+        });
     }
 
     async uploadProduct() {
