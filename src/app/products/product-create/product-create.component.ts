@@ -1,15 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryTree, Product} from '../../models/product';
+import {CategoryTree, PreviewProduct, Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import {AuthService} from '../../services/auth.service';
 import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {BehaviorSubject, forkJoin, from, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, merge, Observable, Subject} from 'rxjs';
 import {Seller} from '../../models/seller';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
+import {defaultIfEmpty, last, map, startWith} from 'rxjs/operators';
+import {MapsLocation} from '../../models/location';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
+import {possibleCategories} from './choose-category/possible-categories';
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -30,24 +33,27 @@ export class ProductCreateComponent implements OnInit {
     // secondFormGroup: FormGroup;
 
     files: File[] = [];
-    downloadUrls: string[];
 
     done = false;
-    categories: CategoryTree;
-    previewProduct: Product;
-    previewProduct$ = new BehaviorSubject<Product>(null);
-    coordinates;
+    categoryTree: CategoryTree;
+    previewProduct$: Observable<PreviewProduct>;
+    product = new Product();
+    coordinates: MapsLocation;
     private NAME_MIN_LENGTH = 3;
     private NAME_MAX_LENGTH = 50;
     private DESCRIPTION_MAX_LENGTH = 10000;
     productForm = this.formBuilder.group({
         name: [null, Validators.compose(
             [Validators.required, Validators.minLength(this.NAME_MIN_LENGTH), Validators.maxLength(this.NAME_MAX_LENGTH)])],
+        categoryTree: [null, Validators.required],
         description: [null, Validators.compose(
             [Validators.required, Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)])],
         price: [null, Validators.required],
         address: ['seller', Validators.required],
+        listingType: ['normal', Validators.required],
     });
+    private urlsChanges = new Subject<string[]>();
+    readonly allCategories = possibleCategories;
 
     constructor(
         private productService: ProductService,
@@ -59,35 +65,39 @@ export class ProductCreateComponent implements OnInit {
     ) {
     }
 
-
-    createProduct(name: string, description: string, price: string) {
-        const priceInt = parseInt(price, 10);
-        this.previewProduct = {
-            name: name,
-            description: description,
-            price: priceInt,
-            sellerUid: this.user.uid,
-            urls: this.downloadUrls,
-            coordinates: this.coordinates
-        } as Product;
-    }
-
     ngOnInit() {
-        this.auth.user$.subscribe(user => {
-            this.user = user as Seller;
-            this.coordinates = {
-                longitude: this.user.coordinates.lng,
-                latitude: this.user.coordinates.lat
+        this.auth.user$.subscribe((user: Seller) => {
+            this.product.coordinates = {
+                lng: user.coordinates.lng,
+                lat: user.coordinates.lat
             };
+            this.product.sellerUid = user.uid;
+            this.product.priority = 1; // normal offer priority, higher is better
         });
+        this.previewProduct$ = combineLatest(
+            this.productForm.controls['name'].valueChanges.pipe(
+                startWith('Name')),
+            this.productForm.controls['price'].valueChanges.pipe(startWith(0)),
+            this.urlsChanges.pipe(startWith(['https://via.placeholder.com/500']))
+            // urls as well
+        ).pipe(
+            map(([name, price, urls]: [string, number, string[]]) => {
+                return {
+                    name: name,
+                    price: price,
+                    urls: urls
+                };
+            })
+        );
     }
 
     async uploadProduct() {
-
-        await this.productService.createProduct(this.previewProduct);
-        this.router.navigateByUrl('/products');
-        // todo
-
+        this.done = false;
+        await this.uploadAllFiles();
+        const productId = await this.productService.createProduct(this.product);
+        this.done = true;
+        alert('product successfully created');
+        this.router.navigate(['products', productId]);
     }
 
 
@@ -117,30 +127,29 @@ export class ProductCreateComponent implements OnInit {
         this.files = files;
     }
 
-    uploadFile(file: File): Observable<UploadTaskSnapshot> {
+    uploadFile(file: File): Promise<UploadTaskSnapshot> {
         const path = `images/${Date.now()}_${file.name}`;
         const task = this.storage.upload(path, file);
-        return task.snapshotChanges();
+        return task.snapshotChanges().pipe(last()).toPromise();
     }
 
-    UploadAllFiles() {
-
-        forkJoin(this.files.map((file) => this.uploadFile(file)))
-            .subscribe(uploads => {
-
-                const downloadUrlObservables: Observable<any>[] = uploads
-                    .map((upload) => from(upload.ref.getDownloadURL()));
-
-                forkJoin(downloadUrlObservables).subscribe(downloadUrls => {
-                    this.downloadUrls = downloadUrls;
-                    this.done = true;
-                });
-            });
+    async uploadAllFiles() {
+        const uploads = await Promise.all(this.files.map(file => this.uploadFile(file)));
+        this.product.urls = await Promise.all(uploads.map(upload => upload.ref.getDownloadURL()));
     }
 
     selectMarker(lat: number, lng: number) {
-        this.coordinates.latitude = lat;
-        this.coordinates.longitude = lng;
+        this.product.coordinates.lat = lat;
+        this.product.coordinates.lng = lng;
+    }
+
+
+    onListingPayAttempt(confirmation: any, priority: number) {
+        if (!confirmation.paid || confirmation.status !== 'succeeded') {
+            return;
+        }
+        this.product.priority = priority;
+
     }
 
     chooseCategory() {
@@ -148,8 +157,16 @@ export class ProductCreateComponent implements OnInit {
             maxHeight: '90vh'
         });
 
-        dialogRef.afterClosed().subscribe(categories => {
-            this.categories = categories;
+        dialogRef.afterClosed().subscribe((categoryTree: CategoryTree) => {
+            this.categoryTree = categoryTree;
+            this.productForm.controls['categoryTree'].setValue(this.toSelectOption(categoryTree));
         });
+    }
+
+    onUrlsSelected($event: string[]) {
+        this.urlsChanges.next($event);
+    }
+    toSelectOption(categoryTree: CategoryTree) {
+        return `${categoryTree.lvl0} -> ${categoryTree.lvl1}`;
     }
 }

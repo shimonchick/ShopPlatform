@@ -1,87 +1,99 @@
 <ng-container *ngIf="auth.user$ | async as user">
+    <mat-tab-group>
+        <mat-tab label="Seller settings">
+            <form (ngSubmit)="registerSeller(firstName.value, lastName.value, phoneNumber.value)"
+                  [formGroup]="addressForm"
+                  class="wrapper" novalidate>
+                <mat-card class="shipping-card">
+                    <mat-card-header>
+                        <mat-card-title>Settings</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col">
+                                <mat-form-field class="full-width">
+                                    <input #firstName formControlName="firstName" matInput placeholder="First name">
+                                    <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
+                                        First name is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <mat-form-field class="full-width">
+                                    <input #lastName formControlName="lastName" matInput placeholder="Last name">
+                                    <mat-error *ngIf="addressForm.controls['lastName'].hasError('required')">
+                                        Last name is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <mat-form-field class="full-width" hintLabel="Your phone number" maxlength="11">
+                                <input #phoneNumber formControlName="phoneNumber" matInput placeholder="eg. 0886..."
+                                       type="number">
+                                <mat-hint align="end">{{phoneNumber.value.length}} / 11</mat-hint>
+                                <mat-error *ngIf="addressForm.controls['phoneNumber'].hasError('required')">
+                                    Phone number is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <mat-form-field class="full-width" hintLabel="Your address">
 
-    <form (ngSubmit)="registerSeller(firstName.value, lastName.value, phoneNumber.value)" [formGroup]="addressForm"
-          class="wrapper" novalidate>
-        <mat-card class="shipping-card">
-            <mat-card-header>
-                <mat-card-title>Settings</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <div class="row">
-                    <div class="col">
-                        <mat-form-field class="full-width">
-                            <input #firstName formControlName="firstName" matInput placeholder="First name">
-                            <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
-                                First name is <strong>required</strong>
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col">
-                        <mat-form-field class="full-width">
-                            <input #lastName formControlName="lastName" matInput placeholder="Last name">
-                            <mat-error *ngIf="addressForm.controls['lastName'].hasError('required')">
-                                Last name is <strong>required</strong>
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <mat-form-field class="full-width" hintLabel="Your phone number" maxlength="11">
-                        <input #phoneNumber formControlName="phoneNumber" matInput placeholder="eg. 0886..."
-                               type="number">
-                        <mat-hint align="end">{{phoneNumber.value.length}} / 11</mat-hint>
-                        <mat-error *ngIf="addressForm.controls['phoneNumber'].hasError('required')">
-                            Phone number is <strong>required</strong>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <mat-form-field class="full-width" hintLabel="Your address">
+                                    <input (change)="addressToCoordinates(); showLocation()"
+                                           [value]="address" matInput placeholder="eg. Sofia ..."
+                                    >
+                                </mat-form-field>
+                            </div>
 
-                            <input (change)="addressToCoordinates(); showLocation()"
-                                   [value]="address" matInput placeholder="eg. Sofia ..."
+                        </div>
+                        <p> Choose address on map:</p>
+                        <div *ngIf="location" class="map-container">
+                            <agm-map
+                                    (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
+                                    (mapReady)="mapReady()"
+                                    [fullscreenControl]="true"
+                                    [latitude]="location.lat"
+                                    [longitude]="location.lng"
+
                             >
-                        </mat-form-field>
-                    </div>
-
-                </div>
-                <p> Choose address on map:</p>
-                <div *ngIf="location" class="map-container">
-                    <agm-map
-                            (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
-                            (mapReady)="mapReady()"
-                            [fullscreenControl]="true"
-                            [latitude]="location.lat"
-                            [longitude]="location.lng"
-
-                    >
 
 
-                        <agm-marker (dragEnd)="selectMarker($event.coords.lat, $event.coords.lng)"
-                                    *ngIf="selectedMarker"
-                                    [latitude]="selectedMarker.lat"
-                                    [longitude]="selectedMarker.lng"
-                                    [markerDraggable]="true"
+                                <agm-marker (dragEnd)="selectMarker($event.coords.lat, $event.coords.lng)"
+                                            *ngIf="selectedMarker"
+                                            [latitude]="selectedMarker.lat"
+                                            [longitude]="selectedMarker.lng"
+                                            [markerDraggable]="true"
 
-                        >
+                                >
 
-                        </agm-marker>
-                    </agm-map>
-                    <p *ngIf="loading">Loading...</p>
-                    <!--<p>Lat: {{selectedMarker?.lat}} Lng: {{selectedMarker?.lng}}</p>-->
-                </div>
-            </mat-card-content>
-            <mat-card-actions>
-                <button *ngIf="!user.roles.seller" [disabled]="!addressForm.valid" class="full-width" color="primary"
-                        mat-raised-button type="submit">
-                    Register as seller and for one click buy
-                </button>
-                <button *ngIf="user.roles.seller" [disabled]="!addressForm.valid" class="full-width" color="primary"
-                        mat-raised-button type="submit">
-                    Update information
-                </button>
-            </mat-card-actions>
-        </mat-card>
-    </form>
+                                </agm-marker>
+                            </agm-map>
+                            <p *ngIf="loading">Loading...</p>
+                            <!--<p>Lat: {{selectedMarker?.lat}} Lng: {{selectedMarker?.lng}}</p>-->
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button *ngIf="!user.roles.seller" [disabled]="!addressForm.valid" class="full-width"
+                                color="primary"
+                                mat-raised-button type="submit">
+                            Register as seller and for one click buy
+                        </button>
+                        <button *ngIf="user.roles.seller" [disabled]="!addressForm.valid" class="full-width"
+                                color="primary"
+                                mat-raised-button type="submit">
+                            Update information
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </form>
+
+        </mat-tab>
+        <mat-tab label="Attach card">
+            <app-attach-card></app-attach-card>
+
+        </mat-tab>
+    </mat-tab-group>
+
 </ng-container>

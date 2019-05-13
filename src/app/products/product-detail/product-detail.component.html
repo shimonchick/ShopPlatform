@@ -33,12 +33,13 @@
                 </button>
             </div>
             <agm-map *ngIf="showMap"
+                     [longitude]="seller.coordinates.lng"
                      [fullscreenControl]="true"
                      [latitude]="seller.coordinates.lat"
-                     [longitude]="seller.coordinates.lon">
+                     [zoom]="10">
                 <agm-marker
                         [latitude]="seller.coordinates.lat"
-                        [longitude]="seller.coordinates.lon">
+                        [longitude]="seller.coordinates.lng">
                 </agm-marker>
             </agm-map>
             <div *ngIf="!showMap">

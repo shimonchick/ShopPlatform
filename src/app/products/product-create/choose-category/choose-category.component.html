@@ -2,8 +2,9 @@
     <mat-step [stepControl]="categoryControl">
         <ng-template matStepLabel>Lvl 0</ng-template>
 
-        <div *ngIf="allCategories$ | async as allLvl0Categories; else loadingSpinner" fxLayout="row wrap" fxLayoutAlign="space-between stretch">
-            <mat-card *ngFor="let category of allLvl0Categories" (click)="chooseCategoryLvl0(category)"
+<!--        <div *ngIf="allCategories; else loadingSpinner" fxLayout="row wrap" fxLayoutAlign="space-between stretch">-->
+        <div fxLayout="row wrap" fxLayoutAlign="space-between stretch">
+            <mat-card *ngFor="let category of allCategories" (click)="chooseCategoryLvl0(category)"
                       fxFlex="22%" fxFlex.md="30%" fxFlex.sm="40%" fxFlex.xs="100%">
                 <mat-card-header>
                     <mat-card-title>{{category.name}}</mat-card-title>
@@ -37,6 +38,8 @@
 </mat-horizontal-stepper>
 
 
-<ng-template #loadingSpinner>
-    <mat-spinner></mat-spinner>
-</ng-template>
+<!--<ng-template #loadingSpinner>-->
+<!--    <div fxLayout fxLayoutAlign="center center">-->
+<!--        <mat-spinner></mat-spinner>-->
+<!--    </div>-->
+<!--</ng-template>-->

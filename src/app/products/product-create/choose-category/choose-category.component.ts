@@ -2,9 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatStepper} from '@angular/material';
 import {Category, CategoryTree} from '../../../models/product';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {possibleCategories} from './possible-categories';
 
 @Component({
     selector: 'app-choose-category',
@@ -15,7 +14,8 @@ export class ChooseCategoryComponent implements OnInit {
     @ViewChild(MatStepper)
     stepper: MatStepper;
 
-    allCategories$: Observable<Category[]>;
+    // allCategories$: Observable<Category[]>;
+    allCategories = possibleCategories;
     loading = true;
     selectedCategory: Category;
     categoryControl = new FormGroup({
@@ -27,17 +27,17 @@ export class ChooseCategoryComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.allCategories$ = this.db.collection('categories').snapshotChanges().pipe(
-            tap((it) => {
-                console.log(it);
-                this.loading = false;
-            }),
-            map(snapshots => snapshots.map(snapshot => {
-                return {
-                    name: snapshot.payload.doc.id, ...snapshot.payload.doc.data()
-                } as Category;
-            }))
-        );
+        // this.allCategories$ = this.db.collection('categories').snapshotChanges().pipe(
+        //     tap((it) => {
+        //         console.log(it);
+        //         this.loading = false;
+        //     }),
+        //     map(snapshots => snapshots.map(snapshot => {
+        //         return {
+        //             name: snapshot.payload.doc.id, ...snapshot.payload.doc.data()
+        //         } as Category;
+        //     }))
+        // );
     }
 
     chooseCategoryTree(subCategory: string) {

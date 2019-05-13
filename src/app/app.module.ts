@@ -47,7 +47,6 @@ import {ChatModule} from './chat/chat.module';
         CoreModule,
         FlexLayoutModule,
         ReactiveFormsModule,
-        FlexLayoutModule,
         MatPasswordStrengthModule,
         SettingsModule,
         LayoutModule,

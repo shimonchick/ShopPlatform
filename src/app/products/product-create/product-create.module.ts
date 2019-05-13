@@ -1,7 +1,5 @@
 import {NgModule} from '@angular/core';
 import {ProductCreateComponent} from './product-create.component';
-import {UploaderComponent} from './uploader/uploader.component';
-import {UploadTaskComponent} from './upload-task/upload-task.component';
 import {SharedModule} from '../../shared.module';
 import {ProductCreateRoutingModule} from './product-create-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -12,16 +10,18 @@ import {ImageCropperModule} from 'ngx-img-cropper';
 import {AgmCoreModule} from '@agm/core';
 import {ProductSharedModule} from '../product-shared.module';
 import { ChooseCategoryComponent } from './choose-category/choose-category.component';
+import {CheckoutDirective} from './checkout.directive';
+import {CheckoutComponent} from './checkout/checkout.component';
 
 @NgModule({
     declarations: [
         ProductCreateComponent,
-        UploaderComponent,
-        UploadTaskComponent,
         // ImageComponent,
         ImagePreviewComponent,
-        ChooseCategoryComponent,
 
+        CheckoutDirective,
+        CheckoutComponent,
+        ChooseCategoryComponent,
     ],
     imports: [
         SharedModule,

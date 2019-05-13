@@ -15,15 +15,16 @@
   width: 100%;
 }
 
-
-.form-full-width {
-  min-width: 150px;
-  max-width: 500px;
+mat-form-field {
   width: 100%;
-}
-
-.form-field {
-  width: 100%;
-  //max-width: 600px;
   margin-top: 10px;
+}
+//.form-field {
+//  width: 100%;
+//  //max-width: 600px;
+//  margin-top: 10px;
+//}
+
+.divider {
+  padding: 4px;
 }

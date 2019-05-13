@@ -14,6 +14,8 @@ export class ImagePreviewComponent {
 
     @Output()
     filesSelected = new EventEmitter<File[]>();
+    @Output()
+    urlsSelected = new EventEmitter<string[]>();
 
     files: File[] = [];
     urls: (string | ArrayBuffer)[] = [];
@@ -78,6 +80,7 @@ export class ImagePreviewComponent {
         }
 
         // this.imageChangedEvent = this.displayFiles[0].file;
+        this.urlsSelected.emit(this.urls as string[]);
         console.log(this.urls);
     }
 
