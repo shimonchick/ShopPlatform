@@ -6,6 +6,7 @@
     <!--<div class="appbar-actions" fxLayout fxLayoutAlign="space-around center">-->
     <button class="spaced-out-button" *ngIf="auth.user$ | async"
             mat-raised-button
+            i18n="add"
             routerLink="/products/create">
         <mat-icon>add</mat-icon>
         Add
@@ -31,17 +32,26 @@
 
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item routerLink="settings">Settings</button>
+                    <button i18n="settings" mat-menu-item routerLink="settings">Settings</button>
 
-                    <button *ngIf="auth.getSnapshotUser().roles?.seller" mat-menu-item
+                    <button *ngIf="auth.getSnapshotUser().roles?.seller"
+                            i18n="orders received"
+                            mat-menu-item
                             routerLink="orders/seller">
                         Orders received
                     </button>
-                    <button *ngIf="auth.getSnapshotUser().roles?.buyer" mat-menu-item routerLink="orders/buyer">
+                    <button *ngIf="auth.getSnapshotUser().roles?.buyer"
+                            i18n="orders sent"
+                            mat-menu-item
+                            routerLink="orders/buyer">
                         Orders sent
                     </button>
 
-                    <button (click)="auth.signOut()" mat-menu-item>Log out</button>
+                    <button (click)="auth.signOut()"
+                            i18n="log out"
+                            mat-menu-item
+                    >Log out
+                    </button>
                 </mat-menu>
             </div>
         </ng-template>

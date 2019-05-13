@@ -17,9 +17,7 @@ export class UserService {
     }
 
     async getUserByIdAsPromise(id: string) {
-        const user: User = await this.db.doc<User>(`users/${id}`).valueChanges().pipe(first()).toPromise();
-        console.log(user);
-        return user;
+        return this.db.doc<User>(`users/${id}`).valueChanges().pipe(first()).toPromise();
     }
 
     getUserById(id: string): Observable<User> {

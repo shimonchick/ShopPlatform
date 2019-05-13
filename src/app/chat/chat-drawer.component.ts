@@ -27,7 +27,7 @@ export class ChatDrawerComponent implements OnInit {
                 private chatService: ChatService,
                 public auth: AuthService,
                 private db: AngularFirestore,
-                private mediatorService: ChatMediatorService) {
+                public mediatorService: ChatMediatorService) {
     }
 
     ngOnInit() {

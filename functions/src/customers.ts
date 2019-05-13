@@ -33,7 +33,7 @@ export const createCustomer = async (uid: any) => {
 
     await updateUser(uid, {stripeCustomerId: customer.id});
 
-    return customer;
+    return customer; // customer.id
 };
 
 

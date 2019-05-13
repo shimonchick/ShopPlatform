@@ -50,7 +50,6 @@ export class ProductCreateComponent implements OnInit {
             [Validators.required, Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)])],
         price: [null, Validators.required],
         address: ['seller', Validators.required],
-        listingType: ['normal', Validators.required],
     });
     private urlsChanges = new Subject<string[]>();
     readonly allCategories = possibleCategories;
@@ -63,14 +62,16 @@ export class ProductCreateComponent implements OnInit {
         private storage: AngularFireStorage,
         private dialog: MatDialog
     ) {
+
     }
 
     ngOnInit() {
         this.auth.user$.subscribe((user: Seller) => {
-            this.product.coordinates = {
+            this.product.coordinates = this.product.coordinates || {
                 lng: user.coordinates.lng,
                 lat: user.coordinates.lat
             };
+            console.log(this.product.coordinates);
             this.product.sellerUid = user.uid;
             this.product.priority = 1; // normal offer priority, higher is better
         });
@@ -152,6 +153,14 @@ export class ProductCreateComponent implements OnInit {
 
     }
 
+    fillProductDetails(name: string, description: string, price: string) {
+        name = name.trim();
+        description = description.trim();
+        const priceInt = parseInt(price.trim(), 10);
+        this.product.name = name;
+        this.product.description = description;
+        this.product.price = priceInt;
+    }
     chooseCategory() {
         const dialogRef = this.dialog.open(ChooseCategoryComponent, {
             maxHeight: '90vh'

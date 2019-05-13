@@ -1,14 +1,14 @@
 <div fxLayoutAlign="center start">
     <mat-vertical-stepper #stepper linear fxFlex="50%" fxFlex.lt-sm="100%">
-        <mat-step [stepControl]="productForm" label="Fill product details">
+        <mat-step i18n-label="Fill product details" [stepControl]="productForm" label="Fill product details">
             <form [formGroup]="productForm">
-                <ng-template matStepLabel>Fill product details</ng-template>
+                <ng-template i18n="Fill product details" matStepLabel>Fill product details</ng-template>
                 <mat-form-field class="form-field">
                     <input #productName
                            formControlName="name"
-                           matInput maxlength="50"
-                           minlength="3" placeholder="Name">
-                    <mat-hint>
+                           matInput
+                           i18n-placeholder="product name" minlength="3" placeholder="Name">
+                    <mat-hint i18n="product name">
                         Product name
                     </mat-hint>
                     <mat-error *ngIf="productForm.controls['name'].invalid">
@@ -26,22 +26,31 @@
 
                 </mat-form-field>
 
-                <mat-form-field hintLabel="Max 10 000 characters">
-                    <textarea #productDescription
-                              formControlName="description"
-                              autosize
-                              matInput maxlength="10000" 
-                              placeholder="Description"></textarea>
+
+                <mat-form-field appearance="outline"
+                                class="form-field"
+                                hintLabel="Max 10 000 characters"
+                                i18n-hintlabel="Max 10 000 characters">
+                <textarea #productDescription
+                          cdkAutosizeMaxRows="10"
+                          cdkAutosizeMinRows="5"
+                          cdkTextareaAutosize
+                          formControlName="description"
+                          i18n-placeholder="description| product description" matInput maxlength="10000"
+                          placeholder="Description"></textarea>
                     <mat-hint align="end">{{productDescription.value?.length || 0}}/10000</mat-hint>
                     <mat-error *ngIf="productForm.controls['description'].invalid ">
                         {{getDescriptionErrorMessage()}}
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field hintLabel="Product Price">
-                    <input #productPrice matInput
+                <mat-form-field class="form-field" hintLabel="Product Price" i18n-hintlabel="product price">
+                    <input #productPrice
                            formControlName="price"
-                           placeholder="price" type="number">
+                           matInput
+                           i18n-placeholder="product price"
+                           placeholder="price"
+                           type="number">
                     <mat-error *ngIf="productForm.controls['price'].hasError('required') ">
                         Product description is <strong>required</strong>
                     </mat-error>
@@ -49,6 +58,7 @@
                 </mat-form-field>
 
                 <app-checkout
+                        class="form-full-width"
                         (paid)="onListingPayAttempt($event, 2)"
                         *ngIf="product.priority === 1"
                         [amount]="100"
@@ -58,6 +68,7 @@
                 ></app-checkout>
 
                 <app-checkout
+                        class="form-full-width"
                         (paid)="onListingPayAttempt($event, 3)"
                         *ngIf="product.priority === 1"
                         [amount]="200"
@@ -65,20 +76,23 @@
                         [description]="'TOP product listing'"
                         [listingType]="'TOP'"
                 ></app-checkout>
-                <mat-radio-group formControlName="address">
-                    <mat-radio-button value="seller">Use your address</mat-radio-button>
-                    <mat-radio-button value="custom">Chose another address</mat-radio-button>
+                <!--Product priority:-->
+                <!--{{product.priority}}-->
+                <mat-radio-group class="form-full-width" formControlName="address">
+                    <mat-radio-button i18n="Use your address" value="seller">Use your address</mat-radio-button>
+                    <mat-radio-button i18n="Chose another address" value="custom">Chose another address
+                    </mat-radio-button>
                 </mat-radio-group>
                 <ng-container *ngIf="productForm.controls['address'].value !== 'seller' && product.coordinates"
                 >
-                    <agm-map
+                    <agm-map (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
 
-                            (mapClick)="selectMarker($event.coords.lat, $event.coords.lng)"
-                            [fullscreenControl]="true"
-                            [latitude]="product.coordinates.lat"
-                            [longitude]="product.coordinates.lng"
-                            [zoom]="12"
-                            style="height: 300px;"
+                             [fullscreenControl]="true"
+                             [latitude]="product.coordinates.lat"
+                             [longitude]="product.coordinates.lng"
+                             [zoom]="12"
+                             class="form-full-width"
+                             style="height: 300px;"
                     >
                         <agm-marker *ngIf="product.coordinates"
                                     [latitude]="product.coordinates.lat"
@@ -90,41 +104,57 @@
 
                 </ng-container>
 
+                <div style="margin: 10px;">
+                    <button (click)="fillProductDetails(productName.value, productDescription.value, productPrice.value)"
+                            i18n="Next"
+                            mat-raised-button
+                            matStepperNext>
+                        Next
+                    </button>
 
-                <div>
-                    <button mat-button matStepperNext>Next</button>
                 </div>
-            </form>
 
+            </form>
         </mat-step>
-        <mat-step label="Upload product images">
-            <div>
-                <form>
-                    <ng-template matStepLabel>Enter product pictures</ng-template>
-                    <!--<app-image></app-image>-->
-                    <app-image-preview (filesSelected)="onFilesSelected($event)"
-                                       (urlsSelected)="onUrlsSelected($event)"></app-image-preview>
-                    <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
-                </form>
+        <mat-step i18n-label="Upload product images" label="Upload product images">
+            <div style="align-self: center">
+                <ng-template i18n="Select product pictures" matStepLabel>Select product pictures</ng-template>
+                <!--<app-image></app-image>-->
+                <app-image-preview (filesSelected)="onFilesSelected($event)"
+                (urlsSelected)="onUrlsSelected($event)"></app-image-preview>
+                <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
             </div>
 
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext>Next</button>
+                <button i18n="Back" mat-raised-button matStepperPrevious style="margin: 10px 10px;">Back</button>
+                <button i18n="Next" mat-raised-button matStepperNext style="margin: 10px 10px;">Next
+                </button>
             </div>
         </mat-step>
         <mat-step label="Create product">
             <div class="mat-typography">
-                <ng-template matStepLabel>Done</ng-template>
-                <h3>Create product listing:</h3>
-                <button (click)="uploadProduct()" mat-raised-button>
+                <ng-template i18n="Done" matStepLabel>Done</ng-template>
+                <h3 i18n="Create product lisitng">Create product listing:</h3>
+                <!--<div fxLayout="row wrap" fxLayoutAlign="space-around center" style="margin: 20px">-->
+                <!--<app-product-preview-->
+                <!--*ngIf="product"-->
+                <!--[product]="product"-->
+                <!--fxFlex="25%" fxFlex.md="33%" fxFlex.sm="50%" fxFlex.xs="100%"-->
+                <!--&gt;</app-product-preview>-->
+
+                <!--</div>-->
+                <button (click)="uploadProduct()"
+                        color="primary"
+                        i18n="Create | Create product listing button"
+                        mat-raised-button>
                     Create
                 </button>
                 <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
 
                 <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button (click)="stepper.reset()" mat-button>Reset</button>
+                    <button i18n="Back" mat-raised-button matStepperPrevious style="margin: 10px 10px;">Back</button>
+                    <button (click)="stepper.reset()" i18n="Reset" mat-raised-button style="margin: 10px 10px;">Reset
+                    </button>
                 </div>
             </div>
         </mat-step>

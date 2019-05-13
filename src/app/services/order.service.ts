@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AuthService} from './auth.service';
 import {map, switchMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {Order} from '../models/order';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +36,7 @@ export class OrderService {
 
     }
 
-    getBuyerOrders() {
+    getBuyerOrders(): Observable<Order[]> {
         return this.auth.user$.pipe(
             switchMap(user => {
                 return this.db
@@ -45,7 +47,7 @@ export class OrderService {
                             return actions.map(a => {
                                 const data: Object = a.payload.doc.data();
                                 const id = a.payload.doc.id;
-                                return {id, ...data};
+                                return {orderId: id, ...data} as Order;
                             });
                         })
                     );

@@ -1,7 +1,10 @@
 
 .card {
   max-width: 300px;
-  margin: 10px auto;
+  //max-height: 300px;
+  //overflow: hidden;
+  //text-overflow: ellipsis;
+  margin: 10px 10px;
   align-content: space-around;
 }
 

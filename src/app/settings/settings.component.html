@@ -41,9 +41,10 @@
                             <div class="col">
                                 <mat-form-field class="full-width" hintLabel="Your address">
 
-                                    <input (change)="addressToCoordinates(); showLocation()"
-                                           [value]="address" matInput placeholder="eg. Sofia ..."
-                                    >
+                                    <input (change)="showLocation()"
+                                           formControlName="location"
+                                           matInput placeholder="eg. Sofia ..."
+                                    />
                                 </mat-form-field>
                             </div>
 
@@ -88,11 +89,6 @@
                     </mat-card-actions>
                 </mat-card>
             </form>
-
-        </mat-tab>
-        <mat-tab label="Attach card">
-            <app-attach-card></app-attach-card>
-
         </mat-tab>
     </mat-tab-group>
 

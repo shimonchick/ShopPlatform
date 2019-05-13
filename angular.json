@@ -44,6 +44,14 @@
             "scripts": []
           },
           "configurations": {
+            "bg": {
+              "aot": true,
+              "outputPath": "dist/ShopPlatform-bg/",
+              "i18nFile": "src/locale/messages.bg.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "bg",
+              "baseHref": "/bg/"
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -78,6 +86,10 @@
             "browserTarget": "ShopPlatform:build"
           },
           "configurations": {
+            "bg": {
+              "browserTarget": "ShopPlatform:build:bg",
+              "baseHref": "/bg/"
+            },
             "production": {
               "browserTarget": "ShopPlatform:build:production"
             }

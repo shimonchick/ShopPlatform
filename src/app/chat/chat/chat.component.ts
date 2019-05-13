@@ -20,7 +20,7 @@ export class ChatComponent implements OnInit {
     messages$: Observable<Message[]>;
     chatRef$ = new BehaviorSubject<AngularFirestoreDocument>(null);
 
-    constructor(private auth: AuthService,
+    constructor(public auth: AuthService,
                 private db: AngularFirestore,
                 private mediatorService: ChatMediatorService) {
     }

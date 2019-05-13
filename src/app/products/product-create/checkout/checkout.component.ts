@@ -40,8 +40,10 @@ export class CheckoutComponent implements OnInit {
             source: async (source) => {
                 this.loading = true;
                 const user = await this.auth.getUser();
-                const fun = this.functions.httpsCallable('stripeCreateCharge');
-                const confirmation = await fun({source: source.id, uid: user.uid, amount: this.amount})
+                const stripeAttachSource = this.functions.httpsCallable('stripeAttachSource');
+                const stripeCreateCharge = this.functions.httpsCallable('stripeCreateCharge');
+                await stripeAttachSource({uid: user.uid, source: source.id}).toPromise();
+                const confirmation = await stripeCreateCharge({source: source.id, uid: user.uid, amount: this.amount})
                     .pipe(catchError(this.handleError))
                     .toPromise();
                 this.loading = false;
