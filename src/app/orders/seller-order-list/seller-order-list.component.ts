@@ -25,7 +25,7 @@ export class SellerOrderListComponent implements OnInit {
 
     async ngOnInit() {
         const orders: Order[] = await this.orderService.getBuyerOrders().pipe(first(), tap(console.log)).toPromise();
-        const buyers: User[] = await Promise.all(orders.map(order => this.userService.getUserByIdAsPromise(order.buyerId)));
+        const buyers: User[] = await Promise.all(orders.map(order => this.userService.getUserByIdAsPromise(order.sellerId)));
         const products: Product[] = await Promise.all(orders.map(order => {
             return this.productService.getProduct(order.productId).pipe(first()).toPromise();
         }));

@@ -56,28 +56,6 @@
                     </mat-error>
 
                 </mat-form-field>
-
-                <app-checkout
-                        class="form-full-width"
-                        (paid)="onListingPayAttempt($event, 2)"
-                        *ngIf="product.priority === 1"
-                        [amount]="100"
-                        [color]="'primary'"
-                        [description]="'VIP product listing'"
-                        [listingType]="'VIP'"
-                ></app-checkout>
-
-                <app-checkout
-                        class="form-full-width"
-                        (paid)="onListingPayAttempt($event, 3)"
-                        *ngIf="product.priority === 1"
-                        [amount]="200"
-                        [color]="'accent'"
-                        [description]="'TOP product listing'"
-                        [listingType]="'TOP'"
-                ></app-checkout>
-                <!--Product priority:-->
-                <!--{{product.priority}}-->
                 <mat-radio-group class="form-full-width" formControlName="address">
                     <mat-radio-button i18n="Use your address" value="seller">Use your address</mat-radio-button>
                     <mat-radio-button i18n="Chose another address" value="custom">Chose another address
@@ -135,22 +113,35 @@
             <div class="mat-typography">
                 <ng-template i18n="Done" matStepLabel>Done</ng-template>
                 <h3 i18n="Create product lisitng">Create product listing:</h3>
-                <!--<div fxLayout="row wrap" fxLayoutAlign="space-around center" style="margin: 20px">-->
-                <!--<app-product-preview-->
-                <!--*ngIf="product"-->
-                <!--[product]="product"-->
-                <!--fxFlex="25%" fxFlex.md="33%" fxFlex.sm="50%" fxFlex.xs="100%"-->
-                <!--&gt;</app-product-preview>-->
-
-                <!--</div>-->
+                <mat-progress-spinner
+                        *ngIf="uploading"
+                        mode="indeterminate"></mat-progress-spinner>
                 <button (click)="uploadProduct()"
-                        color="primary"
-                        i18n="Create | Create product listing button"
+                        *ngIf="!uploading"
+                        i18n="Upload | Upload product listing button"
                         mat-raised-button>
-                    Create
+                    Uplaod normal product listing
                 </button>
-                <mat-progress-bar *ngIf="!done" mode="indeterminate"></mat-progress-bar>
 
+                <app-checkout
+                        (paid)="onListingPayAttempt($event, 2)"
+                        *ngIf="product.priority === 1 && !uploading"
+                        [amount]="100"
+                        [color]="'primary'"
+                        [description]="'VIP product listing'"
+                >
+                    Upload VIP product listing
+                </app-checkout>
+
+                <app-checkout
+                        (paid)="onListingPayAttempt($event, 3)"
+                        *ngIf="product.priority === 1 && !uploading"
+                        [amount]="200"
+                        [color]="'accent'"
+                        [description]="'TOP product listing'"
+                >
+                    Upload TOP product listing
+                </app-checkout>
                 <div>
                     <button i18n="Back" mat-raised-button matStepperPrevious style="margin: 10px 10px;">Back</button>
                     <button (click)="stepper.reset()" i18n="Reset" mat-raised-button style="margin: 10px 10px;">Reset

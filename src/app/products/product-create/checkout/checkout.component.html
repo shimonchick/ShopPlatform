@@ -3,7 +3,9 @@
         i18n="Buy listing"
         mat-raised-button
 >
-    Buy {{listingType}} listing
+    <ng-content>
+
+    </ng-content>
 </button>
 <mat-error *ngIf="error">{{error}}</mat-error>
 <ng-container *ngIf="loading">

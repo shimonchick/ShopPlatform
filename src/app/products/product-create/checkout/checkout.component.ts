@@ -16,7 +16,6 @@ export class CheckoutComponent implements OnInit {
     @Input() amount;
     @Input() description;
     @Input() color;
-    @Input() listingType;
     @Output() paid = new EventEmitter<any>();
     handler; // : StripeCheckoutHandler;
     error = null;

@@ -37,27 +37,18 @@ export class SettingsComponent implements OnInit {
 
     ngOnInit() {
         this.auth.user$.subscribe((seller: Seller) => {
-            this.location = seller.coordinates;
-            if (navigator.geolocation) {
-                new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition((data) => {
-                        resolve({lat: data.coords.latitude, lng: data.coords.longitude});
-                    }, err => resolve({lat: -74.006, lng: 40.71}));
-                }).then((location: MapsLocation) => {
-                    this.location = location;
-                    this.selectedMarker = location;
-                });
+            this.getLocation(seller);
+            console.log(seller.displayName.split(' ')[1]);
+            if (!seller.firstName) {
+                this.addressForm.get('firstName').setValue(seller.displayName.split(' ')[0]);
             } else {
-                this.location = {lat: -74.006, lng: 40.71};
-                this.selectedMarker = this.location;
+                this.addressForm.get('firstName').setValue(seller.lastName);
             }
-
-            console.log(this.location);
-            if (seller.firstName) {
-                this.addressForm.get('firstName').setValue(seller.firstName);
-            }
-            if (seller.lastName) {
+            if (!seller.lastName) {
+                this.addressForm.get('lastName').setValue(seller.displayName.split(' ')[1]);
+            } else {
                 this.addressForm.get('lastName').setValue(seller.lastName);
+
             }
             if (seller.phoneNumber) {
                 this.addressForm.get('phoneNumber').setValue(seller.phoneNumber);
@@ -93,7 +84,6 @@ export class SettingsComponent implements OnInit {
         this.getAddress(lat, lng);
     }
 
-
     getAddress(lat: number, lng: number) {
         console.log('Finding Address');
         if (navigator.geolocation) {
@@ -124,6 +114,24 @@ export class SettingsComponent implements OnInit {
 
     showLocation() {
         this.getAddress(this.location.lat, this.location.lng);
+    }
+
+    private getLocation(seller: Seller) {
+        this.location = seller.coordinates;
+        if (navigator.geolocation) {
+            new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition((data) => {
+                    resolve({lat: data.coords.latitude, lng: data.coords.longitude});
+                }, err => resolve({lat: -74.006, lng: 40.71}));
+            }).then((location: MapsLocation) => {
+                this.location = location;
+                this.selectedMarker = location;
+            });
+        } else {
+            this.location = {lat: -74.006, lng: 40.71};
+            this.selectedMarker = this.location;
+        }
+        console.log(this.location);
     }
 }
 

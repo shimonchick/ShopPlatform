@@ -6,13 +6,13 @@ import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '
 import {Router} from '@angular/router';
 import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {BehaviorSubject, combineLatest, merge, Observable, Subject} from 'rxjs';
+import {combineLatest, Observable, Subject} from 'rxjs';
 import {Seller} from '../../models/seller';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
-import {defaultIfEmpty, last, map, startWith} from 'rxjs/operators';
+import {last, map, startWith} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
-import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 import {possibleCategories} from './choose-category/possible-categories';
+import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -34,7 +34,6 @@ export class ProductCreateComponent implements OnInit {
 
     files: File[] = [];
 
-    done = false;
     categoryTree: CategoryTree;
     previewProduct$: Observable<PreviewProduct>;
     product = new Product();
@@ -53,6 +52,7 @@ export class ProductCreateComponent implements OnInit {
     });
     private urlsChanges = new Subject<string[]>();
     readonly allCategories = possibleCategories;
+    uploading = false;
 
     constructor(
         private productService: ProductService,
@@ -93,10 +93,10 @@ export class ProductCreateComponent implements OnInit {
     }
 
     async uploadProduct() {
-        this.done = false;
+        this.uploading = true;
         await this.uploadAllFiles();
         const productId = await this.productService.createProduct(this.product);
-        this.done = true;
+        this.uploading = false;
         alert('product successfully created');
         this.router.navigate(['products', productId]);
     }
@@ -150,7 +150,7 @@ export class ProductCreateComponent implements OnInit {
             return;
         }
         this.product.priority = priority;
-
+        this.uploadProduct();
     }
 
     fillProductDetails(name: string, description: string, price: string) {
