@@ -120,28 +120,8 @@
                         *ngIf="!uploading"
                         i18n="Upload | Upload product listing button"
                         mat-raised-button>
-                    Uplaod normal product listing
+                    Uplaod product listing
                 </button>
-
-                <app-checkout
-                        (paid)="onListingPayAttempt($event, 2)"
-                        *ngIf="product.priority === 1 && !uploading"
-                        [amount]="100"
-                        [color]="'primary'"
-                        [description]="'VIP product listing'"
-                >
-                    Upload VIP product listing
-                </app-checkout>
-
-                <app-checkout
-                        (paid)="onListingPayAttempt($event, 3)"
-                        *ngIf="product.priority === 1 && !uploading"
-                        [amount]="200"
-                        [color]="'accent'"
-                        [description]="'TOP product listing'"
-                >
-                    Upload TOP product listing
-                </app-checkout>
                 <div>
                     <button i18n="Back" mat-raised-button matStepperPrevious style="margin: 10px 10px;">Back</button>
                     <button (click)="stepper.reset()" i18n="Reset" mat-raised-button style="margin: 10px 10px;">Reset

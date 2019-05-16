@@ -11,7 +11,6 @@ export class Product implements PreviewProduct {
     description: string;
     id: string;
     coordinates: MapsLocation;
-    priority: number;
     name: string;
     price: number;
     urls: string[];

@@ -13,6 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@angular/cdk": "^7.3.7",
+    "@angular/material": "^7.3.7",
     "algoliasearch": "^3.32.1",
     "express": "^4.16.4",
     "firebase-admin": "~7.0.0",

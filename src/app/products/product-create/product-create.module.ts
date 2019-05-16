@@ -37,6 +37,7 @@ import {GridsterModule} from 'angular-gridster2';
     ],
     entryComponents: [
         ChooseCategoryComponent,
+        CheckoutComponent
     ]
 })
 export class ProductCreateModule {

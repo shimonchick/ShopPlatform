@@ -1,15 +1,40 @@
-<button (click)="checkout($event)"
-        [color]="color"
-        i18n="Buy listing"
-        mat-raised-button
->
-    <ng-content>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Select product priority
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-slider [(ngModel)]="value"
+                    max="100"
+                    min="0"
+                    step="1"
+                    style="width:100%"
+                    thumbLabel
+        >
+        </mat-slider>
+    </mat-card-content>
+    <mat-card-actions>
+        <button
+                (paid)="onPaymentAttempt($event)"
+                (uploading)="onUploading($event)"
+                *ngIf="value !== 0"
+                [amount]="100 * value"
+                [description]="'Set product priority'"
+                [productId]="data.productId"
+                appCheckout
+                mat-button
+        >
+            Buy product priority
+        </button>
 
-    </ng-content>
-</button>
-<mat-error *ngIf="error">{{error}}</mat-error>
-<ng-container *ngIf="loading">
-    <span i18n="processing payment"> Processing payment ...</span>
-    <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-</ng-container>
-<mat-divider></mat-divider>
+        <button mat-button mat-dialog-close>Maybe later</button>
+    </mat-card-actions>
+</mat-card>
+
+<!--<mat-error *ngIf="error">{{error}}</mat-error>-->
+<!--<ng-container *ngIf="loading">-->
+<!--<span i18n="processing payment"> Processing payment ...</span>-->
+<!--<mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>-->
+<!--</ng-container>-->
+<!--<mat-divider></mat-divider>-->

@@ -12,6 +12,7 @@ import {ChooseCategoryComponent} from './choose-category/choose-category.compone
 import {last, map, startWith} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
 import {possibleCategories} from './choose-category/possible-categories';
+import {CheckoutComponent} from './checkout/checkout.component';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
@@ -38,6 +39,8 @@ export class ProductCreateComponent implements OnInit {
     previewProduct$: Observable<PreviewProduct>;
     product = new Product();
     coordinates: MapsLocation;
+    readonly allCategories = possibleCategories;
+    uploading = false;
     private NAME_MIN_LENGTH = 3;
     private NAME_MAX_LENGTH = 50;
     private DESCRIPTION_MAX_LENGTH = 10000;
@@ -51,8 +54,6 @@ export class ProductCreateComponent implements OnInit {
         address: ['seller', Validators.required],
     });
     private urlsChanges = new Subject<string[]>();
-    readonly allCategories = possibleCategories;
-    uploading = false;
 
     constructor(
         private productService: ProductService,
@@ -73,7 +74,6 @@ export class ProductCreateComponent implements OnInit {
             };
             console.log(this.product.coordinates);
             this.product.sellerUid = user.uid;
-            this.product.priority = 1; // normal offer priority, higher is better
         });
         this.previewProduct$ = combineLatest(
             this.productForm.controls['name'].valueChanges.pipe(
@@ -97,8 +97,15 @@ export class ProductCreateComponent implements OnInit {
         await this.uploadAllFiles();
         const productId = await this.productService.createProduct(this.product);
         this.uploading = false;
-        alert('product successfully created');
-        this.router.navigate(['products', productId]);
+        console.log(productId);
+        const dialogRef = this.dialog.open(CheckoutComponent, {
+            data: {productId: productId},
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            this.router.navigate(['products']);
+        });
+        // alert('product successfully created');
+        // this.router.navigate(['products', productId]);
     }
 
 
@@ -145,13 +152,6 @@ export class ProductCreateComponent implements OnInit {
     }
 
 
-    onListingPayAttempt(confirmation: any, priority: number) {
-        if (!confirmation.paid || confirmation.status !== 'succeeded') {
-            return;
-        }
-        this.product.priority = priority;
-        this.uploadProduct();
-    }
 
     fillProductDetails(name: string, description: string, price: string) {
         name = name.trim();
@@ -161,6 +161,7 @@ export class ProductCreateComponent implements OnInit {
         this.product.description = description;
         this.product.price = priceInt;
     }
+
     chooseCategory() {
         const dialogRef = this.dialog.open(ChooseCategoryComponent, {
             maxHeight: '90vh'
@@ -175,6 +176,7 @@ export class ProductCreateComponent implements OnInit {
     onUrlsSelected($event: string[]) {
         this.urlsChanges.next($event);
     }
+
     toSelectOption(categoryTree: CategoryTree) {
         return `${categoryTree.lvl0} -> ${categoryTree.lvl1}`;
     }

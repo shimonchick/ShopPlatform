@@ -42,7 +42,7 @@ export class SettingsComponent implements OnInit {
             if (!seller.firstName) {
                 this.addressForm.get('firstName').setValue(seller.displayName.split(' ')[0]);
             } else {
-                this.addressForm.get('firstName').setValue(seller.lastName);
+                this.addressForm.get('firstName').setValue(seller.firstName);
             }
             if (!seller.lastName) {
                 this.addressForm.get('lastName').setValue(seller.displayName.split(' ')[1]);

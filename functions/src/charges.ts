@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import {assert, assertUID, catchErrors} from './helpers';
-import {stripe} from './config';
+import {db, stripe} from './config';
 import {getCustomer} from './customers';
 import {attachSource} from './sources';
 
@@ -42,11 +42,22 @@ export const stripeCreateCharge = functions.https.onCall(async (data, context) =
     const uid = assertUID(context);
     const source = assert(data, 'source');
     const amount = assert(data, 'amount');
+    const productId = assert(data, 'productId');
 
     // Optional
     const idempotency_key = data.itempotency_key;
 
-    return catchErrors(createCharge(uid, source, amount, idempotency_key));
+    const confirmation = await catchErrors(createCharge(uid, source, amount, idempotency_key));
+    if (confirmation.paid && confirmation.status === 'succeeded') {
+        console.log('paid');
+        const product = await db.doc(`products/${productId}`).get().then(doc => doc.data());
+        product.priority = amount / 100;
+        await db.doc(`products/${productId}`).update(product);
+        return true;
+    } else {
+        console.log('not paid');
+        return false;
+    }
 });
 
 

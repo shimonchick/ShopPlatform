@@ -1,8 +1,6 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
-import {AngularFireFunctions} from '@angular/fire/functions';
-import {AuthService} from '../../../services/auth.service';
-import {catchError} from 'rxjs/operators';
-import {of} from 'rxjs';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 declare var StripeCheckout; // : StripeCheckoutStatic;
 
@@ -12,79 +10,31 @@ declare var StripeCheckout; // : StripeCheckoutStatic;
     styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
+    value = 1;
+    uploading = false;
 
-    @Input() amount;
-    @Input() description;
-    @Input() color;
-    @Output() paid = new EventEmitter<any>();
-    handler; // : StripeCheckoutHandler;
-    error = null;
-    // confirmation: any;
-    loading = false;
-
-    constructor(private auth: AuthService, private functions: AngularFireFunctions) {
+    constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+                private dialogRef: MatDialogRef<CheckoutComponent>,
+                private router: Router,
+                private snackBar: MatSnackBar) {
     }
 
-    ngOnInit() {
-        this.handler = StripeCheckout.configure({
-            key: 'pk_test_EmC4mZ1ZgzenHqSHS0zLkKyY00p0Q6mX7d',
-            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-            locale: 'auto',
-            opened: function () {
-                console.log('checkout form opened');
-            },
-            closed: function () {
-                console.log('checkout form closed');
-            },
-            source: async (source) => {
-                this.loading = true;
-                const user = await this.auth.getUser();
-                const stripeAttachSource = this.functions.httpsCallable('stripeAttachSource');
-                const stripeCreateCharge = this.functions.httpsCallable('stripeCreateCharge');
-                await stripeAttachSource({uid: user.uid, source: source.id}).toPromise();
-                const confirmation = await stripeCreateCharge({source: source.id, uid: user.uid, amount: this.amount})
-                    .pipe(catchError(this.handleError))
-                    .toPromise();
-                this.loading = false;
-                console.log(confirmation);
-                this.paid.emit(confirmation);
-            }
-        });
+    ngOnInit(): void {
+        console.log(this.data.productId);
     }
 
-    @HostListener('click')
-    // Open the checkout handler
-    async checkout(e) {
-        const user = await this.auth.getUser();
-        this.handler.open({
-            name: 'ShopPlatform',
-            description: this.description,
-            amount: this.amount,
-            email: user.email,
-        });
-        e.preventDefault();
-    }
+    onPaymentAttempt(paid: boolean) {
+        if (paid) {
+            const snackBarRef = this.snackBar.open('Product priority set', 'Dismiss', {
+                duration: 3000,
+            });
 
-    // Close on navigate
-    @HostListener('window:popstate')
-    onPopstate() {
-        console.log('popup closed because of navigate');
-        this.handler.close();
-    }
-
-    handleError(error) {
-        let errorMessage = '';
-        if (error.error instanceof ErrorEvent) {
-            // client-side error
-            errorMessage = `Error: ${error.error.message}`;
-        } else {
-            // server-side error
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            this.dialogRef.close();
+            this.router.navigate(['products'], this.data.productId);
         }
-        console.log(errorMessage);
-        this.error = errorMessage;
-        // window.alert(errorMessage);
-        return of(null);
-        // return throwError(errorMessage); // if you want to rethrow the error
+    }
+
+    onUploading(uploading: boolean) {
+        this.uploading = uploading;
     }
 }
