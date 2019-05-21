@@ -1,5 +1,5 @@
 import {Product} from './product';
-import {User} from './user';
+import {Seller} from './seller';
 
 export interface Order {
     orderId;
@@ -10,5 +10,5 @@ export interface Order {
 
 export interface DisplayOrder {
     product: Product;
-    person: User;
+    person: Seller;
 }

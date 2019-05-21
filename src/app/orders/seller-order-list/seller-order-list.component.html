@@ -21,13 +21,20 @@
                     <mat-card-title *ngIf="order.person" i18n="ordered from you">
                         {{order.person.displayName}} ordered from you
                     </mat-card-title>
-                    <div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"
-                         [style.backgroundSize]="'cover'"
-                         mat-card-avatar
-                    ></div>
+                    <!--<div [style.backgroundImage]="'url(' + order.product.urls[0] + ')'"-->
+                    <!--[style.backgroundSize]="'cover'"-->
+                    <!--mat-card-avatar-->
+                    <!--&gt;</div>-->
                 </mat-card-header>
+                <img [src]="order.product.urls[0]" alt="Product photo" mat-card-image>
+
                 <mat-card-content>
-                    {{order.product.name}}
+                    <ul>
+                        <li><span>Product: {{order.product.name}}</span></li>
+                        <li><span>Name of buyer: {{order.person.firstName + ' ' + order.person.lastName}}</span></li>
+                        <li><span>Buyer address: {{order.person.address}}</span></li>
+                    </ul>
+
                 </mat-card-content>
             </mat-card>
         </mat-card-content>

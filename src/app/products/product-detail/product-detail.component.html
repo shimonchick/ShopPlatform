@@ -24,6 +24,17 @@
                     Order
                 </button>
             </div>
+            <div *ngIf="(auth.user$ | async).uid === product.sellerUid">
+                <button
+                        class="stretched"
+                        color="accent"
+                        i18n="edit listing"
+                        mat-raised-button>
+                    <mat-icon>edit</mat-icon>
+                    Edit listing
+                </button>
+
+            </div>
             <div>
                 <button class="stretched"
                         color="accent"

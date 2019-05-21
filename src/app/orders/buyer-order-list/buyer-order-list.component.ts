@@ -6,7 +6,7 @@ import {ProductService} from '../../services/product.service';
 import {first, tap} from 'rxjs/operators';
 import {DisplayOrder, Order} from '../../models/order';
 import {Product} from '../../models/product';
-import {User} from '../../models/user';
+import {Seller} from '../../models/seller';
 
 @Component({
     selector: 'app-buyer-order-list',
@@ -26,12 +26,12 @@ export class BuyerOrderListComponent implements OnInit {
 
     async ngOnInit() {
         const orders: Order[] = await this.orderService.getBuyerOrders().pipe(first(), tap(console.log)).toPromise();
-        const buyers: User[] = await Promise.all(orders.map(order => this.userService.getUserByIdAsPromise(order.buyerId)));
+        const people = await Promise.all(orders.map(order => this.userService.getUserByIdAsPromise(order.buyerId))) as Seller[];
         const products: Product[] = await Promise.all(orders.map(order => {
             return this.productService.getProduct(order.productId).pipe(first()).toPromise();
         }));
         for (let i = 0; i < orders.length; i++) {
-            this.displayOrders.push({product: products[i], person: buyers[i]});
+            this.displayOrders.push({product: products[i], person: people[i]});
         }
         // .subscribe(async (orders: any) => {
         //         console.log(orders);

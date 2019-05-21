@@ -3,13 +3,13 @@ import {CategoryTree, PreviewProduct, Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import {AuthService} from '../../services/auth.service';
 import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {Seller} from '../../models/seller';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
-import {last, map, startWith} from 'rxjs/operators';
+import {first, last, map, startWith} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
 import {possibleCategories} from './choose-category/possible-categories';
 import {CheckoutComponent} from './checkout/checkout.component';
@@ -59,6 +59,7 @@ export class ProductCreateComponent implements OnInit {
         private productService: ProductService,
         public auth: AuthService,
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
         private storage: AngularFireStorage,
         private dialog: MatDialog
@@ -66,7 +67,14 @@ export class ProductCreateComponent implements OnInit {
 
     }
 
-    ngOnInit() {
+    async ngOnInit() {
+        const productId = this.activatedRoute.snapshot.paramMap.get('productId');
+        if (productId) {
+            this.product = await this.productService.getProduct(productId).pipe(first()).toPromise();
+            this.productForm.controls['name'].setValue(this.product.name);
+            this.productForm.controls['description'].setValue(this.product.description);
+            this.productForm.controls['price'].setValue(this.product.price);
+        }
         this.auth.user$.subscribe((user: Seller) => {
             this.product.coordinates = this.product.coordinates || {
                 lng: user.coordinates.lng,
@@ -150,7 +158,6 @@ export class ProductCreateComponent implements OnInit {
         this.product.coordinates.lat = lat;
         this.product.coordinates.lng = lng;
     }
-
 
 
     fillProductDetails(name: string, description: string, price: string) {
