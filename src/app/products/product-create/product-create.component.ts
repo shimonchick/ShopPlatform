@@ -9,7 +9,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {Seller} from '../../models/seller';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
-import {first, last, map, startWith} from 'rxjs/operators';
+import {last, map, startWith} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
 import {possibleCategories} from './choose-category/possible-categories';
 import {CheckoutComponent} from './checkout/checkout.component';
@@ -67,14 +67,15 @@ export class ProductCreateComponent implements OnInit {
 
     }
 
-    async ngOnInit() {
-        const productId = this.activatedRoute.snapshot.paramMap.get('productId');
-        if (productId) {
-            this.product = await this.productService.getProduct(productId).pipe(first()).toPromise();
-            this.productForm.controls['name'].setValue(this.product.name);
-            this.productForm.controls['description'].setValue(this.product.description);
-            this.productForm.controls['price'].setValue(this.product.price);
-        }
+    /*async*/
+    ngOnInit() {
+        // const productId = this.activatedRoute.snapshot.paramMap.get('productId');
+        // if (productId) {
+        //     this.product = await this.productService.getProduct(productId).pipe(first()).toPromise();
+        //     this.productForm.controls['name'].setValue(this.product.name);
+        //     this.productForm.controls['description'].setValue(this.product.description);
+        //     this.productForm.controls['price'].setValue(this.product.price);
+        // }
         this.auth.user$.subscribe((user: Seller) => {
             this.product.coordinates = this.product.coordinates || {
                 lng: user.coordinates.lng,

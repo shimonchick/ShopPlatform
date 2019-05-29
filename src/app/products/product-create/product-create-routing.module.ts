@@ -5,7 +5,7 @@ import {AuthGuard} from '../../core/auth.guard';
 import {SellerGuard} from '../../core/seller.guard';
 
 const routes = [
-    {path: ':productId', canActivate: [AuthGuard, SellerGuard], component: ProductCreateComponent},
+    {path: '', canActivate: [AuthGuard, SellerGuard], component: ProductCreateComponent},
 ];
 
 @NgModule({
