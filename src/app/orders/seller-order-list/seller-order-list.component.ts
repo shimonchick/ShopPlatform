@@ -30,22 +30,13 @@ export class SellerOrderListComponent implements OnInit {
             return this.productService.getProduct(order.productId).pipe(first()).toPromise();
         }));
         for (let i = 0; i < orders.length; i++) {
-            this.displayOrders.push({product: products[i], person: people[i]});
+            this.displayOrders.push({product: products[i], person: people[i], order: orders[i]});
         }
-        // this.orderService.getSellerOrders().subscribe(async (orders: any) => {
-        //         console.log(orders);
-        //         for (let i = 0; i < orders.length; i++) {
-        //             this._newOrder.seller = await this.userService.getUserByIdAsPromise(orders[i].sellerId);
-        //             this.productService.getProduct(orders[i].productId).subscribe((product) => {
-        //                 this._newOrder.product = product;
-        //                 this.orders.push(this._newOrder);
-        //             });
-        //
-        //         }
-        //
-        //     }
-        // );
     }
 
 
+    deleteOrder(displayOrder: DisplayOrder) {
+        this.orderService.delete(displayOrder.order);
+        this.displayOrders.splice(this.displayOrders.indexOf(displayOrder), 1);
+    }
 }

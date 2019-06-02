@@ -32,7 +32,7 @@ export class OrderService {
         if (uid !== order.buyerId) {
             return;
         }
-        return this.db.collection('orders').doc(order.productId).delete();
+        return this.db.collection('orders').doc(order.orderId).delete();
 
     }
 

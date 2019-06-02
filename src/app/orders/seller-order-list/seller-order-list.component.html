@@ -9,8 +9,7 @@
                 fxLayout="row wrap"
                 fxLayoutAlign="space-evenly center">
             <mat-card
-                    *ngFor="let order of displayOrders"
-                    [routerLink]="['/products', order.product.id]"
+                    *ngFor="let order of displayOrders; let i = index"
                     class="card"
                     fxFlex="25%"
                     fxFlex.md="33%"
@@ -36,6 +35,10 @@
                     </ul>
 
                 </mat-card-content>
+                <mat-card-actions>
+                    <button [routerLink]="['/products', order.product.id]" mat-button>VIEW</button>
+                    <button (click)="deleteOrder(order)" mat-button>CANCEL</button>
+                </mat-card-actions>
             </mat-card>
         </mat-card-content>
     </mat-card>

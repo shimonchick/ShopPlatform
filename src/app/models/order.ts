@@ -11,4 +11,5 @@ export interface Order {
 export interface DisplayOrder {
     product: Product;
     person: Seller;
+    order: Order;
 }
