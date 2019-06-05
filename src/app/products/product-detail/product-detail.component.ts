@@ -116,7 +116,7 @@ export class ProductDetailComponent implements OnInit {
         // add friend
         const user = await this.auth.getUser();
         await this.db.doc(`friends/${user.uid}`).set({[participantUserId]: true}, {merge: true});
-        await this.db.doc(`friends/${participantUserId}`).set({[participantUserId]: true}, {merge: true});
+        await this.db.doc(`friends/${participantUserId}`).set({[user.uid]: true}, {merge: true});
         await this.router.navigate(['/chats', participantUserId]);
     }
 }
