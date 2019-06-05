@@ -48,6 +48,8 @@ export class ProductDetailComponent implements OnInit {
 
         /** Basic Gallery Example */
         this.product$.subscribe(async product => {
+            console.log('productttt');
+            console.log(product);
             // Creat gallery items
             this.product = product;
             this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
@@ -110,5 +112,12 @@ export class ProductDetailComponent implements OnInit {
     }
 
 
+    async openChat(participantUserId: string) {
+        // add friend
+        const user = await this.auth.getUser();
+        await this.db.doc(`friends/${user.uid}`).set({[participantUserId]: true}, {merge: true});
+        await this.db.doc(`friends/${participantUserId}`).set({[participantUserId]: true}, {merge: true});
+        await this.router.navigate(['/chats', participantUserId]);
+    }
 }
 

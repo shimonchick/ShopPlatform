@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MessagingService} from './services/messaging.service';
+// import {MessagingService} from './services/messaging.service';
 
 @Component({
     selector: 'app-root',
@@ -11,13 +11,13 @@ export class AppComponent implements OnInit {
     title = 'ShopPlatform';
     message;
 
-    constructor(private msgService: MessagingService) {
-    }
+    // constructor(private msgService: MessagingService) {
+    // }
 
     ngOnInit() {
-        this.msgService.getPermission();
-        this.msgService.receiveMessage();
-        this.message = this.msgService.currentMessage;
+        // this.msgService.getPermission();
+        // this.msgService.receiveMessage();
+        // this.message = this.msgService.currentMessage;
     }
 
 }

@@ -21,6 +21,7 @@ export class AuthService {
         this.ngxAuth.onSuccessEmitter.subscribe(user => {
             console.log('updating user data');
             console.log(user);
+            console.log(user.providerData[0]);
             this.updateUserData(user);
         });
         this.user$ = this.ngxAuth.afa.authState.pipe(
@@ -54,20 +55,22 @@ export class AuthService {
         return this.snapshotUser;
     }
 
-    private updateUserData({uid, photoURL, displayName, email, phoneNumber}) {
+    private updateUserData({uid, photoURL, displayName, email, phoneNumber, providerData}) { // todo providerData is a quickfix
         // Sets user data in firestore on login
+        console.log(providerData);
         const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
         const customUserData = {
-            uid: uid,
-            photoURL: photoURL,
-            displayName: displayName,
-            email: email,
-            phoneNumber: phoneNumber,
+            uid,
+            photoURL: providerData[0].photoURL,
+            displayName,
+            email,
+            phoneNumber,
             roles: {
                 buyer: false,
                 seller: false
             }
         };
+        console.log('hello');
         return userRef.set(customUserData, {merge: true});
     }
 

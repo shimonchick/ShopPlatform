@@ -39,7 +39,8 @@
                 <button class="stretched"
                         color="accent"
                         i18n="Chat"
-                        mat-raised-button>
+                        mat-raised-button
+                        (click)="openChat(product.sellerUid)">
                     <mat-icon>chat</mat-icon>
                     Chat
                 </button>

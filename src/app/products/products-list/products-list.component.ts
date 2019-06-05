@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {ChangeEvent, VirtualScrollerComponent} from 'ngx-virtual-scroller';
 import {Product} from '../../models/product';
+import * as chance from 'chance';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
     selector: 'app-products-view',
@@ -23,6 +25,21 @@ export class ProductsListComponent implements OnChanges {
     private get total() {
         return this.products.length;
     }
+    // constructor(private db: AngularFirestore) {
+    //     const chancee = new chance.Chance();
+    //     const coordinates = {lat: chancee.latitude(), lng: chancee.longitude()};
+    //     for (let i = 0; i < 40; i++) {
+    //         this.db.collection('products').add({
+    //             id: this.db.createId(),
+    //             name: chancee.name(),
+    //             sellerUid: 'srK9w1MhosSUDCMiA3vGLyMt4Vk2',
+    //             description: chancee.paragraph(),
+    //             price: chancee.integer({min: 10, max: 1500}),
+    //             coordinates: coordinates,
+    //             urls: [chancee.avatar({protocol: 'https'})]
+    //         } as Product);
+    //     }
+    // }
 
     nextBatch(event: ChangeEvent, offset) {
         console.log(event);

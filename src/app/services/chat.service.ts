@@ -6,6 +6,7 @@ import {User} from '../models/user';
     providedIn: 'root'
 })
 export class ChatService {
+    // todo deprecated
 
     private _newChat$ = new Subject<User>();
     newChat$ = this._newChat$.asObservable();

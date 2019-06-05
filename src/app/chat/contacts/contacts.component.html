@@ -1,21 +1,25 @@
 <div class="drawer_container" [@onSideNavChange]="sideNavOpened ? 'open' : 'close'">
-  <div fxLayout="column" fxLayoutGap="10px" style="height: 100%;">
+    <div fxLayout="column" fxLayoutGap="10px" style="height: 100%;">
 
-    <div>
-      <mat-nav-list>
-        <a mat-list-item *ngFor="let user of contacts$ | async" (click)="openChat(user.uid)">
-          <img class="avatar" [src]="user.photoURL" alt="User avatar">
-          <span [@animateText]="showText ? 'show' : 'hide'">{{ user.displayName }} </span>
-        </a>
-      </mat-nav-list>
+        <div>
+            <mat-nav-list>
+                <a mat-list-item *ngFor="let user of contacts$ | async" (click)="openChat(user.uid)">
+                    <div>
+                        <img class="avatar" [src]="user.photoURL" alt="User avatar">
+                    </div>
+                    <div style="text-align: center; margin: auto">
+                        <span [@animateText]="showText ? 'show' : 'hide'">{{ user.displayName }} </span>
+                    </div>
+                </a>
+            </mat-nav-list>
+        </div>
     </div>
-  </div>
 
-  <span class="spacer"></span>
-  <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0 10px;">
-    <button mat-icon-button (click)="onSinenavToggle()">
-      <mat-icon *ngIf="sideNavOpened">arrow_left</mat-icon>
-      <mat-icon *ngIf="!sideNavOpened">arrow_right</mat-icon>
-    </button>
-  </div>
+    <span class="spacer"></span>
+    <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0 10px;">
+        <button mat-icon-button (click)="onSinenavToggle()">
+            <mat-icon *ngIf="sideNavOpened">arrow_left</mat-icon>
+            <mat-icon *ngIf="!sideNavOpened">arrow_right</mat-icon>
+        </button>
+    </div>
 </div>

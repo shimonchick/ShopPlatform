@@ -31,3 +31,12 @@ export function userToKendoUser(user: User): KendoUser {
         name: user.displayName
     };
 }
+
+// export function theSmallerOfThe2Ids(id1: string, id2: string) {
+//     return id1.localeCompare(id2) < 0 ? id1 : id2;
+// }
+
+export function orderChatIds(id1: string, id2: string): [string, string] {
+    const comparison = id1.localeCompare(id2);
+    return comparison > 1 ? [id1, id2] : [id2, id1];
+}

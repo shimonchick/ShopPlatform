@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {map, switchMap} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {Chat} from '../../models/chat';
-import {userToKendoUser} from '../utils';
+import {orderChatIds, userToKendoUser} from '../utils';
 import {Message, SendMessageEvent} from '@progress/kendo-angular-conversational-ui';
 import {User} from '../../models/user';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, merge, Observable} from 'rxjs';
 import {AuthService} from '../../services/auth.service';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {ChatMediatorService} from '../mediator/chat-mediator.service';
 import {firestore} from 'firebase/app';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-chat',
@@ -22,21 +23,28 @@ export class ChatComponent implements OnInit {
 
     constructor(public auth: AuthService,
                 private db: AngularFirestore,
-                private mediatorService: ChatMediatorService) {
+                private mediatorService: ChatMediatorService,
+                private activatedRoute: ActivatedRoute) {
     }
 
     ngOnInit() {
+        this.activatedRoute.paramMap.subscribe(params => {
+            console.log(params);
+        });
         this.messages$ = combineLatest(
             this.auth.user$.pipe(map(user => user.uid)),
-            this.mediatorService.selectedUserId$
+            merge(
+                this.mediatorService.selectedUserId$,
+                this.activatedRoute.paramMap.pipe(map(it => it.get('id')))
+            )
         ).pipe(
-            // todo chat not working, make the chat id concat the smaller of the two ids
             map(([userId, selectedUserId]) => {
                 console.log(`new id selected: ${selectedUserId}`);
                 /*
                     Change the chat reference every time we switch to a new user
                  */
-                const ref = this.db.doc<Chat>(`chats/${userId}_${selectedUserId}`);
+                const [chatId1, chatId2] = orderChatIds(userId, selectedUserId);
+                const ref = this.db.doc<Chat>(`chats/${chatId1}_${chatId2}`);
                 this.chatRef$.next(ref);
                 return ref;
             }),

@@ -2,9 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ChatService} from '../services/chat.service';
 import {AuthService} from '../services/auth.service';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {ChatMediatorService} from './mediator/chat-mediator.service';
 import {onMainContentChange} from './animations';
 
@@ -17,14 +15,9 @@ import {onMainContentChange} from './animations';
 export class ChatDrawerComponent implements OnInit {
 
 
-    isHandset$ = this.breakPointObserver.observe(Breakpoints.Handset)
-        .pipe(
-            map(result => result.matches)
-        );
     onSideNavChange$: Observable<boolean>;
 
-    constructor(private breakPointObserver: BreakpointObserver,
-                private chatService: ChatService,
+    constructor(private chatService: ChatService,
                 public auth: AuthService,
                 private db: AngularFirestore,
                 public mediatorService: ChatMediatorService) {
