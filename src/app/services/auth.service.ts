@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {first, shareReplay, switchMap} from 'rxjs/operators';
 import {AuthProcessService} from 'ngx-auth-firebaseui';
 import {CoreModule} from '../core.module';
+import {Product} from '../models/product';
 
 @Injectable({
     providedIn: CoreModule
@@ -77,6 +78,9 @@ export class AuthService {
     async signOut() {
         await this.ngxAuth.afa.auth.signOut();
         return this.router.navigate(['/']);
+    }
+    isOwnerOf(product: Product) {
+        return this.snapshotUser.uid === product.sellerUid;
     }
 
 }
