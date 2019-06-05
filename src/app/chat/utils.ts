@@ -38,5 +38,5 @@ export function userToKendoUser(user: User): KendoUser {
 
 export function orderChatIds(id1: string, id2: string): [string, string] {
     const comparison = id1.localeCompare(id2);
-    return comparison !== 0 ? [id1, id2] : [id2, id1];
+    return comparison !== -1 ? [id1, id2] : [id2, id1];
 }

@@ -43,6 +43,8 @@ export class ChatComponent implements OnInit {
                 /*
                     Change the chat reference every time we switch to a new user
                  */
+                console.log(selectedUserId);
+                console.log(userId);
                 const [chatId1, chatId2] = orderChatIds(userId, selectedUserId);
                 const ref = this.db.doc<Chat>(`chats/${chatId1}_${chatId2}`);
                 this.chatRef$.next(ref);
