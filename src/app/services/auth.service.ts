@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {first, shareReplay, switchMap} from 'rxjs/operators';
 import {AuthProcessService} from 'ngx-auth-firebaseui';
 import {CoreModule} from '../core.module';
+import {Product} from '../models/product';
 
 @Injectable({
     providedIn: CoreModule
@@ -54,6 +55,15 @@ export class AuthService {
         return this.snapshotUser;
     }
 
+    async signOut() {
+        await this.ngxAuth.afa.auth.signOut();
+        return this.router.navigate(['/']);
+    }
+
+    isOwnerOf(product: Product) {
+        return this.snapshotUser.uid === product.sellerUid;
+    }
+
     private updateUserData({uid, photoURL, displayName, email, phoneNumber}) {
         // Sets user data in firestore on login
         const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
@@ -69,11 +79,6 @@ export class AuthService {
             }
         };
         return userRef.set(customUserData, {merge: true});
-    }
-
-    async signOut() {
-        await this.ngxAuth.afa.auth.signOut();
-        return this.router.navigate(['/']);
     }
 
 }

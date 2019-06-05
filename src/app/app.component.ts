@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MessagingService} from './services/messaging.service';
+import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -11,13 +13,21 @@ export class AppComponent implements OnInit {
     title = 'ShopPlatform';
     message;
 
-    constructor(private msgService: MessagingService) {
+    constructor(private msgService: MessagingService,
+                private snackbar: MatSnackBar,
+                private router: Router) {
     }
 
     ngOnInit() {
         this.msgService.getPermission();
         this.msgService.receiveMessage();
-        this.message = this.msgService.currentMessage;
+        this.msgService.currentMessage.subscribe((message: any) => {
+            const ref = this.snackbar.open(message.title, '');
+            ref.afterOpened().subscribe(() => {
+                this.router.navigateByUrl(message.click_action);
+            });
+        });
+
     }
 
 }

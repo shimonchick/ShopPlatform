@@ -14,7 +14,7 @@
                 <!--todo add a currency to the user-->
             </div>
 
-            <div *ngIf="auth.isSeller()">
+            <div *ngIf="auth.isSeller() && !auth.isOwnerOf(product)">
                 <button (click)="openDialog()"
                         class="stretched"
                         color="accent"
