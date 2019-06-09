@@ -1,16 +1,35 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {
+    CdkDrag,
+    CdkDragStart,
+    CdkDropList, CdkDropListGroup, CdkDragMove, CdkDragEnter,
+    moveItemInArray
+} from '@angular/cdk/drag-drop';
+import {ViewportRuler} from '@angular/cdk/overlay';
 
-// import {ImageCroppedEvent, ImageCropperComponent} from 'ngx-image-cropper';
 
 @Component({
     selector: 'app-image-preview',
     templateUrl: './image-preview.component.html',
     styleUrls: ['./image-preview.component.scss'],
 })
-export class ImagePreviewComponent {
-    // @ViewChild('input')
-    //     inputRef: ElementRef;
+export class ImagePreviewComponent implements AfterViewInit {
+
+
+    constructor(private viewportRuler: ViewportRuler) {
+        this.target = null;
+        this.source = null;
+    }
+
+    @ViewChild(CdkDropListGroup) listGroup: CdkDropListGroup<CdkDropList>;
+    @ViewChild(CdkDropList) placeholder: CdkDropList;
+
+    public target: CdkDropList;
+    public targetIndex: number;
+    public source: CdkDropList;
+    public sourceIndex: number;
+    public dragIndex: number;
+    public activeContainer;
 
     @Output()
     filesSelected = new EventEmitter<File[]>();
@@ -19,44 +38,32 @@ export class ImagePreviewComponent {
 
     files: File[] = [];
     urls: (string | ArrayBuffer)[] = [];
-    // imageChangedEvent: any = '';
-    // croppedImage: any = '';
-    // showCropper = false;
-    // cropperSettings: CropperSettings;
 
-    constructor() {
-        // this.cropperSettings = new CropperSettings();
-        // this.cropperSettings.width = 100;
-        // this.cropperSettings.height = 100;
-        // this.cropperSettings.croppedWidth = 100;
-        // this.cropperSettings.croppedHeight = 100;
-        // this.cropperSettings.canvasWidth = 400;
-        // this.cropperSettings.canvasHeight = 300;
+    indexOf(collection, node) {
+        return Array.prototype.indexOf.call(collection, node);
     }
 
-//  @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
 
+    // drop(event: CdkDragDrop<File>) {
+    //     moveItemInArray(this.urls, event.previousIndex, event.currentIndex);
+    // }
 
-    drop(event: CdkDragDrop<File>) {
-        moveItemInArray(this.urls, event.previousIndex, event.currentIndex);
+    /** Determines whether an event is a touch event. */
+    isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
+        return event.type.startsWith('touch');
     }
 
-    // imageCropped(event: ImageCroppedEvent) {
-    //   this.croppedImage = event.base64;
-    //   console.log(event);
-//  }
-//     imageLoaded() {
-//         this.showCropper = true;
-//         console.log('Image loaded');
-//     }
-//
-//     cropperReady() {
-//         console.log('Cropper ready');
-//     }
-//
-//     loadImageFailed() {
-//         console.log('Load failed');
-//     }
+    isInsideDropListClientRect(dropList: CdkDropList, x: number, y: number) {
+        const {top, bottom, left, right} = dropList.element.nativeElement.getBoundingClientRect();
+        return y >= top && y <= bottom && x >= left && x <= right;
+    }
+
+    ngAfterViewInit() {
+        const phElement = this.placeholder.element.nativeElement;
+
+        phElement.style.display = 'none';
+        phElement.parentNode.removeChild(phElement);
+    }
 
     onSelectFile(files: File[]) {
         if (!files) {
@@ -64,7 +71,6 @@ export class ImagePreviewComponent {
         }
         this.files = this.files.concat(files);
         console.log(this.files);
-        this.filesSelected.emit(files);
 
         for (let i = 0; i < files.length; i++) {
 
@@ -74,17 +80,105 @@ export class ImagePreviewComponent {
                 const content: string | ArrayBuffer = (e.target as FileReader).result;
                 this.urls.push(content);
 
+                // this.addItem(content);
             };
             reader.readAsDataURL(files[i]);
+
         }
 
         // this.imageChangedEvent = this.displayFiles[0].file;
         this.urlsSelected.emit(this.urls as string[]);
+        this.filesSelected.emit(files);
         console.log(this.urls);
+
     }
 
-    // fileChangeEvent(event: File) {
-    //     // this.imageCropped()
-    //     console.log(event);
-    // }
+    dragMoved(e: CdkDragMove) {
+        const point = this.getPointerPositionOnPage(e.event);
+
+        this.listGroup._items.forEach(dropList => {
+            if (this.isInsideDropListClientRect(dropList, point.x, point.y)) {
+                this.activeContainer = dropList;
+                return;
+            }
+        });
+    }
+
+    dropListDropped() {
+        if (!this.target) {
+            return;
+        }
+
+        const phElement = this.placeholder.element.nativeElement;
+        const parent = phElement.parentElement;
+
+        phElement.style.display = 'none';
+
+        parent.removeChild(phElement);
+        parent.appendChild(phElement);
+        parent.insertBefore(this.source.element.nativeElement, parent.children[this.sourceIndex]);
+
+        this.target = null;
+        this.source = null;
+
+        if (this.sourceIndex !== this.targetIndex) {
+            moveItemInArray(this.urls, this.sourceIndex, this.targetIndex);
+        }
+    }
+
+    dropListEnterPredicate = (drag: CdkDrag, drop: CdkDropList) => {
+        if (drop === this.placeholder) {
+            return true;
+        }
+
+        if (drop !== this.activeContainer) {
+            return false;
+        }
+
+        const phElement = this.placeholder.element.nativeElement;
+        const sourceElement = drag.dropContainer.element.nativeElement;
+        const dropElement = drop.element.nativeElement;
+
+        const dragIndex = this.indexOf(dropElement.parentElement.children, (this.source ? phElement : sourceElement));
+        const dropIndex = this.indexOf(dropElement.parentElement.children, dropElement);
+
+        if (!this.source) {
+            this.sourceIndex = dragIndex;
+            this.source = drag.dropContainer;
+
+            phElement.style.width = sourceElement.clientWidth + 'px';
+            phElement.style.height = sourceElement.clientHeight + 'px';
+
+            sourceElement.parentElement.removeChild(sourceElement);
+        }
+
+        this.targetIndex = dropIndex;
+        this.target = drop;
+
+        phElement.style.display = '';
+        dropElement.parentElement.insertBefore(phElement, (dropIndex > dragIndex
+            ? dropElement.nextSibling : dropElement));
+
+        this.placeholder.enter(drag, drag.element.nativeElement.offsetLeft, drag.element.nativeElement.offsetTop);
+        return false;
+    }
+
+    getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
+        // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
+        const point = this.isTouchEvent(event) ? (event.touches[0] || event.changedTouches[0]) : event;
+        const scrollPosition = this.viewportRuler.getViewportScrollPosition();
+
+        return {
+            x: point.pageX - scrollPosition.left,
+            y: point.pageY - scrollPosition.top
+        };
+    }
+
+
+    onDelete(url: string | ArrayBuffer) {
+        this.urls.splice(this.urls.indexOf(url), 1);
+        this.files.splice(this.urls.indexOf(url), 1);
+        this.filesSelected.emit(this.files);
+        this.urlsSelected.emit(this.urls as string[]);
+    }
 }

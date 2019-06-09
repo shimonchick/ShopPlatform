@@ -9,16 +9,33 @@
             multiple="true"
     >
     </ngx-dropzone>
+    <!--    <div>-->
+    <!--        <div (cdkDropListDropped)="drop($event)"-->
+    <!--             cdkDropList-->
+    <!--             cdkDropListOrientation="horizontal"-->
+    <!--             class="list"-->
+    <!--             style="align-self: flex-end">-->
+    <!--            <div *ngFor="let url of urls"-->
+    <!--                 cdkDrag-->
+    <!--                 class="list-item">-->
+    <!--                <img [src]="url" class="display-image">-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
-    <div (cdkDropListDropped)="drop($event)"
-         cdkDropList
-         cdkDropListOrientation="horizontal"
-         class="list"
-         style="align-self: flex-end">
-        <div *ngFor="let url of urls"
-             cdkDrag
-             class="list-item">
-            <img [src]="url" class="display-image">
+    <div class="example-container" cdkDropListGroup>
+        <div cdkDropList [cdkDropListEnterPredicate]="dropListEnterPredicate"
+             (cdkDropListDropped)="dropListDropped()"></div>
+        <div cdkDropList *ngFor="let url of urls"
+             [cdkDropListEnterPredicate]="dropListEnterPredicate" (cdkDropListDropped)="dropListDropped()">
+            <div cdkDrag class="example-box" (cdkDragMoved)="dragMoved($event);">
+
+                <img [src]="url" class="display-image">
+                <button mat-raised-button color="warn" (click)="onDelete(url)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </div>
         </div>
     </div>
+
 </div>
