@@ -1,4 +1,4 @@
-<main *ngIf="product$ | async as product">
+<main *ngIf="product">
     <section fxLayout="row" fxLayout.lt-sm="column">
         <article fxFlex="60" fxFlex.lt-sm="100" id="gallery">
             <gallery *ngIf="items" [items]="items" loadingMode="indeterminate">
@@ -13,38 +13,40 @@
                 {{product.price | currency}}
                 <!--todo add a currency to the user-->
             </div>
+            <ng-container *ngIf="(auth.user$ | async)">
+                <div *ngIf="auth.isSeller() && !auth.isOwnerOf(product)">
+                    <button (click)="openDialog()"
+                            class="stretched"
+                            color="accent"
+                            i18n="order"
+                            mat-raised-button>
+                        <mat-icon>shopping_cart</mat-icon>
+                        Order
+                    </button>
+                </div>
+                <div *ngIf="(auth.user$ | async).uid === product.sellerUid">
+                    <button
+                            class="stretched"
+                            color="accent"
+                            i18n="edit listing"
+                            mat-raised-button>
+                        <mat-icon>edit</mat-icon>
+                        Edit listing
+                    </button>
 
-            <div *ngIf="auth.isSeller() && !auth.isOwnerOf(product)">
-                <button (click)="openDialog()"
-                        class="stretched"
-                        color="accent"
-                        i18n="order"
-                        mat-raised-button>
-                    <mat-icon>shopping_cart</mat-icon>
-                    Order
-                </button>
-            </div>
-            <div *ngIf="(auth.user$ | async).uid === product.sellerUid">
-                <button
-                        class="stretched"
-                        color="accent"
-                        i18n="edit listing"
-                        mat-raised-button>
-                    <mat-icon>edit</mat-icon>
-                    Edit listing
-                </button>
-
-            </div>
-            <div>
-                <button class="stretched"
-                        color="accent"
-                        i18n="Chat"
-                        mat-raised-button
-                        (click)="openChat(product.sellerUid)">
-                    <mat-icon>chat</mat-icon>
-                    Chat
-                </button>
-            </div>
+                </div>
+                <div>
+                    <button *ngIf="auth.user$ | async"
+                            class="stretched"
+                            color="accent"
+                            i18n="Chat"
+                            mat-raised-button
+                            (click)="openChat(product.sellerUid)">
+                        <mat-icon>chat</mat-icon>
+                        Chat
+                    </button>
+                </div>
+            </ng-container>
             <div>
                 <button class="stretched" color="accent" mat-raised-button>
                     <mat-icon>phone</mat-icon>

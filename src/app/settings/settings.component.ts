@@ -5,6 +5,8 @@ import {MapsLocation} from '../models/location';
 import {AuthService} from '../services/auth.service';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Seller} from '../models/seller';
+import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 // import {google} from '@agm/core/services/google-maps-types';
 declare let google: any;
 
@@ -29,9 +31,10 @@ export class SettingsComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private page: Location,
         public auth: AuthService,
         private db: AngularFirestore,
+        private snackbar: MatSnackBar,
+        private router: Router,
     ) {
     }
 
@@ -72,8 +75,18 @@ export class SettingsComponent implements OnInit {
         };
         this.db.doc(`users/${user.uid}`).set(seller, {merge: true});
 
-        alert('You are now registered as a buyer');
-        setTimeout(() => this.page.back(), 1000);
+
+        const snackbarRef = this.snackbar.open('Successfully filled credentials', 'Start creating listings', {
+            duration: 5000
+        });
+        snackbarRef.onAction().subscribe(() => {
+            this.router.navigateByUrl('/products/create');
+        });
+        setTimeout(() => {
+            this.router.navigateByUrl('/products/create');
+        }, 5000);
+        // alert('You are now registered as a buyer');
+        // setTimeout(() => this.page.back(), 1000);
 
     }
 

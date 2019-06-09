@@ -13,6 +13,7 @@ import {AuthService} from '../../services/auth.service';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {User} from '../../models/user';
+import {first, last, map, tap} from 'rxjs/operators';
 
 @Component({
     selector: 'app-product-detail',
@@ -21,7 +22,7 @@ import {User} from '../../models/user';
 })
 export class ProductDetailComponent implements OnInit {
 
-    product$: Observable<Product>;
+    // product$: Observable<Product>;
     items: GalleryItem[];
     seller: Seller;
     showMap = true;
@@ -41,36 +42,59 @@ export class ProductDetailComponent implements OnInit {
     }
 
 
-    ngOnInit() {
+    async ngOnInit() {
         const id = this.activatedRoute.snapshot.paramMap.get('id');
         console.log(id);
-        this.product$ = this.productService.getProduct(id);
+
+        this.product = await this.productService.getProduct(id).pipe(first()).toPromise() as Product;
+        console.log(this.product);
+
+        this.items = this.product.urls.map(url => new ImageItem({src: url, thumb: url}));
+        this.seller = await this.userService.getUserByIdAsPromise(this.product.sellerUid) as Seller;
+        console.log(this.seller);
+
+        /** Lightbox Example */
+
+            // Get a lightbox gallery ref
+        const lightboxRef = this.gallery.ref('lightbox');
+
+        // Add custom gallery config to the lightbox (optional)
+        lightboxRef.setConfig({
+            imageSize: ImageSize.Cover,
+            thumbPosition: ThumbnailsPosition.Top,
+            loadingMode: 'indeterminate'
+        });
+
+        // Load items into the lightbox gallery ref
+        lightboxRef.load(this.items);
 
         /** Basic Gallery Example */
-        this.product$.subscribe(async product => {
-            console.log('productttt');
-            console.log(product);
-            // Creat gallery items
-            this.product = product;
-            this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
-            this.seller = await this.userService.getUserByIdAsPromise(product.sellerUid) as Seller;
-
-
-            /** Lightbox Example */
-
-                // Get a lightbox gallery ref
-            const lightboxRef = this.gallery.ref('lightbox');
-
-            // Add custom gallery config to the lightbox (optional)
-            lightboxRef.setConfig({
-                imageSize: ImageSize.Cover,
-                thumbPosition: ThumbnailsPosition.Top,
-                loadingMode: 'indeterminate'
-            });
-
-            // Load items into the lightbox gallery ref
-            lightboxRef.load(this.items);
-        });
+        // this.product$.pipe(
+        //     map(async product => {
+        //         console.log('productttt');
+        //         console.log(product);
+        // Creat gallery items
+        // this.product = product;
+        // this.items = product.urls.map(url => new ImageItem({src: url, thumb: url}));
+        // this.seller = await this.userService.getUserByIdAsPromise(product.sellerUid) as Seller;
+        // console.log(this.seller);
+        //
+        // /** Lightbox Example */
+        //
+        //     // Get a lightbox gallery ref
+        // const lightboxRef = this.gallery.ref('lightbox');
+        //
+        // // Add custom gallery config to the lightbox (optional)
+        // lightboxRef.setConfig({
+        //     imageSize: ImageSize.Cover,
+        //     thumbPosition: ThumbnailsPosition.Top,
+        //     loadingMode: 'indeterminate'
+        // });
+        //
+        // // Load items into the lightbox gallery ref
+        // lightboxRef.load(this.items);
+        //     })
+        // );
 
     }
 

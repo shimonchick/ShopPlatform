@@ -12,7 +12,7 @@ declare var StripeCheckout; // : StripeCheckoutStatic;
 export class CheckoutComponent implements OnInit {
     value = 1;
     uploading = false;
-
+    
     constructor(@Inject(MAT_DIALOG_DATA) public data: any,
                 private dialogRef: MatDialogRef<CheckoutComponent>,
                 private router: Router,

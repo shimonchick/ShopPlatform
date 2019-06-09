@@ -11,8 +11,10 @@
                     step="1"
                     style="width:100%"
                     thumbLabel
+                    *ngIf="!uploading"
         >
         </mat-slider>
+        <mat-spinner mode="indeterminate" *ngIf="uploading"></mat-spinner>
     </mat-card-content>
     <mat-card-actions>
         <button
@@ -27,8 +29,7 @@
         >
             Buy product priority
         </button>
-
-        <button mat-button mat-dialog-close>Maybe later</button>
+        <button *ngIf="!uploading" mat-button mat-dialog-close>Maybe later</button>
     </mat-card-actions>
 </mat-card>
 
