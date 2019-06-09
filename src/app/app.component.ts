@@ -22,9 +22,9 @@ export class AppComponent implements OnInit {
         this.msgService.getPermission();
         this.msgService.receiveMessage();
         this.msgService.currentMessage.subscribe((message: any) => {
-            const ref = this.snackbar.open(message.title, '');
+            const ref = this.snackbar.open(message.notification.title, 'See details');
             ref.afterOpened().subscribe(() => {
-                this.router.navigateByUrl(message.click_action);
+                this.router.navigateByUrl(message.notification.click_action);
             });
         });
 

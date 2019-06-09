@@ -25,8 +25,7 @@ export const orderNotification = functions.firestore
                     + `Address of buyer: ${buyer.address}\n`
                     + `Phone number of buyer: ${buyer.phoneNumber}`,
                 icon: 'https://material.io/tools/icons/static/icons/baseline-event_note-24px.svg',
-                click_action: 'localhost:3000/orders/seller', // TODO: rename when deployed or move to configuration file
-
+                click_action: '/orders/seller', // TODO: rename when deployed or move to configuration file
             }
         };
 
