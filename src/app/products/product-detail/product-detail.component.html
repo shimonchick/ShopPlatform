@@ -24,7 +24,7 @@
                         Order
                     </button>
                 </div>
-                <div *ngIf="(auth.user$ | async).uid === product.sellerUid">
+                <div *ngIf="auth.isOwnerOf(product)">
                     <button
                             class="stretched"
                             color="accent"
@@ -51,6 +51,19 @@
                 <button class="stretched" color="accent" mat-raised-button>
                     <mat-icon>phone</mat-icon>
                     {{seller.phoneNumber}}
+                </button>
+            </div>
+
+            <div *ngIf="auth.isOwnerOf(product)">
+                <button
+                        class="stretched"
+                        color="warn"
+                        i18n="delete listing"
+                        mat-raised-button
+                        (click)="deleteProduct(product)"
+                >
+                    <mat-icon>delete_forever</mat-icon>
+                    Delete listing
                 </button>
             </div>
             <agm-map *ngIf="showMap"

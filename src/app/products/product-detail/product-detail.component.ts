@@ -143,5 +143,11 @@ export class ProductDetailComponent implements OnInit {
         await this.db.doc(`friends/${participantUserId}`).set({[user.uid]: true}, {merge: true});
         await this.router.navigate(['/chats', participantUserId]);
     }
+
+    async deleteProduct(product: Product) {
+        await this.productService.deleteProduct(product);
+        // TODO: confirm delete
+        this.router.navigateByUrl('/');
+    }
 }
 

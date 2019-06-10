@@ -25,7 +25,7 @@
             <mat-card *ngFor="let subCategory of selectedCategory.subCategories" (click)="chooseCategoryTree(subCategory)"
                       fxFlex="22%" fxFlex.md="30%" fxFlex.sm="40%" fxFlex.xs="100%">
                 <mat-card-header>
-                    <mat-card-title>{{subCategory}}</mat-card-title>
+                    <mat-card-title>{{subCategory.name}}</mat-card-title>
                 </mat-card-header>
                 <!--        <img matCardImage src="Card wide image source">-->
                 <!--        todo add an image as an icon-->

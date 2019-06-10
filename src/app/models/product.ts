@@ -1,4 +1,5 @@
 import {MapsLocation} from './location';
+import {FormlyFieldConfig} from '@ngx-formly/core';
 
 export interface PreviewProduct {
     name: string;
@@ -24,5 +25,6 @@ export interface Category {
 export interface CategoryTree {
     lvl0: string;
     lvl1: string;
+    fields:  FormlyFieldConfig[];
 }
 

@@ -1,13 +1,70 @@
 import {Category} from '../../../models/product';
 
-export const possibleCategories: Category[] = [
+export const possibleCategories: ({ name: string; subCategories: ({ name: string; fields: { templateOptions: { label: string; required: boolean }; type: string; key: string }[] } | string)[] } | { name: string; subCategories: string[] } | { name: string; subCategories: any[] })[] = [
     {
         name: 'Real estate',
         subCategories: [
-            'Sales',
-            'In the country',
-            'Rent',
-            'Housemates'
+
+            {
+                name: 'Sales',
+                fields: [
+                    {
+                        key: 'type',
+                        type: 'radio',
+                        templateOptions: {
+                            label: 'Type of apartment',
+                            placeholder: 'Two rooms',
+                            description: 'Type of apartment',
+                            required: true,
+                            options: [
+                                {value: 1, label: 'One room'},
+                                {value: 2, label: 'Two rooms'},
+                                {value: 3, label: 'Three rooms'},
+                                {value: 4, label: 'Four rooms'},
+                                {value: 5, label: 'Many rooms'},
+                            ],
+                        },
+                    },
+                    {
+                        key: 'area',
+                        type: 'input',
+                        templateOptions: {
+                            required: true,
+                            label: 'Area',
+                            placeholder: 'Area',
+                            description: 'Area of the apartment'
+                        }
+                    },
+                    {
+                        key: 'yearBuilt',
+                        type: 'input',
+                        templateOptions: {
+                            required: true,
+                            label: 'Year built',
+                            placeholder: 'eg. 2010...',
+                            description: 'Year the building was built'
+                        }
+                    },
+                ]
+            },
+            {
+                name: 'Outside the country',
+                fields: [
+                    {}
+                ]
+            },
+            {
+                name: 'Rent',
+                fields: [
+                    {}
+                ]
+            },
+            {
+                name: 'Housemates',
+                fields: [
+                    {}
+                ]
+            }
         ]
     },
     {
