@@ -20,6 +20,20 @@ export const indexProduct = functions.firestore
         });
     });
 
+export const updateProduct = functions.firestore
+    .document('products/{productId}')
+    .onUpdate((snapchange, context) => {
+        const snap = snapchange.after;
+        const data = snap.data();
+        const objectID = snap.id;
+
+        // Add the data to the algolia index
+        return index.addObject({
+            objectID,
+            ...data
+        });
+    });
+
 export const unindexProduct = functions.firestore
     .document('products/{productId}')
     .onDelete((snap, context) => {

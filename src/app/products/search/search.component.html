@@ -9,20 +9,17 @@
             <mat-toolbar color="primary">Menu</mat-toolbar>
 
             <div id="algolia-widgets">
+                <ais-current-refinements></ais-current-refinements>
                 <ais-range-slider
+                        [tooltips]="true"
                         [max]="1500"
                         [min]="0"
                         attribute="price">
                 </ais-range-slider>
-                <!--                <ais-hierarchical-menu-->
-                <!--                        [attributes]="[-->
-                <!--                            'hierarchicalCategories.lvl0',-->
-                <!--                            'hierarchicalCategories.lvl1',-->
-                <!--                            'hierarchicalCategories.lvl2'-->
-                <!--                        ]"-->
-                <!--                >-->
-
-                <!--                </ais-hierarchical-menu>-->
+                <ais-hierarchical-menu
+                        [attributes]="['categories.lvl0', 'categories.lvl1']"
+                >
+                </ais-hierarchical-menu>
             </div>
         </mat-drawer>
 
