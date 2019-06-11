@@ -24,6 +24,8 @@
     "@angular/platform-browser": "~7.2.13",
     "@angular/platform-browser-dynamic": "~7.2.13",
     "@angular/router": "~7.2.13",
+    "@ngx-formly/core": "latest",
+    "@ngx-formly/material": "^5.1.9",
     "@ngx-gallery/core": "^4.0.1",
     "@ngx-gallery/gallerize": "^4.0.1",
     "@ngx-gallery/lightbox": "^4.0.1",

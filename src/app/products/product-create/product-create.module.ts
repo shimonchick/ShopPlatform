@@ -13,6 +13,8 @@ import {ChooseCategoryComponent} from './choose-category/choose-category.compone
 import {CheckoutDirective} from './checkout.directive';
 import {CheckoutComponent} from './checkout/checkout.component';
 import {GridsterModule} from 'angular-gridster2';
+import {FormlyModule} from '@ngx-formly/core';
+import {FormlyMaterialModule} from '@ngx-formly/material';
 
 @NgModule({
     declarations: [
@@ -33,7 +35,12 @@ import {GridsterModule} from 'angular-gridster2';
         ImageCropperModule,
         AgmCoreModule,
         ProductSharedModule,
-        GridsterModule,
+        FormlyMaterialModule,
+        FormlyModule.forRoot({
+            validationMessages: [
+                { name: 'required', message: 'This field is required' },
+            ],
+        }),
     ],
     entryComponents: [
         ChooseCategoryComponent,

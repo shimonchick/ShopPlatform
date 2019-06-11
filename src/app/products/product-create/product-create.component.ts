@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CategoryTree, PreviewProduct, Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import {AuthService} from '../../services/auth.service';
-import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
@@ -14,6 +14,7 @@ import {MapsLocation} from '../../models/location';
 import {possibleCategories} from './choose-category/possible-categories';
 import {CheckoutComponent} from './checkout/checkout.component';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
+import {FormlyFieldConfig} from '@ngx-formly/core';
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -33,6 +34,9 @@ export class ProductCreateComponent implements OnInit {
     // firstFormGroup: FormGroup;
     // secondFormGroup: FormGroup;
 
+    form = new FormGroup({});
+    fields: FormlyFieldConfig[] = [];
+    aditionalDetails = {};
     files: File[] = [];
 
     categoryTree: CategoryTree;
@@ -168,6 +172,7 @@ export class ProductCreateComponent implements OnInit {
         this.product.name = name;
         this.product.description = description;
         this.product.price = priceInt;
+        this.product = {...this.product, ...this.aditionalDetails};
     }
 
     chooseCategory() {
@@ -178,6 +183,8 @@ export class ProductCreateComponent implements OnInit {
         dialogRef.afterClosed().subscribe((categoryTree: CategoryTree) => {
             this.categoryTree = categoryTree;
             this.productForm.controls['categoryTree'].setValue(this.toSelectOption(categoryTree));
+
+            this.fields = this.categoryTree.fields;
         });
     }
 

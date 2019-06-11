@@ -1,13 +1,120 @@
 import {Category} from '../../../models/product';
 
-export const possibleCategories: Category[] = [
+export const possibleCategories: ({ name: string; subCategories: ({ name: string; fields: { templateOptions: { label: string; required: boolean }; type: string; key: string }[] } | string)[] } | { name: string; subCategories: string[] } | { name: string; subCategories: any[] })[] = [
     {
         name: 'Real estate',
         subCategories: [
-            'Sales',
-            'In the country',
-            'Rent',
-            'Housemates'
+
+            {
+                name: 'Sales',
+                fields: [
+                    {
+                        key: 'type',
+                        type: 'select',
+                        templateOptions: {
+                            label: 'Type of apartment',
+                            description: 'Type of apartment',
+                            required: true,
+                            options: [
+                                {value: 1, label: 'One room'},
+                                {value: 2, label: 'Two rooms'},
+                                {value: 3, label: 'Three rooms'},
+                                {value: 4, label: 'Four rooms'},
+                                {value: 5, label: 'Many rooms'},
+                                {value: 6, label: 'maisonette'},
+                            ],
+                        },
+                    },
+                    {
+                        key: 'area',
+                        type: 'input',
+                        templateOptions: {
+                            required: true,
+                            label: 'Area',
+                            placeholder: 'Area',
+                            description: 'Area of the apartment'
+                        }
+                    },
+                    {
+                        key: 'yearBuilt',
+                        type: 'input',
+                        templateOptions: {
+                            required: true,
+                            label: 'Year built',
+                            placeholder: 'eg. 2010...',
+                            description: 'Year the building was built'
+                        }
+                    },
+                    {
+                        key: 'constructionType',
+                        type: 'select',
+                        templateOptions: {
+                            required: true,
+                            label: 'Construction type',
+                            options: [
+                                {value: 1, label: 'Bricks'},
+                                {value: 2, label: 'Panels'},
+                                {value: 3, label: 'EPC'},
+                                {value: 4, label: 'PC'},
+                                {value: 5, label: 'Trimmer joists'},
+                            ]
+                        }
+                    },
+                    {
+                        key: 'floor',
+                        type: 'input',
+                        templateOptions: {
+                            required: true,
+                            label: 'Building floor',
+                            placeholder: 'Eg. 3 ...',
+                            description: 'At which floor is the apartment located'
+                        }
+                    },
+                    {
+                        key: 'totalFloors',
+                        type: 'input',
+                        templateOptions: {
+                            required: true,
+                            label: 'Total building floors',
+                            placeholder: 'Eg. 5 ..',
+                            description: 'How many floors does the building have in total'
+                        }
+                    },
+                    {
+                        key: 'heating',
+                        type: 'select',
+                        templateOptions: {
+                            required: true,
+                            label: 'Heating type',
+                            options: [
+                                {value: 1, label: 'Electricity'},
+                                {value: 2, label: 'Gas'},
+                                {value: 3, label: 'Solar'},
+                                {value: 4, label: 'Fireplace/chimney'},
+                                {value: 5, label: 'None'},
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                name: 'Outside the country',
+                fields: [
+                    {}
+                ]
+            },
+            {
+                name: 'Rent',
+                fields: [
+                    {}
+                ]
+            },
+            {
+                name: 'Housemates',
+                fields: [
+                    {}
+                ]
+            }
         ]
     },
     {

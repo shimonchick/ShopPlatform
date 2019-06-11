@@ -40,10 +40,11 @@ export class ChooseCategoryComponent implements OnInit {
         // );
     }
 
-    chooseCategoryTree(subCategory: string) {
+    chooseCategoryTree(subCategory: any) {
         this.dialogRef.close({
             lvl0: this.selectedCategory.name,
-            lvl1: subCategory
+            lvl1: subCategory.name,
+            fields: subCategory.fields,
         } as CategoryTree);
     }
 
