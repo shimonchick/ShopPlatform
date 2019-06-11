@@ -151,7 +151,7 @@ export class ProductCreateComponent implements OnInit {
     uploadFile(file: File): Promise<UploadTaskSnapshot> {
         const path = `images/${Date.now()}_${file.name}`;
         const task = this.storage.upload(path, file);
-        return task.snapshotChanges().pipe(last()).toPromise();
+        return task.snapshotChanges().pipe(last()).toPromise() as Promise<UploadTaskSnapshot>;
     }
 
     async uploadAllFiles() {
@@ -172,7 +172,7 @@ export class ProductCreateComponent implements OnInit {
         this.product.name = name;
         this.product.description = description;
         this.product.price = priceInt;
-        this.product = {...this.product, ...this.aditionalDetails};
+        this.product = {...this.product, additionalDetails: this.aditionalDetails};
     }
 
     chooseCategory() {
@@ -182,6 +182,8 @@ export class ProductCreateComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((categoryTree: CategoryTree) => {
             this.categoryTree = categoryTree;
+            this.product['categories.lvl0'] = categoryTree.lvl0;
+            this.product['categories.lvl1'] = `${categoryTree.lvl0} > ${categoryTree.lvl1}`;
             this.productForm.controls['categoryTree'].setValue(this.toSelectOption(categoryTree));
 
             this.fields = this.categoryTree.fields;

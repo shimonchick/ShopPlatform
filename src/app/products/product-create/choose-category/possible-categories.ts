@@ -120,13 +120,34 @@ export const possibleCategories: ({ name: string; subCategories: ({ name: string
     {
         name: 'Vehicles, caravans, boats',
         subCategories: [
-            'Parts',
-            'Accessories',
-            'Trailers, wagons, others',
-            'Caravans',
-            'Tyres',
-            'Agro, building, parts',
-            'Auto services, '
+            {
+                name: 'Parts',
+                fields: []
+            },
+            {
+                name: 'Accessories',
+                fields: []
+            },
+            {
+                name: 'Trailers, wagons, others',
+                fields: []
+            },
+            {
+                name: 'Caravans',
+                fields: []
+            },
+            {
+                name: 'Tyres',
+                fields: []
+            },
+            {
+                name: 'Agro, building, parts',
+                fields: []
+            },
+            {
+                name: 'Auto services',
+                fields: []
+            },
         ]
     },
     {

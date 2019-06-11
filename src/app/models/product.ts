@@ -15,6 +15,7 @@ export class Product implements PreviewProduct {
     name: string;
     price: number;
     urls: string[];
+    additionalDetails: any;
 }
 
 export interface Category {
