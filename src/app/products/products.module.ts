@@ -24,7 +24,7 @@ import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-di
         ProductDetailComponent,
         SearchComponent,
         ProductsListComponent,
-        ConfirmationDialogComponent
+        ConfirmationDialogComponent,
     ],
     imports: [
         ProductsRoutingModule,

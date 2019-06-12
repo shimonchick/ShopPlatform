@@ -34,10 +34,10 @@ export class ProductService {
     // parameter is object and not a product since we don't want the product id starting value(undefined)
     async createProduct(data: any) {
         console.log('creating product');
-        const key: string = this.db.createId();
+        const key: string = data.id || this.db.createId();
         const product: Product = {id: key, ...data};
         const documentReference = this.db.doc<Product>(`/products/${key}`);
-        await documentReference.set(Object.assign({}, product));
+        await documentReference.set(Object.assign({}, product), {merge: true});
         return key;
     }
 

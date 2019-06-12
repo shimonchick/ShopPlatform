@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
-import {ProductCreateComponent} from './product-create.component';
+import {ProductSetComponent} from './product-set.component';
 import {SharedModule} from '../../shared.module';
-import {ProductCreateRoutingModule} from './product-create-routing.module';
+import {ProductSetRoutingModule} from './product-set-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {NgxDropzoneModule} from 'ngx-dropzone';
 import {ImagePreviewComponent} from './image-preview/image-preview.component';
@@ -12,13 +12,12 @@ import {ProductSharedModule} from '../product-shared.module';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
 import {CheckoutDirective} from './checkout.directive';
 import {CheckoutComponent} from './checkout/checkout.component';
-import {GridsterModule} from 'angular-gridster2';
 import {FormlyModule} from '@ngx-formly/core';
 import {FormlyMaterialModule} from '@ngx-formly/material';
 
 @NgModule({
     declarations: [
-        ProductCreateComponent,
+        ProductSetComponent,
         // ImageComponent,
         ImagePreviewComponent,
 
@@ -28,7 +27,7 @@ import {FormlyMaterialModule} from '@ngx-formly/material';
     ],
     imports: [
         SharedModule,
-        ProductCreateRoutingModule,
+        ProductSetRoutingModule,
         ReactiveFormsModule,
         NgxDropzoneModule,
         DragDropModule,
@@ -47,5 +46,5 @@ import {FormlyMaterialModule} from '@ngx-formly/material';
         CheckoutComponent
     ]
 })
-export class ProductCreateModule {
+export class ProductSetModule {
 }

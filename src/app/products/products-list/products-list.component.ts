@@ -36,7 +36,7 @@ export class ProductsListComponent implements OnChanges {
     //             description: chancee.paragraph(),
     //             price: chancee.integer({min: 10, max: 1500}),
     //             coordinates: coordinates,
-    //             urls: [chancee.avatar({protocol: 'https'})]
+    //             previewUrls: [chancee.avatar({protocol: 'https'})]
     //         } as Product);
     //     }
     // }

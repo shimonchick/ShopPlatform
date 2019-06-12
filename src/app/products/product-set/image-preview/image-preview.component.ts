@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {
     CdkDrag,
     CdkDragStart,
@@ -13,7 +13,7 @@ import {ViewportRuler} from '@angular/cdk/overlay';
     templateUrl: './image-preview.component.html',
     styleUrls: ['./image-preview.component.scss'],
 })
-export class ImagePreviewComponent implements AfterViewInit {
+export class ImagePreviewComponent implements AfterViewInit, OnInit {
 
 
     constructor(private viewportRuler: ViewportRuler) {
@@ -32,12 +32,14 @@ export class ImagePreviewComponent implements AfterViewInit {
     public activeContainer;
 
     @Output()
-    filesSelected = new EventEmitter<File[]>();
+    newFilesSelected = new EventEmitter<File[]>();
     @Output()
-    urlsSelected = new EventEmitter<string[]>();
+    previewUrlsChange = new EventEmitter<string[]>();
 
     files: File[] = [];
-    urls: (string | ArrayBuffer)[] = [];
+
+    @Input()
+    previewUrls: (string | ArrayBuffer)[];
 
     indexOf(collection, node) {
         return Array.prototype.indexOf.call(collection, node);
@@ -45,7 +47,7 @@ export class ImagePreviewComponent implements AfterViewInit {
 
 
     // drop(event: CdkDragDrop<File>) {
-    //     moveItemInArray(this.urls, event.previousIndex, event.currentIndex);
+    //     moveItemInArray(this.previewUrls, event.previousIndex, event.currentIndex);
     // }
 
     /** Determines whether an event is a touch event. */
@@ -59,37 +61,26 @@ export class ImagePreviewComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
+        console.log(this.previewUrls);
         const phElement = this.placeholder.element.nativeElement;
 
         phElement.style.display = 'none';
         phElement.parentNode.removeChild(phElement);
     }
 
-    onSelectFile(files: File[]) {
+    async onSelectFile(files: File[]) {
         if (!files) {
             return;
         }
-        this.files = this.files.concat(files);
+        this.files = files;
         console.log(this.files);
 
-        for (let i = 0; i < files.length; i++) {
-
-            const reader = new FileReader();
-            reader.onload = (e: ProgressEvent) => {
-                // console.log(reader.result);
-                const content: string | ArrayBuffer = (e.target as FileReader).result;
-                this.urls.push(content);
-
-                // this.addItem(content);
-            };
-            reader.readAsDataURL(files[i]);
-
-        }
+        this.previewUrls = this.previewUrls.concat(await filesToUrls(files));
 
         // this.imageChangedEvent = this.displayFiles[0].file;
-        this.urlsSelected.emit(this.urls as string[]);
-        this.filesSelected.emit(files);
-        console.log(this.urls);
+        this.previewUrlsChange.emit(this.previewUrls as string[]);
+        this.newFilesSelected.emit(files);
+        console.log(this.previewUrls);
 
     }
 
@@ -122,7 +113,7 @@ export class ImagePreviewComponent implements AfterViewInit {
         this.source = null;
 
         if (this.sourceIndex !== this.targetIndex) {
-            moveItemInArray(this.urls, this.sourceIndex, this.targetIndex);
+            moveItemInArray(this.previewUrls, this.sourceIndex, this.targetIndex);
         }
     }
 
@@ -176,9 +167,59 @@ export class ImagePreviewComponent implements AfterViewInit {
 
 
     onDelete(url: string | ArrayBuffer) {
-        this.urls.splice(this.urls.indexOf(url), 1);
-        this.files.splice(this.urls.indexOf(url), 1);
-        this.filesSelected.emit(this.files);
-        this.urlsSelected.emit(this.urls as string[]);
+        this.previewUrls.splice(this.previewUrls.indexOf(url), 1);
+        this.files.splice(this.previewUrls.indexOf(url), 1);
+        this.newFilesSelected.emit(this.files);
+        this.previewUrlsChange.emit(this.previewUrls as string[]);
     }
+
+    ngOnInit(): void {
+    }
+}
+
+// function filesToUrls(newFiles: File[]) {
+//     let previewUrls: string[] = [];
+//     newFiles.forEach(file => {
+//
+//         const reader = new FileReader();
+//         reader.onload = (e: ProgressEvent) => {
+//             console.log('read the file');
+//             // console.log(reader.result);
+//             const content: string = (e.target as FileReader).result as string;
+//             console.log('before');
+//             console.log(previewUrls);
+//             console.log(content);
+//             previewUrls.push('hello');
+//             console.log('after');
+//             console.log(previewUrls);
+//
+//             // this.addItem(content);
+//         };
+//         reader.readAsDataURL(file);
+//         debugger;
+//         console.log(previewUrls);
+//         console.log('hello');
+//     });
+//     console.log(previewUrls);
+//     console.log('world');
+//     return previewUrls;
+// }
+
+export async function filesToUrls(files: File[]) {
+    // create function which return resolved promise
+    // with data:base64 string
+    function getBase64(file: File) {
+        const reader = new FileReader();
+        return new Promise<string>(resolve => {
+            reader.onload = ev => {
+                resolve((ev.target as FileReader).result as string);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+    // here will be array of promisified functions
+    const promises = files.map(file => getBase64(file));
+
+    // array with base64 strings
+    return await Promise.all(promises);
 }

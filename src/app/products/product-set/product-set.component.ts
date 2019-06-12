@@ -6,10 +6,10 @@ import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validat
 import {ActivatedRoute, Router} from '@angular/router';
 import {ErrorStateMatcher, MatDialog} from '@angular/material';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {combineLatest, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {Seller} from '../../models/seller';
 import {ChooseCategoryComponent} from './choose-category/choose-category.component';
-import {last, map, startWith} from 'rxjs/operators';
+import {first, last, map, startWith} from 'rxjs/operators';
 import {MapsLocation} from '../../models/location';
 import {possibleCategories} from './choose-category/possible-categories';
 import {CheckoutComponent} from './checkout/checkout.component';
@@ -25,10 +25,10 @@ export class CustomErrorStateMatcher implements ErrorStateMatcher {
 
 @Component({
     selector: 'app-product-create',
-    templateUrl: './product-create.component.html',
-    styleUrls: ['./product-create.component.scss']
+    templateUrl: './product-set.component.html',
+    styleUrls: ['./product-set.component.scss']
 })
-export class ProductCreateComponent implements OnInit {
+export class ProductSetComponent implements OnInit {
 
     user: Seller;
     // firstFormGroup: FormGroup;
@@ -36,8 +36,8 @@ export class ProductCreateComponent implements OnInit {
 
     form = new FormGroup({});
     fields: FormlyFieldConfig[] = [];
-    aditionalDetails = {};
-    files: File[] = [];
+    additionalDetails = {};
+    newFiles: File[] = [];
 
     categoryTree: CategoryTree;
     previewProduct$: Observable<PreviewProduct>;
@@ -57,7 +57,7 @@ export class ProductCreateComponent implements OnInit {
         price: [null, Validators.required],
         address: ['seller', Validators.required],
     });
-    private urlsChanges = new Subject<string[]>();
+    private urlsChanges = new BehaviorSubject<string[]>(['https://via.placeholder.com/500']);
 
     constructor(
         private productService: ProductService,
@@ -73,35 +73,37 @@ export class ProductCreateComponent implements OnInit {
 
     /*async*/
     ngOnInit() {
-        // const productId = this.activatedRoute.snapshot.paramMap.get('productId');
-        // if (productId) {
-        //     this.product = await this.productService.getProduct(productId).pipe(first()).toPromise();
-        //     this.productForm.controls['name'].setValue(this.product.name);
-        //     this.productForm.controls['description'].setValue(this.product.description);
-        //     this.productForm.controls['price'].setValue(this.product.price);
-        // }
-        this.auth.user$.subscribe((user: Seller) => {
-            this.product.coordinates = this.product.coordinates || {
-                lng: user.coordinates.lng,
-                lat: user.coordinates.lat
-            };
-            console.log(this.product.coordinates);
-            this.product.sellerUid = user.uid;
-        });
+        const productId = this.activatedRoute.snapshot.paramMap.get('id');
+        if (productId) {
+            // if there was an id provided - use the data from the product
+            this.productService.getProduct(productId).pipe(first()).toPromise().then(product => {
+                this.product = product;
+                this.productForm.controls['name'].setValue(this.product.name);
+                this.productForm.controls['description'].setValue(this.product.description);
+                this.productForm.controls['price'].setValue(this.product.price);
+                this.productForm.controls['categoryTree'].setValue(this.product['categories.lvl1']);
+                this.additionalDetails = product.additionalDetails;
+                this.urlsChanges.next(this.product.urls);
+            });
+        } else {
+            // if there was no id provided - use the user's data
+            this.auth.user$.subscribe((user: Seller) => {
+                this.product.coordinates = this.product.coordinates || {
+                    lng: user.coordinates.lng,
+                    lat: user.coordinates.lat
+                };
+                console.log(this.product.coordinates);
+                this.product.sellerUid = user.uid;
+            });
+        }
         this.previewProduct$ = combineLatest(
             this.productForm.controls['name'].valueChanges.pipe(
                 startWith('Name')),
             this.productForm.controls['price'].valueChanges.pipe(startWith(0)),
-            this.urlsChanges.pipe(startWith(['https://via.placeholder.com/500']))
-            // urls as well
+            this.urlsChanges
+            // previewUrls as well
         ).pipe(
-            map(([name, price, urls]: [string, number, string[]]) => {
-                return {
-                    name: name,
-                    price: price,
-                    urls: urls
-                };
-            })
+            map(([name, price, urls]: [string, number, string[]]) => ({name, price, urls}))
         );
     }
 
@@ -145,7 +147,7 @@ export class ProductCreateComponent implements OnInit {
     }
 
     onFilesSelected(files: File[]) {
-        this.files = files;
+        this.newFiles = [...this.newFiles, ...files];
     }
 
     uploadFile(file: File): Promise<UploadTaskSnapshot> {
@@ -155,8 +157,9 @@ export class ProductCreateComponent implements OnInit {
     }
 
     async uploadAllFiles() {
-        const uploads = await Promise.all(this.files.map(file => this.uploadFile(file)));
-        this.product.urls = await Promise.all(uploads.map(upload => upload.ref.getDownloadURL()));
+        const uploads = await Promise.all(this.newFiles.map(file => this.uploadFile(file)));
+        console.log(this.product.urls);
+        this.product.urls = [...this.product.urls, ...await Promise.all(uploads.map(upload => upload.ref.getDownloadURL()))];
     }
 
     selectMarker(lat: number, lng: number) {
@@ -172,7 +175,7 @@ export class ProductCreateComponent implements OnInit {
         this.product.name = name;
         this.product.description = description;
         this.product.price = priceInt;
-        this.product = {...this.product, ...this.aditionalDetails};
+        this.product = {...this.product, additionalDetails: this.additionalDetails};
     }
 
     chooseCategory() {

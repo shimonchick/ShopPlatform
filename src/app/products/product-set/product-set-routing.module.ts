@@ -1,11 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {ProductCreateComponent} from './product-create.component';
+import {ProductSetComponent} from './product-set.component';
 import {AuthGuard} from '../../core/auth.guard';
 import {SellerGuard} from '../../core/seller.guard';
 
 const routes = [
-    {path: '', canActivate: [AuthGuard, SellerGuard], component: ProductCreateComponent},
+    {path: '', canActivate: [AuthGuard, SellerGuard], component: ProductSetComponent},
+    {path: ':id', canActivate: [AuthGuard, SellerGuard], component: ProductSetComponent},
 ];
 
 @NgModule({
@@ -16,5 +17,5 @@ const routes = [
         RouterModule
     ]
 })
-export class ProductCreateRoutingModule {
+export class ProductSetRoutingModule {
 }

@@ -15,7 +15,7 @@
     <!--             cdkDropListOrientation="horizontal"-->
     <!--             class="list"-->
     <!--             style="align-self: flex-end">-->
-    <!--            <div *ngFor="let url of urls"-->
+    <!--            <div *ngFor="let url of previewUrls"-->
     <!--                 cdkDrag-->
     <!--                 class="list-item">-->
     <!--                <img [src]="url" class="display-image">-->
@@ -26,7 +26,7 @@
     <div class="example-container" cdkDropListGroup>
         <div cdkDropList [cdkDropListEnterPredicate]="dropListEnterPredicate"
              (cdkDropListDropped)="dropListDropped()"></div>
-        <div cdkDropList *ngFor="let url of urls"
+        <div cdkDropList *ngFor="let url of previewUrls"
              [cdkDropListEnterPredicate]="dropListEnterPredicate" (cdkDropListDropped)="dropListDropped()">
             <div cdkDrag class="example-box" (cdkDragMoved)="dragMoved($event);">
 

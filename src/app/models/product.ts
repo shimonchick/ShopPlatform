@@ -15,6 +15,12 @@ export class Product implements PreviewProduct {
     name: string;
     price: number;
     urls: string[];
+    'categories.lvl0': string;
+    'categories.lvl1': string;
+    additionalDetails: any;
+    constructor() {
+        this.urls = [];
+    }
 }
 
 export interface Category {

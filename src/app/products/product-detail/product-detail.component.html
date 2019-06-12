@@ -29,7 +29,8 @@
                             class="stretched"
                             color="accent"
                             i18n="edit listing"
-                            mat-raised-button>
+                            mat-raised-button
+                            [routerLink]="['/products/create', product.id]">
                         <mat-icon>edit</mat-icon>
                         Edit listing
                     </button>

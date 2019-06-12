@@ -28,7 +28,7 @@ export const updateProduct = functions.firestore
         const objectID = snap.id;
 
         // Add the data to the algolia index
-        return index.addObject({
+        return index.saveObject({
             objectID,
             ...data
         });

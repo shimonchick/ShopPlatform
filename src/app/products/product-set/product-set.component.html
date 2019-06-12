@@ -55,7 +55,7 @@
                            readonly/>
 
                 </mat-form-field>
-                <formly-form [model]="aditionalDetails" [fields]="fields" [form]="form">
+                <formly-form [model]="additionalDetails" [fields]="fields" [form]="form">
                 </formly-form>
 
                 <mat-radio-group class="form-full-width" formControlName="address">
@@ -100,9 +100,9 @@
             <div style="align-self: center">
                 <ng-template i18n="Select product pictures" matStepLabel>Select product pictures</ng-template>
                 <!--<app-image></app-image>-->
-                <app-image-preview (filesSelected)="onFilesSelected($event)"
-                (urlsSelected)="onUrlsSelected($event)"></app-image-preview>
-                <!--<app-uploader (urls)="OnUploads($event)"></app-uploader>-->
+                <app-image-preview (newFilesSelected)="onFilesSelected($event)" [previewUrls]="product.urls"
+                                   (previewUrlsChange)="onUrlsSelected($event)"></app-image-preview>
+                <!--<app-uploader (previewUrls)="OnUploads($event)"></app-uploader>-->
             </div>
 
             <div>
@@ -122,7 +122,7 @@
                         *ngIf="!uploading"
                         i18n="Upload | Upload product listing button"
                         mat-raised-button>
-                    Uplaod product listing
+                    Upload product listing
                 </button>
                 <div>
                     <button i18n="Back" mat-raised-button matStepperPrevious style="margin: 10px 10px;">Back</button>

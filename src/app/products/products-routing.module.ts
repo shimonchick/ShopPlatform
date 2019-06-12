@@ -5,7 +5,7 @@ import {SearchComponent} from './search/search.component';
 
 const routes = [
     {path: '', component: SearchComponent},
-    {path: 'create', loadChildren: './product-create/product-create.module#ProductCreateModule'},
+    {path: 'create', loadChildren: './product-set/product-set.module#ProductSetModule'},
     {path: ':id', component: ProductDetailComponent},
 ];
 
