@@ -175,7 +175,7 @@ export class ProductSetComponent implements OnInit {
         this.product.name = name;
         this.product.description = description;
         this.product.price = priceInt;
-        this.product = {...this.product, additionalDetails: this.aditionalDetails};
+        this.product = {...this.product, additionalDetails: this.additionalDetails};
     }
 
     chooseCategory() {
